@@ -1,6 +1,12 @@
-﻿namespace AppHarbor.Commands
+﻿using System;
+
+namespace AppHarbor.Commands
 {
-	public class LoginCommand
+	public class LoginCommand : ICommand
 	{
+		public void Execute(string[] arguments)
+		{
+			throw new NotImplementedException();
+		}
 	}
 }
