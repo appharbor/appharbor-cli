@@ -4,6 +4,7 @@ namespace AppHarbor.Commands
 {
 	public class LoginCommand : ICommand
 	{
+		private const string TokenEnvironmentVariable = "AppHarborToken";
 		private readonly AccessTokenFetcher _accessTokenFetcher;
 		private readonly EnvironmentVariableConfiguration _environmentVariableConfiguration;
 
@@ -15,7 +16,7 @@ namespace AppHarbor.Commands
 
 		public void Execute(string[] arguments)
 		{
-			if (_environmentVariableConfiguration.Get("AppHarborToken", EnvironmentVariableTarget.User) != null)
+			if (_environmentVariableConfiguration.Get(TokenEnvironmentVariable, EnvironmentVariableTarget.User) != null)
 			{
 				throw new CommandException("You're already logged in");
 			}
