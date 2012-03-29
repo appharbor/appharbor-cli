@@ -12,6 +12,8 @@ namespace AppHarbor
 		{
 			var container = new WindsorContainer()
 				.Install(new AppHarborInstaller());
+
+			var commandDispatcher = container.Resolve<CommandDispatcher>();
 		}
 	}
 }
