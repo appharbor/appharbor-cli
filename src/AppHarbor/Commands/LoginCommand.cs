@@ -4,21 +4,16 @@ namespace AppHarbor.Commands
 {
 	public class LoginCommand : ICommand
 	{
-		private const string TokenEnvironmentVariable = "AppHarborToken";
-		private const EnvironmentVariableTarget TokenEnvironmentVariableTarget = EnvironmentVariableTarget.User;
+		private readonly AccessTokenConfiguration _accessTokenConfiguration;
 
-		private readonly AccessTokenFetcher _accessTokenFetcher;
-		private readonly EnvironmentVariableConfiguration _environmentVariableConfiguration;
-
-		public LoginCommand(AccessTokenFetcher accessTokenFetcher, EnvironmentVariableConfiguration environmentVariableConfiguration)
+		public LoginCommand(AccessTokenConfiguration accessTokenFetcher)
 		{
-			_accessTokenFetcher = accessTokenFetcher;
-			_environmentVariableConfiguration = environmentVariableConfiguration;
+			_accessTokenConfiguration = accessTokenFetcher;
 		}
 
 		public void Execute(string[] arguments)
 		{
-			if (_environmentVariableConfiguration.Get(TokenEnvironmentVariable, TokenEnvironmentVariableTarget) != null)
+			if (_accessTokenConfiguration.Get() != null)
 			{
 				throw new CommandException("You're already logged in");
 			}
@@ -29,8 +24,7 @@ namespace AppHarbor.Commands
 			Console.WriteLine("Password:");
 			var password = Console.ReadLine();
 
-			var accessToken = _accessTokenFetcher.Get(username, password);
-			_environmentVariableConfiguration.Set(TokenEnvironmentVariable, accessToken, TokenEnvironmentVariableTarget);
+			_accessTokenConfiguration.Set(username, password);
 		}
 	}
 }

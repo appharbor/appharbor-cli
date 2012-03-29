@@ -60,12 +60,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AccessTokenFetcher.cs" />
+    <Compile Include="AccessTokenConfiguration.cs" />
     <Compile Include="AppHarborInstaller.cs" />
     <Compile Include="CommandDispatcher.cs" />
     <Compile Include="CommandException.cs" />
     <Compile Include="Commands\LoginCommand.cs" />
-    <Compile Include="EnvironmentVariableConfiguration.cs" />
     <Compile Include="ICommand.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

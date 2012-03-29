@@ -18,7 +18,7 @@ namespace AppHarbor
 				.WithService.AllInterfaces());
 
 			container.Register(Component
-				.For<AccessTokenFetcher>());
+				.For<AccessTokenConfiguration>());
 
 			container.Register(Component
 				.For<AppHarborApi>());
@@ -33,9 +33,6 @@ namespace AppHarbor
 
 			container.Register(Component
 				.For<CommandDispatcher>());
-
-			container.Register(Component
-				.For<EnvironmentVariableConfiguration>());
 		}
 	}
 }
