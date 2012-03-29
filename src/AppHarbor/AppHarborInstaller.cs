@@ -30,6 +30,9 @@ namespace AppHarbor
 
 			container.Register(Component
 				.For<CommandDispatcher>());
+
+			container.Register(Component
+				.For<EnvironmentVariableConfiguration>());
 		}
 	}
 }
