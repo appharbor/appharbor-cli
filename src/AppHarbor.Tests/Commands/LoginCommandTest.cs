@@ -7,6 +7,7 @@ namespace AppHarbor.Tests.Commands
 {
 	public class LoginCommandTest
 	{
+		[Fact]
 		public void ShouldAskForUsernameAndPassword()
 		{
 			using (var writer = new StringWriter())
