@@ -21,14 +21,11 @@ namespace AppHarbor
 				.For<AccessTokenConfiguration>());
 
 			container.Register(Component
-				.For<AppHarborClient>());
-
-			container.Register(Component
-				.For<AuthInfo>()
+				.For<AppHarborClient>()
 				.UsingFactoryMethod(x =>
 				{
 					var accessTokenConfiguration = container.Resolve<AccessTokenConfiguration>();
-					return new AuthInfo { AccessToken = accessTokenConfiguration.GetAccessToken() };
+					return new AppHarborClient(accessTokenConfiguration.GetAccessToken());
 				}));
 
 			container.Register(Component

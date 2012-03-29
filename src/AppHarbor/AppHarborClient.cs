@@ -4,15 +4,20 @@
 	{
 		private readonly AuthInfo _authInfo;
 
-		public AppHarborClient(AuthInfo authInfo)
+		public AppHarborClient(string AccessToken)
 		{
-			_authInfo = authInfo;
+			_authInfo = new AuthInfo { AccessToken = AccessToken };
 		}
 
 		public void CreateApplication(string name, string regionIdentifier)
 		{
-			var appHarborApi = new AppHarborApi(_authInfo);
+			var appHarborApi = GetAppHarborApi();
 			appHarborApi.CreateApplication(name, regionIdentifier);
+		}
+
+		private AppHarborApi GetAppHarborApi()
+		{
+			return new AppHarborApi(_authInfo);
 		}
 	}
 }
