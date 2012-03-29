@@ -13,7 +13,11 @@ namespace AppHarbor.Commands
 
 		public void Execute(string[] arguments)
 		{
-			throw new NotImplementedException();
+			Console.WriteLine("Username:");
+			var username = Console.ReadLine();
+
+			Console.WriteLine("Password:");
+			var password = Console.ReadLine();
 		}
 	}
 }
