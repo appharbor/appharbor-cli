@@ -23,14 +23,14 @@ namespace AppHarbor.Tests.Commands
 					Console.SetIn(reader);
 
 					var accessTokenConfigurationMock = new Mock<AccessTokenConfiguration>();
-					accessTokenConfigurationMock.Setup(x => x.Get()).Returns((string)null);
+					accessTokenConfigurationMock.Setup(x => x.GetAccessToken()).Returns((string)null);
 
 					var loginCommand = new LoginCommand(accessTokenConfigurationMock.Object);
 					loginCommand.Execute(new string[] { });
 
 					var expected = string.Format("Username:{0}Password:{0}", Environment.NewLine);
 					Assert.Equal(expected, writer.ToString());
-					accessTokenConfigurationMock.Verify(x => x.Set(username, password), Times.Once());
+					accessTokenConfigurationMock.Verify(x => x.SetAccessToken(username, password), Times.Once());
 				}
 			}
 		}
@@ -39,7 +39,7 @@ namespace AppHarbor.Tests.Commands
 		public void ShouldThrowIfUserIsAlreadyLoggedIn()
 		{
 			var accessTokenConfigurationMock = new Mock<AccessTokenConfiguration>();
-			accessTokenConfigurationMock.Setup(x => x.Get()).Returns("foo");
+			accessTokenConfigurationMock.Setup(x => x.GetAccessToken()).Returns("foo");
 
 			var loginCommand = new LoginCommand(accessTokenConfigurationMock.Object);
 

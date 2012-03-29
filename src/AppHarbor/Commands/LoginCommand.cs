@@ -13,7 +13,7 @@ namespace AppHarbor.Commands
 
 		public void Execute(string[] arguments)
 		{
-			if (_accessTokenConfiguration.Get() != null)
+			if (_accessTokenConfiguration.GetAccessToken() != null)
 			{
 				throw new CommandException("You're already logged in");
 			}
@@ -24,7 +24,7 @@ namespace AppHarbor.Commands
 			Console.WriteLine("Password:");
 			var password = Console.ReadLine();
 
-			_accessTokenConfiguration.Set(username, password);
+			_accessTokenConfiguration.SetAccessToken(username, password);
 		}
 	}
 }

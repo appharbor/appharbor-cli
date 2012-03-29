@@ -7,12 +7,12 @@ namespace AppHarbor
 		private const string TokenEnvironmentVariable = "AppHarborToken";
 		private const EnvironmentVariableTarget TokenEnvironmentVariableTarget = EnvironmentVariableTarget.User;
 
-		public virtual string Get()
+		public virtual string GetAccessToken()
 		{
 			return Environment.GetEnvironmentVariable(TokenEnvironmentVariable, TokenEnvironmentVariableTarget);
 		}
 
-		public virtual void Set(string username, string password)
+		public virtual void SetAccessToken(string username, string password)
 		{
 			throw new NotImplementedException();
 			//Environment.SetEnvironmentVariable(TokenEnvironmentVariable, "foo", TokenEnvironmentVariableTarget);
