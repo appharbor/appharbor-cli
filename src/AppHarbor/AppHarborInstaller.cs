@@ -21,7 +21,7 @@ namespace AppHarbor
 				.For<AccessTokenConfiguration>());
 
 			container.Register(Component
-				.For<AppHarborApi>());
+				.For<AppHarborClient>());
 
 			container.Register(Component
 				.For<AuthInfo>()

@@ -4,16 +4,16 @@ namespace AppHarbor.Commands
 {
 	public class CreateCommand : ICommand
 	{
-		private readonly AppHarborApi _appHarborApi;
+		private readonly AppHarborClient _appHarborClient;
 
-		public CreateCommand(AppHarborApi appHarborApi)
+		public CreateCommand(AppHarborClient appHarborClient)
 		{
-			_appHarborApi = appHarborApi;
+			_appHarborClient = appHarborClient;
 		}
 
 		public void Execute(string[] arguments)
 		{
-			var result = _appHarborApi.CreateApplication(arguments[0], arguments[1]);
+			_appHarborClient.CreateApplication(arguments[0], arguments[1]);
 			throw new NotImplementedException();
 		}
 	}
