@@ -13,7 +13,7 @@ namespace AppHarbor.Commands
 
 		public void Execute(string[] arguments)
 		{
-			throw new NotImplementedException();
+			_accessTokenConfiguration.DeleteAccessToken();
 		}
 	}
 }
