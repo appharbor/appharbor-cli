@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace AppHarbor
 {
@@ -9,6 +10,11 @@ namespace AppHarbor
 		public CommandDispatcher(IEnumerable<ICommand> commands)
 		{
 			_commands = commands;
+		}
+
+		public void Dispatch(string[] args)
+		{
+			throw new NotImplementedException();
 		}
 	}
 }
