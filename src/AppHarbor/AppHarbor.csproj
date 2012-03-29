@@ -61,6 +61,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AccessTokenConfiguration.cs" />
+    <Compile Include="AppHarborClient.cs" />
     <Compile Include="AppHarborInstaller.cs" />
     <Compile Include="CommandDispatcher.cs" />
     <Compile Include="CommandException.cs" />
