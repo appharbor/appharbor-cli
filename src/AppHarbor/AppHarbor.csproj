@@ -66,6 +66,7 @@
     <Compile Include="CommandException.cs" />
     <Compile Include="Commands\CreateCommand.cs" />
     <Compile Include="Commands\LoginCommand.cs" />
+    <Compile Include="Commands\LogoutCommand.cs" />
     <Compile Include="ICommand.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
