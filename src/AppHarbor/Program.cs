@@ -14,6 +14,8 @@ namespace AppHarbor
 				.Install(new AppHarborInstaller());
 
 			var commandDispatcher = container.Resolve<CommandDispatcher>();
+
+			commandDispatcher.Dispatch(args);
 		}
 	}
 }
