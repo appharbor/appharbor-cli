@@ -15,22 +15,27 @@ namespace AppHarbor.Tests.Commands
 			{
 				Console.SetOut(writer);
 
-				using (var reader = new StringReader(string.Format("foo{0}bar{0}", Environment.NewLine)))
+				var username = "foo";
+				var password = "bar";
+
+				using (var reader = new StringReader(string.Format("{0}{2}{1}{2}", username, password, Environment.NewLine)))
 				{
 					Console.SetIn(reader);
 
 					var accessTokenFetcher = new Mock<AccessTokenFetcher>();
-					accessTokenFetcher.Setup(x => x.Get("foo", "bar")).Returns("baz");
+					var accessToken = "baz";
+					accessTokenFetcher.Setup(x => x.Get(username, password)).Returns(accessToken);
 
 					var environmentVariableConfiguration = new Mock<EnvironmentVariableConfiguration>();
-					environmentVariableConfiguration.Setup(x => x.Get("foo", EnvironmentVariableTarget.User)).Returns((string)null);
+					var tokenConfigurationVariable = "AppHarborToken";
+					environmentVariableConfiguration.Setup(x => x.Get(tokenConfigurationVariable, EnvironmentVariableTarget.User)).Returns((string)null);
 
 					var loginCommand = new LoginCommand(accessTokenFetcher.Object, environmentVariableConfiguration.Object);
 					loginCommand.Execute(new string[] { });
 
 					var expected = string.Format("Username:{0}Password:{0}", Environment.NewLine);
 					Assert.Equal(expected, writer.ToString());
-					environmentVariableConfiguration.Verify(x => x.Set("AppHarborToken", "baz", EnvironmentVariableTarget.User), Times.Once());
+					environmentVariableConfiguration.Verify(x => x.Set("AppHarborToken", accessToken, EnvironmentVariableTarget.User), Times.Once());
 				}
 			}
 		}
