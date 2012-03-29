@@ -9,7 +9,13 @@ namespace AppHarbor
 	{
 		public void Install(IWindsorContainer container, IConfigurationStore store)
 		{
-			throw new NotImplementedException();
+			container.Register(Component
+				.For<AuthInfo>()
+				.UsingFactoryMethod(x =>
+				{
+					var token = Environment.GetEnvironmentVariable("AppHarborToken", EnvironmentVariableTarget.User);
+					return new AuthInfo { AccessToken = token };
+				}));
 		}
 	}
 }
