@@ -6,9 +6,9 @@ namespace AppHarbor.Commands
 	{
 		private readonly AccessTokenConfiguration _accessTokenConfiguration;
 
-		public LoginCommand(AccessTokenConfiguration accessTokenFetcher)
+		public LoginCommand(AccessTokenConfiguration accessTokenConfiguration)
 		{
-			_accessTokenConfiguration = accessTokenFetcher;
+			_accessTokenConfiguration = accessTokenConfiguration;
 		}
 
 		public void Execute(string[] arguments)
