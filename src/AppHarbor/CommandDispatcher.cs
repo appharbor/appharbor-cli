@@ -22,7 +22,15 @@ namespace AppHarbor
 			{
 				throw new ArgumentException(string.Format("The command \"{0}\" does not exist", commandName));
 			}
-			command.Execute(args.Skip(1).ToArray());
+
+			try
+			{
+				command.Execute(args.Skip(1).ToArray());
+			}
+			catch (CommandException exception)
+			{
+				Console.WriteLine(string.Format("Error: {0}", exception.Message));
+			}
 		}
 	}
 }
