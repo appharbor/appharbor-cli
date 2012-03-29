@@ -2,5 +2,8 @@
 {
 	public class CommandDispatcher
 	{
+		public CommandDispatcher()
+		{
+		}
 	}
 }
