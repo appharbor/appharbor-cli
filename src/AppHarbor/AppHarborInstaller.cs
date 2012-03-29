@@ -12,6 +12,11 @@ namespace AppHarbor
 		{
 			container.Kernel.Resolver.AddSubResolver(new CollectionResolver(container.Kernel));
 
+			container.Register(AllTypes
+				.FromThisAssembly()
+				.BasedOn<ICommand>()
+				.WithService.AllInterfaces());
+
 			container.Register(Component
 				.For<AppHarborApi>());
 
