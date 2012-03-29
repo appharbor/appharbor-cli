@@ -10,7 +10,7 @@ namespace AppHarbor.Commands
 		public LoginCommand(AppHarborApi appHarborApi, EnvironmentVariableConfiguration environmentVariableConfiguration)
 		{
 			_appHarborApi = appHarborApi;
-			_environmentVariableConfiguration = _environmentVariableConfiguration;
+			_environmentVariableConfiguration = environmentVariableConfiguration;
 		}
 
 		public void Execute(string[] arguments)
