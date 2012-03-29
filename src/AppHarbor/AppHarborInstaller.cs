@@ -18,6 +18,9 @@ namespace AppHarbor
 				.WithService.AllInterfaces());
 
 			container.Register(Component
+				.For<AccessTokenFetcher>());
+
+			container.Register(Component
 				.For<AppHarborApi>());
 
 			container.Register(Component
