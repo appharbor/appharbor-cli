@@ -60,6 +60,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AccessTokenFetcher.cs" />
     <Compile Include="AppHarborInstaller.cs" />
     <Compile Include="CommandDispatcher.cs" />
     <Compile Include="CommandException.cs" />
