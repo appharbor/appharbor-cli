@@ -16,8 +16,12 @@ namespace AppHarbor
 		public void Dispatch(string[] args)
 		{
 			var commandName = args[0];
-			var command = _commands.Single(x => x.GetType().Name.ToLower().StartsWith(commandName.ToLower()));
+			var command = _commands.FirstOrDefault(x => x.GetType().Name.ToLower().StartsWith(commandName.ToLower()));
 
+			if (command == null)
+			{
+				throw new ArgumentException(string.Format("The command \"{0}\" does not exist", commandName));
+			}
 			command.Execute(args.Skip(1).ToArray());
 		}
 	}

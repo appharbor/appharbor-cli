@@ -1,6 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Moq;
+using Xunit;
 using Xunit.Extensions;
 
 namespace AppHarbor.Tests
@@ -26,6 +28,19 @@ namespace AppHarbor.Tests
 			commandMock.Verify(x => x.Execute(
 				It.Is<string[]>(y => ArraysEqual(y, commands.Skip(1).ToArray()))), Times.Once());
 		}
+
+		[Theory]
+		[InlineData("bar")]
+		[InlineData("foobar")]
+		public void ShouldNotMatchCommandThatDoesntExist(string commandName)
+		{
+			var commandMock = new Mock<FooCommand>();
+			var commandDispatcher = new CommandDispatcher(new ICommand[] { commandMock.Object });
+
+			var exception = Assert.Throws<ArgumentException>(() => commandDispatcher.Dispatch(new string[] { commandName }));
+			Assert.Equal(string.Format("The command \"{0}\" does not exist", commandName), exception.Message);
+		}
+
 
 		public static IEnumerable<object[]> FooArguments
 		{
