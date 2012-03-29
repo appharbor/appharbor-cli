@@ -4,12 +4,12 @@ namespace AppHarbor.Commands
 {
 	public class LoginCommand : ICommand
 	{
-		private readonly AppHarborApi _appHarborApi;
+		private readonly AccessTokenFetcher _accessTokenFetcher;
 		private readonly EnvironmentVariableConfiguration _environmentVariableConfiguration;
 
-		public LoginCommand(AppHarborApi appHarborApi, EnvironmentVariableConfiguration environmentVariableConfiguration)
+		public LoginCommand(AccessTokenFetcher accessTokenFetcher, EnvironmentVariableConfiguration environmentVariableConfiguration)
 		{
-			_appHarborApi = appHarborApi;
+			_accessTokenFetcher = accessTokenFetcher;
 			_environmentVariableConfiguration = environmentVariableConfiguration;
 		}
 
