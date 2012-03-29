@@ -10,7 +10,8 @@ namespace AppHarbor
 	{
 		static void Main(string[] args)
 		{
-			var container = new WindsorContainer();
+			var container = new WindsorContainer()
+				.Install(new AppHarborInstaller());
 		}
 	}
 }
