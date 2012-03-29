@@ -2,8 +2,9 @@
 {
 	public class AccessTokenFetcher
 	{
-		public void Get(string username, string password)
+		public virtual string Get(string username, string password)
 		{
+			return "";
 		}
 	}
 }
