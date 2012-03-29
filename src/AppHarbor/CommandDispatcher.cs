@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Collections.Generic;
 
 namespace AppHarbor
@@ -14,7 +15,10 @@ namespace AppHarbor
 
 		public void Dispatch(string[] args)
 		{
-			throw new NotImplementedException();
+			var commandName = args[0];
+			var command = _commands.Single(x => x.GetType().Name.ToLower().StartsWith(commandName.ToLower()));
+
+			command.Execute(args.Skip(1).ToArray());
 		}
 	}
 }
