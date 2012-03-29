@@ -10,6 +10,9 @@ namespace AppHarbor
 		public void Install(IWindsorContainer container, IConfigurationStore store)
 		{
 			container.Register(Component
+				.For<AppHarborApi>());
+
+			container.Register(Component
 				.For<AuthInfo>()
 				.UsingFactoryMethod(x =>
 				{
