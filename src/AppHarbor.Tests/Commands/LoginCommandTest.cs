@@ -9,7 +9,7 @@ namespace AppHarbor.Tests.Commands
 	public class LoginCommandTest
 	{
 		[Fact]
-		public void ShouldAskForUsernameAndPassword()
+		public void ShouldSetAppHarborTokenIfUserIsntLoggedIn()
 		{
 			using (var writer = new StringWriter())
 			{
@@ -19,11 +19,18 @@ namespace AppHarbor.Tests.Commands
 				{
 					Console.SetIn(reader);
 
-					var loginCommand = new LoginCommand(null, null);
+					var accessTokenFetcher = new Mock<AccessTokenFetcher>();
+					accessTokenFetcher.Setup(x => x.Get("foo", "bar")).Returns("baz");
+
+					var environmentVariableConfiguration = new Mock<EnvironmentVariableConfiguration>();
+					environmentVariableConfiguration.Setup(x => x.Get("foo", EnvironmentVariableTarget.User)).Returns((string)null);
+
+					var loginCommand = new LoginCommand(accessTokenFetcher.Object, environmentVariableConfiguration.Object);
 					loginCommand.Execute(new string[] { });
 
 					var expected = string.Format("Username:{0}Password:{0}", Environment.NewLine);
 					Assert.Equal(expected, writer.ToString());
+					environmentVariableConfiguration.Verify(x => x.Set("AppHarborToken", "baz", EnvironmentVariableTarget.User), Times.Once());
 				}
 			}
 		}

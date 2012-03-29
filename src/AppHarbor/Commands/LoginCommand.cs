@@ -26,6 +26,9 @@ namespace AppHarbor.Commands
 
 			Console.WriteLine("Password:");
 			var password = Console.ReadLine();
+
+			var accessToken = _accessTokenFetcher.Get(username, password);
+			_environmentVariableConfiguration.Set(TokenEnvironmentVariable, accessToken, EnvironmentVariableTarget.User);
 		}
 	}
 }
