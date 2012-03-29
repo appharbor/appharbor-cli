@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Castle.Windsor;
 
 namespace AppHarbor
 {
@@ -9,6 +10,7 @@ namespace AppHarbor
 	{
 		static void Main(string[] args)
 		{
+			var container = new WindsorContainer();
 		}
 	}
 }
