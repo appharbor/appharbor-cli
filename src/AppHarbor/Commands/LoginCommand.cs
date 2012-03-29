@@ -5,10 +5,12 @@ namespace AppHarbor.Commands
 	public class LoginCommand : ICommand
 	{
 		private readonly AppHarborApi _appHarborApi;
+		private readonly EnvironmentVariableConfiguration _environmentVariableConfiguration;
 
-		public LoginCommand(AppHarborApi appHarborApi)
+		public LoginCommand(AppHarborApi appHarborApi, EnvironmentVariableConfiguration environmentVariableConfiguration)
 		{
 			_appHarborApi = appHarborApi;
+			_environmentVariableConfiguration = _environmentVariableConfiguration;
 		}
 
 		public void Execute(string[] arguments)

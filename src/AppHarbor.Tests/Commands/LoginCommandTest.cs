@@ -18,7 +18,7 @@ namespace AppHarbor.Tests.Commands
 				{
 					Console.SetIn(reader);
 
-					var loginCommand = new LoginCommand(null);
+					var loginCommand = new LoginCommand(null, null);
 					loginCommand.Execute(new string[] { });
 
 					var expected = string.Format("Username:{0}Password:{0}", Environment.NewLine);
