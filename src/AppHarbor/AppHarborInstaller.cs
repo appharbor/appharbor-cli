@@ -27,8 +27,8 @@ namespace AppHarbor
 				.For<AuthInfo>()
 				.UsingFactoryMethod(x =>
 				{
-					var token = Environment.GetEnvironmentVariable("AppHarborToken", EnvironmentVariableTarget.User);
-					return new AuthInfo { AccessToken = token };
+					var accessTokenConfiguration = container.Resolve<AccessTokenConfiguration>();
+					return new AuthInfo { AccessToken = accessTokenConfiguration.GetAccessToken() };
 				}));
 
 			container.Register(Component
