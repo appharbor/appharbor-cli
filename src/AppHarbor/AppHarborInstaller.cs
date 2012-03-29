@@ -19,6 +19,9 @@ namespace AppHarbor
 					var token = Environment.GetEnvironmentVariable("AppHarborToken", EnvironmentVariableTarget.User);
 					return new AuthInfo { AccessToken = token };
 				}));
+
+			container.Register(Component
+				.For<CommandDispatcher>());
 		}
 	}
 }
