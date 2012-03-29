@@ -2,6 +2,7 @@
 using Castle.MicroKernel.Registration;
 using Castle.MicroKernel.SubSystems.Configuration;
 using Castle.Windsor;
+using Castle.MicroKernel.Resolvers.SpecializedResolvers;
 
 namespace AppHarbor
 {
@@ -9,6 +10,8 @@ namespace AppHarbor
 	{
 		public void Install(IWindsorContainer container, IConfigurationStore store)
 		{
+			container.Kernel.Resolver.AddSubResolver(new CollectionResolver(container.Kernel));
+
 			container.Register(Component
 				.For<AppHarborApi>());
 
