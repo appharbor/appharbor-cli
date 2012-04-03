@@ -1,6 +1,9 @@
-﻿using System.Linq;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using AppHarbor.Commands;
 using Moq;
+using Ploeh.AutoFixture;
 using Ploeh.AutoFixture.Xunit;
 using Xunit;
 using Xunit.Extensions;
@@ -17,7 +20,13 @@ namespace AppHarbor.Tests.Commands
 		}
 
 		[Theory, AutoCommandData]
-		public void ShouldCreateApplication([Frozen]Mock<IAppHarborClient> client, CreateCommand command, string[] arguments)
+		public void ShouldCreateApplicationWithOnlyName(CreateCommand command, Fixture fixture)
+		{
+			command.Execute(new string[] { "foo" });
+		}
+
+		[Theory, AutoCommandData]
+		public void ShouldCreateApplicationWithRegion([Frozen]Mock<IAppHarborClient> client, CreateCommand command, string[] arguments)
 		{
 			command.Execute(arguments);
 
