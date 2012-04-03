@@ -47,7 +47,7 @@ namespace AppHarbor.Tests.Commands
 				Console.SetOut(writer);
 				command.Object.Execute(arguments);
 
-				Assert.Equal(string.Format(string.Concat("Created application \"{0}\".", Environment.NewLine), applicationSlug), writer.ToString());
+				Assert.Equal(string.Format(string.Concat("Created application \"{0}\" | URL: https://{0}.apphb.com", Environment.NewLine), applicationSlug), writer.ToString());
 			}
 		}
 	}

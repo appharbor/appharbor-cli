@@ -20,9 +20,10 @@ namespace AppHarbor.Commands
 			{
 				throw new CommandException("An application name must be provided to create an application");
 			}
+
 			var result = _appHarborClient.CreateApplication(arguments.First(), arguments.Skip(1).FirstOrDefault());
 
-			Console.WriteLine("Created application \"{0}\".", result.ID);
+			Console.WriteLine("Created application \"{0}\" | URL: https://{0}.apphb.com", result.ID);
 		}
 	}
 }
