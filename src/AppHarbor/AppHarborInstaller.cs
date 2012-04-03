@@ -16,7 +16,8 @@ namespace AppHarbor
 				.BasedOn<ICommand>());
 
 			container.Register(Component
-				.For<AccessTokenConfiguration>());
+				.For<IAccessTokenConfiguration>()
+				.ImplementedBy<AccessTokenConfiguration>());
 
 			container.Register(Component
 				.For<AppHarborClient>()
