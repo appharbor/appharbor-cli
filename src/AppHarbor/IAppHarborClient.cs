@@ -1,9 +1,10 @@
 ﻿using System;
+using AppHarbor.Model;
 
 namespace AppHarbor
 {
 	public interface IAppHarborClient
 	{
-		void CreateApplication(string name, string regionIdentifier);
+		CreateResult<string> CreateApplication(string name, string regionIdentifier);
 	}
 }

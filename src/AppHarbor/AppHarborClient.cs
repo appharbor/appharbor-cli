@@ -1,4 +1,5 @@
 ﻿using System;
+using AppHarbor.Model;
 
 namespace AppHarbor
 {
@@ -11,10 +12,10 @@ namespace AppHarbor
 			_authInfo = new AuthInfo { AccessToken = AccessToken };
 		}
 
-		public void CreateApplication(string name, string regionIdentifier = null)
+		public CreateResult<string> CreateApplication(string name, string regionIdentifier = null)
 		{
 			var appHarborApi = GetAppHarborApi();
-			appHarborApi.CreateApplication(name, regionIdentifier);
+			return appHarborApi.CreateApplication(name, regionIdentifier);
 		}
 
 		private AppHarborApi GetAppHarborApi()
