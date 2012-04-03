@@ -20,9 +20,12 @@ namespace AppHarbor.Tests.Commands
 		}
 
 		[Theory, AutoCommandData]
-		public void ShouldCreateApplicationWithOnlyName(CreateCommand command, Fixture fixture)
+		public void ShouldCreateApplicationWithOnlyName([Frozen]Mock<IAppHarborClient> client, CreateCommand command, Fixture fixture)
 		{
-			command.Execute(new string[] { "foo" });
+			var arguments = new string[] { "foo" };
+			command.Execute(arguments);
+
+			client.Verify(x => x.CreateApplication(arguments.First(), arguments.Skip(1).FirstOrDefault()), Times.Once());
 		}
 
 		[Theory, AutoCommandData]
