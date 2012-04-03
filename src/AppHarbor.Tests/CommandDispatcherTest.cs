@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Castle.MicroKernel;
 using Moq;
 using Xunit;
 using Xunit.Extensions;
@@ -20,13 +21,18 @@ namespace AppHarbor.Tests
 		[PropertyData("FooArguments")]
 		public void ShouldParseAndExecuteCommandWithArguments(string[] commands)
 		{
+			var kernelMock = new Mock<IKernel>();
+			var fooCommandType = typeof(FooCommand);
+			var commandDispatcher = new CommandDispatcher(new Type[] { fooCommandType }, kernelMock.Object );
+
 			var commandMock = new Mock<FooCommand>();
-			var commandDispatcher = new CommandDispatcher(new ICommand[] { commandMock.Object });
+			kernelMock.Setup(x => x.Resolve(It.Is<Type>(y => y == fooCommandType))).Returns(commandMock.Object);
 
 			commandDispatcher.Dispatch(commands);
 
 			commandMock.Verify(x => x.Execute(
 				It.Is<string[]>(y => ArraysEqual(y, commands.Skip(1).ToArray()))), Times.Once());
+
 		}
 
 		[Theory]
@@ -34,8 +40,9 @@ namespace AppHarbor.Tests
 		[InlineData("foobar")]
 		public void ShouldNotMatchCommandThatDoesntExist(string commandName)
 		{
-			var commandMock = new Mock<FooCommand>();
-			var commandDispatcher = new CommandDispatcher(new ICommand[] { commandMock.Object });
+			var kernelMock = new Mock<IKernel>();
+			var fooCommandType = typeof(FooCommand);
+			var commandDispatcher = new CommandDispatcher(new Type[] { fooCommandType }, kernelMock.Object );
 
 			var exception = Assert.Throws<ArgumentException>(() => commandDispatcher.Dispatch(new string[] { commandName }));
 			Assert.Equal(string.Format("The command \"{0}\" does not exist", commandName), exception.Message);
