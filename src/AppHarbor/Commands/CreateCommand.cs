@@ -7,11 +7,13 @@ namespace AppHarbor.Commands
 	{
 		private readonly IAppHarborClient _appHarborClient;
 		private readonly ApplicationConfiguration _applicationConfiguration;
+		private readonly GitExecutor _gitExecutor;
 
-		public CreateCommand(IAppHarborClient appHarborClient, ApplicationConfiguration applicationConfiguration)
+		public CreateCommand(IAppHarborClient appHarborClient, ApplicationConfiguration applicationConfiguration, GitExecutor gitExecutor)
 		{
 			_appHarborClient = appHarborClient;
 			_applicationConfiguration = applicationConfiguration;
+			_gitExecutor = gitExecutor;
 		}
 
 		public void Execute(string[] arguments)
