@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 
 namespace AppHarbor.Commands
 {
@@ -15,7 +16,11 @@ namespace AppHarbor.Commands
 
 		public void Execute(string[] arguments)
 		{
-			var test = _appHarborClient.CreateApplication(arguments[0], arguments[1]);
+			if (arguments.Length == 0)
+			{
+				throw new CommandException("An application name must be provided to create an application");
+			}
+			var test = _appHarborClient.CreateApplication(arguments.First(), arguments.Skip(1).FirstOrDefault());
 		}
 	}
 }
