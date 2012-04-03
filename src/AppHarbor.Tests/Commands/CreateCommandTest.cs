@@ -2,7 +2,8 @@
 using Moq;
 using Ploeh.AutoFixture;
 using Ploeh.AutoFixture.AutoMoq;
-using Xunit;
+using Ploeh.AutoFixture.Xunit;
+using Xunit.Extensions;
 
 namespace AppHarbor.Tests.Commands
 {
@@ -15,15 +16,12 @@ namespace AppHarbor.Tests.Commands
 			_fixture = new Fixture().Customize(new AutoMoqCustomization());
 		}
 
-		[Fact]
-		public void ShouldCreateApplication()
+		[Theory, AutoCommandData]
+		public void ShouldCreateApplication([Frozen]Mock<IAppHarborClient> client, CreateCommand command)
 		{
-			var client = _fixture.Freeze<Mock<IAppHarborClient>>();
-			var command = _fixture.CreateAnonymous<CreateCommand>();
+			command.Execute(new string[] { "foo", "bar" });
 
-			command.Execute(new string[] { "foo", "var" });
-
-			client.Verify(x => x.CreateApplication("bar", "baz"), Times.Once());
+			client.Verify(x => x.CreateApplication("foo", "bar"), Times.Once());
 		}
 	}
 }
