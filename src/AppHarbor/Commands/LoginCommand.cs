@@ -4,9 +4,9 @@ namespace AppHarbor.Commands
 {
 	public class LoginCommand : ICommand
 	{
-		private readonly AccessTokenConfiguration _accessTokenConfiguration;
+		private readonly IAccessTokenConfiguration _accessTokenConfiguration;
 
-		public LoginCommand(AccessTokenConfiguration accessTokenConfiguration)
+		public LoginCommand(IAccessTokenConfiguration accessTokenConfiguration)
 		{
 			_accessTokenConfiguration = accessTokenConfiguration;
 		}
