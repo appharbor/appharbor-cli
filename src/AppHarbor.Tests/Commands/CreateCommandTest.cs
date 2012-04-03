@@ -1,4 +1,5 @@
-﻿using AppHarbor.Commands;
+﻿using System.Linq;
+using AppHarbor.Commands;
 using Moq;
 using Ploeh.AutoFixture;
 using Ploeh.AutoFixture.AutoMoq;
@@ -15,13 +16,12 @@ namespace AppHarbor.Tests.Commands
 		{
 			_fixture = new Fixture().Customize(new AutoMoqCustomization());
 		}
-
 		[Theory, AutoCommandData]
-		public void ShouldCreateApplication([Frozen]Mock<IAppHarborClient> client, CreateCommand command)
+		public void ShouldCreateApplication([Frozen]Mock<IAppHarborClient> client, CreateCommand command, string[] arguments)
 		{
-			command.Execute(new string[] { "foo", "bar" });
+			command.Execute(arguments);
 
-			client.Verify(x => x.CreateApplication("foo", "bar"), Times.Once());
+			client.Verify(x => x.CreateApplication(arguments.First(), arguments.Skip(1).FirstOrDefault()), Times.Once());
 		}
 	}
 }
