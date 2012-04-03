@@ -16,7 +16,7 @@ namespace AppHarbor
 			_gitExecutable = new FileInfo(gitExecutablePath);
 		}
 
-		public void Execute(string command, DirectoryInfo repositoryDirectory)
+		public virtual void Execute(string command, DirectoryInfo repositoryDirectory)
 		{
 			var processArguments = new StringBuilder();
 
