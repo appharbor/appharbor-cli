@@ -7,9 +7,9 @@ namespace AppHarbor.Commands
 	{
 		private readonly IAppHarborClient _appHarborClient;
 		private readonly ApplicationConfiguration _applicationConfiguration;
-		private readonly GitExecutor _gitExecutor;
+		private readonly IGitExecutor _gitExecutor;
 
-		public CreateCommand(IAppHarborClient appHarborClient, ApplicationConfiguration applicationConfiguration, GitExecutor gitExecutor)
+		public CreateCommand(IAppHarborClient appHarborClient, ApplicationConfiguration applicationConfiguration, IGitExecutor gitExecutor)
 		{
 			_appHarborClient = appHarborClient;
 			_applicationConfiguration = applicationConfiguration;

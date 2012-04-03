@@ -88,6 +88,7 @@
     <Compile Include="IAppHarborClient.cs" />
     <Compile Include="ICommand.cs" />
     <Compile Include="IFileSystem.cs" />
+    <Compile Include="IGitExecutor.cs" />
     <Compile Include="PhysicalFileSystem.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

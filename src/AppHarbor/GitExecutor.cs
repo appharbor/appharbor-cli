@@ -5,7 +5,7 @@ using System.Text;
 
 namespace AppHarbor
 {
-	public class GitExecutor
+	public class GitExecutor : IGitExecutor
 	{
 		private readonly FileInfo _gitExecutable;
 
