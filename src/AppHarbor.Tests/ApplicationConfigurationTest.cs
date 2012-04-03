@@ -30,7 +30,8 @@ namespace AppHarbor.Tests
 			var fileSystem = new InMemoryFileSystem();
 			var applicationConfiguration = new ApplicationConfiguration(fileSystem);
 
-			Assert.Throws<ApplicationConfigurationException>(() => applicationConfiguration.GetApplicationId());
+			var exception = Assert.Throws<ApplicationConfigurationException>(() => applicationConfiguration.GetApplicationId());
+			Assert.Equal("Application is not configured", exception.Message);
 		}
 	}
 }
