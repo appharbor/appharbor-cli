@@ -11,7 +11,7 @@ namespace AppHarbor
 			_authInfo = new AuthInfo { AccessToken = AccessToken };
 		}
 
-		public void CreateApplication(string name, string regionIdentifier)
+		public void CreateApplication(string name, string regionIdentifier = null)
 		{
 			var appHarborApi = GetAppHarborApi();
 			appHarborApi.CreateApplication(name, regionIdentifier);
