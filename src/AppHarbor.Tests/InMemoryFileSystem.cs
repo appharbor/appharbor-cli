@@ -1,23 +1,71 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 
 namespace AppHarbor.Tests
 {
 	public class InMemoryFileSystem : IFileSystem
 	{
+		private readonly IDictionary<string, byte[]> _files;
+
+		public InMemoryFileSystem()
+		{
+			_files = new Dictionary<string, byte[]>();
+		}
+
 		public void Delete(string path)
 		{
-			throw new NotImplementedException();
+			_files.Remove(path);
 		}
 
 		public Stream OpenRead(string path)
 		{
-			throw new NotImplementedException();
+			byte[] bytes;
+			if (!_files.TryGetValue(path, out bytes))
+			{
+				throw new FileNotFoundException();
+			}
+
+			return new MemoryStream(bytes);
 		}
 
 		public Stream OpenWrite(string path)
 		{
-			throw new NotImplementedException();
+			return new DelegateOutputStream(x =>
+			{
+				var bytes = x.ToArray();
+				_files.Add(path, bytes);
+			});
+		}
+
+		public IDictionary<string, byte[]> Files
+		{
+			get
+			{
+				return _files;
+			}
+		}
+
+		private class DelegateOutputStream : MemoryStream
+		{
+			private readonly Action<MemoryStream> _beforeDispose;
+			private bool _hasDisposed;
+
+			public DelegateOutputStream(Action<MemoryStream> beforeDispose)
+			{
+				_beforeDispose = beforeDispose;
+			}
+
+			protected override void Dispose(bool disposing)
+			{
+				if (disposing && !_hasDisposed)
+				{
+					_hasDisposed = true;
+					_beforeDispose(this);
+				}
+
+				base.Dispose(disposing);
+			}
 		}
 	}
 }
