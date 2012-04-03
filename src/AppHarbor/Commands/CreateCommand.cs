@@ -20,7 +20,7 @@ namespace AppHarbor.Commands
 			{
 				throw new CommandException("An application name must be provided to create an application");
 			}
-			var test = _appHarborClient.CreateApplication(arguments.First(), arguments.Skip(1).FirstOrDefault());
+			var result = _appHarborClient.CreateApplication(arguments.First(), arguments.Skip(1).FirstOrDefault());
 		}
 	}
 }
