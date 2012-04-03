@@ -7,17 +7,40 @@ namespace AppHarbor
 	{
 		public void Delete(string path)
 		{
-			throw new NotImplementedException();
+			var directory = new DirectoryInfo(path);
+			if (directory.Exists)
+			{
+				directory.Delete(recursive: true);
+				return;
+			}
+
+			var file = new FileInfo(path);
+			if (file.Exists)
+			{
+				file.Delete();
+			}
 		}
 
 		public Stream OpenRead(string path)
 		{
-			throw new NotImplementedException();
+			var file = new FileInfo(path);
+			if (file.Exists)
+			{
+				return file.OpenRead();
+			}
+
+			throw new FileNotFoundException();
 		}
 
 		public Stream OpenWrite(string path)
 		{
-			throw new NotImplementedException();
+			var file = new FileInfo(path);
+			if (!file.Directory.Exists)
+			{
+				file.Directory.Create();
+			}
+
+			return file.OpenWrite();
 		}
 	}
 }
