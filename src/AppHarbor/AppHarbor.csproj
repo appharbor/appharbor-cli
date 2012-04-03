@@ -64,6 +64,7 @@
     <Compile Include="AccessTokenConfiguration.cs" />
     <Compile Include="AppHarborClient.cs" />
     <Compile Include="AppHarborInstaller.cs" />
+    <Compile Include="ApplicationConfiguration.cs" />
     <Compile Include="CommandDispatcher.cs" />
     <Compile Include="CommandException.cs" />
     <Compile Include="Commands\CreateCommand.cs" />
