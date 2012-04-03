@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using AppHarbor.Commands;
 using Moq;
-using Ploeh.AutoFixture;
 using Ploeh.AutoFixture.Xunit;
 using Xunit;
 using Xunit.Extensions;
