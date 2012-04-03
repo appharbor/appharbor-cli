@@ -1,5 +1,8 @@
-﻿using System.Linq;
+﻿using System;
+using System.IO;
+using System.Linq;
 using AppHarbor.Commands;
+using AppHarbor.Model;
 using Moq;
 using Ploeh.AutoFixture.Xunit;
 using Xunit;
@@ -33,6 +36,19 @@ namespace AppHarbor.Tests.Commands
 		{
 			command.Execute(arguments);
 			client.Verify(x => x.CreateApplication(arguments.First(), arguments.Skip(1).FirstOrDefault()), Times.Once());
+		}
+
+		[Theory, AutoCommandData]
+		public void ShouldPrintSuccessMessageAfterCreatingApplication([Frozen]Mock<IAppHarborClient> client, Mock<CreateCommand> command, string[] arguments, string applicationSlug)
+		{
+			client.Setup(x => x.CreateApplication(arguments[0], arguments[1])).Returns(new CreateResult<string> { ID = applicationSlug });
+			using (var writer = new StringWriter())
+			{
+				Console.SetOut(writer);
+				command.Object.Execute(arguments);
+
+				Assert.Equal(string.Format(string.Concat("Created application \"{0}\".", Environment.NewLine), applicationSlug), writer.ToString());
+			}
 		}
 	}
 }
