@@ -4,10 +4,10 @@ namespace AppHarbor.Commands
 {
 	public class CreateCommand : ICommand
 	{
-		private readonly AppHarborClient _appHarborClient;
+		private readonly IAppHarborClient _appHarborClient;
 		private readonly ApplicationConfiguration _applicationConfiguration;
 
-		public CreateCommand(AppHarborClient appHarborClient, ApplicationConfiguration applicationConfiguration)
+		public CreateCommand(IAppHarborClient appHarborClient, ApplicationConfiguration applicationConfiguration)
 		{
 			_appHarborClient = appHarborClient;
 			_applicationConfiguration = applicationConfiguration;
