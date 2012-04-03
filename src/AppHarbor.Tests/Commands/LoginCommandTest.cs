@@ -2,30 +2,28 @@
 using System.IO;
 using AppHarbor.Commands;
 using Moq;
+using Ploeh.AutoFixture.Xunit;
 using Xunit;
+using Xunit.Extensions;
 
 namespace AppHarbor.Tests.Commands
 {
 	public class LoginCommandTest
 	{
-		[Fact]
-		public void ShouldSetAppHarborTokenIfUserIsntLoggedIn()
+		[Theory, AutoData]
+		public void ShouldSetAppHarborTokenIfUserIsntLoggedIn(string username, string password, [Frozen]Mock<IAccessTokenConfiguration> accessTokenConfigurationMock)
 		{
 			using (var writer = new StringWriter())
 			{
 				Console.SetOut(writer);
 
-				var username = "foo";
-				var password = "bar";
-
 				using (var reader = new StringReader(string.Format("{0}{2}{1}{2}", username, password, Environment.NewLine)))
 				{
 					Console.SetIn(reader);
 
-					var accessTokenConfigurationMock = new Mock<AccessTokenConfiguration>();
 					accessTokenConfigurationMock.Setup(x => x.GetAccessToken()).Returns((string)null);
-
 					var loginCommand = new LoginCommand(accessTokenConfigurationMock.Object);
+
 					loginCommand.Execute(new string[] { });
 
 					var expected = string.Format("Username:{0}Password:{0}", Environment.NewLine);
@@ -35,10 +33,9 @@ namespace AppHarbor.Tests.Commands
 			}
 		}
 
-		[Fact]
-		public void ShouldThrowIfUserIsAlreadyLoggedIn()
+		[Theory, AutoData]
+		public void ShouldThrowIfUserIsAlreadyLoggedIn([Frozen]Mock<AccessTokenConfiguration> accessTokenConfigurationMock)
 		{
-			var accessTokenConfigurationMock = new Mock<AccessTokenConfiguration>();
 			accessTokenConfigurationMock.Setup(x => x.GetAccessToken()).Returns("foo");
 
 			var loginCommand = new LoginCommand(accessTokenConfigurationMock.Object);
