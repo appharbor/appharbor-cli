@@ -1,8 +1,8 @@
-﻿using System;
+﻿using System.Reflection;
 using Castle.MicroKernel.Registration;
+using Castle.MicroKernel.Resolvers.SpecializedResolvers;
 using Castle.MicroKernel.SubSystems.Configuration;
 using Castle.Windsor;
-using Castle.MicroKernel.Resolvers.SpecializedResolvers;
 
 namespace AppHarbor
 {
@@ -12,10 +12,8 @@ namespace AppHarbor
 		{
 			container.Kernel.Resolver.AddSubResolver(new CollectionResolver(container.Kernel));
 
-			container.Register(AllTypes
-				.FromThisAssembly()
-				.BasedOn<ICommand>()
-				.WithService.AllInterfaces());
+			container.Register(AllTypes.FromThisAssembly()
+				.BasedOn<ICommand>());
 
 			container.Register(Component
 				.For<AccessTokenConfiguration>());
@@ -29,7 +27,11 @@ namespace AppHarbor
 				}));
 
 			container.Register(Component
-				.For<CommandDispatcher>());
+				.For<CommandDispatcher>()
+				.UsingFactoryMethod(x =>
+				{
+					return new CommandDispatcher(Assembly.GetExecutingAssembly().GetExportedTypes(), container.Kernel);
+				}));
 		}
 	}
 }
