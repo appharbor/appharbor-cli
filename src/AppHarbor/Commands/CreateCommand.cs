@@ -5,12 +5,12 @@ namespace AppHarbor.Commands
 	public class CreateCommand : ICommand
 	{
 		private readonly AppHarborClient _appHarborClient;
-		private readonly IFileSystem _fileSystem;
+		private readonly ApplicationConfiguration _applicationConfiguration;
 
-		public CreateCommand(AppHarborClient appHarborClient, IFileSystem fileSystem)
+		public CreateCommand(AppHarborClient appHarborClient, ApplicationConfiguration applicationConfiguration)
 		{
 			_appHarborClient = appHarborClient;
-			_fileSystem = fileSystem;
+			_applicationConfiguration = applicationConfiguration;
 		}
 
 		public void Execute(string[] arguments)
