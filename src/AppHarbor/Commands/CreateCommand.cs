@@ -15,8 +15,7 @@ namespace AppHarbor.Commands
 
 		public void Execute(string[] arguments)
 		{
-			_appHarborClient.CreateApplication(arguments[0], arguments[1]);
-			throw new NotImplementedException();
+			var test = _appHarborClient.CreateApplication(arguments[0], arguments[1]);
 		}
 	}
 }
