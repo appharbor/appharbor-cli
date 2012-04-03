@@ -23,16 +23,18 @@ namespace AppHarbor.Tests.Commands
 		public void ShouldCreateApplicationWithOnlyName([Frozen]Mock<IAppHarborClient> client, CreateCommand command)
 		{
 			var arguments = new string[] { "foo" };
-			command.Execute(arguments);
-
-			client.Verify(x => x.CreateApplication(arguments.First(), arguments.Skip(1).FirstOrDefault()), Times.Once());
+			VerifyArguments(client, command, arguments);
 		}
 
 		[Theory, AutoCommandData]
 		public void ShouldCreateApplicationWithRegion([Frozen]Mock<IAppHarborClient> client, CreateCommand command, string[] arguments)
 		{
-			command.Execute(arguments);
+			VerifyArguments(client, command, arguments);
+		}
 
+		private static void VerifyArguments(Mock<IAppHarborClient> client, CreateCommand command, string[] arguments)
+		{
+			command.Execute(arguments);
 			client.Verify(x => x.CreateApplication(arguments.First(), arguments.Skip(1).FirstOrDefault()), Times.Once());
 		}
 	}
