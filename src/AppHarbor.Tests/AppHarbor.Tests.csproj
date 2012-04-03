@@ -69,6 +69,7 @@
     <Compile Include="CommandDispatcherTest.cs" />
     <Compile Include="Commands\LoginCommandTest.cs" />
     <Compile Include="Commands\LogoutCommandTest.cs" />
+    <Compile Include="InMemoryFileSystem.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
