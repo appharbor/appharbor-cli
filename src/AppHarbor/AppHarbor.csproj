@@ -83,6 +83,7 @@
     <Compile Include="Commands\CreateCommand.cs" />
     <Compile Include="Commands\LoginCommand.cs" />
     <Compile Include="Commands\LogoutCommand.cs" />
+    <Compile Include="IAccessTokenConfiguration.cs" />
     <Compile Include="IAppHarborClient.cs" />
     <Compile Include="ICommand.cs" />
     <Compile Include="IFileSystem.cs" />

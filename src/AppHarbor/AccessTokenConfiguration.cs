@@ -2,7 +2,7 @@
 
 namespace AppHarbor
 {
-	public class AccessTokenConfiguration
+	public class AccessTokenConfiguration : IAccessTokenConfiguration
 	{
 		private const string TokenEnvironmentVariable = "AppHarborToken";
 		private const EnvironmentVariableTarget TokenEnvironmentVariableTarget = EnvironmentVariableTarget.User;
