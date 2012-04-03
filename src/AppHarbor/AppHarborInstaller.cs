@@ -32,6 +32,11 @@ namespace AppHarbor
 				{
 					return new CommandDispatcher(Assembly.GetExecutingAssembly().GetExportedTypes(), container.Kernel);
 				}));
+
+			container.Register(Component
+				.For<IFileSystem>()
+				.ImplementedBy<PhysicalFileSystem>()
+				.LifeStyle.Transient);
 		}
 	}
 }
