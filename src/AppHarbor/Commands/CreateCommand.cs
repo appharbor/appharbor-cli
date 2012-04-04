@@ -24,6 +24,7 @@ namespace AppHarbor.Commands
 			var result = _appHarborClient.CreateApplication(arguments.First(), arguments.Skip(1).FirstOrDefault());
 
 			Console.WriteLine("Created application \"{0}\" | URL: https://{0}.apphb.com", result.ID);
+			Console.WriteLine("");
 
 			_applicationConfiguration.SetupApplication(result.ID, _appHarborClient.GetUser());
 		}
