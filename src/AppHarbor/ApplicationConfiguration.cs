@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Linq;
 using AppHarbor.Model;
 
 namespace AppHarbor
@@ -29,6 +30,12 @@ namespace AppHarbor
 			}
 			catch (FileNotFoundException)
 			{
+			}
+
+			var url = _gitExecutor.Execute("config remote.appharbor.url", CurrentDirectory).FirstOrDefault();
+			if (url != null)
+			{
+				return url.Split(new string[] { "/", ".git" }, StringSplitOptions.RemoveEmptyEntries).Last();
 			}
 
 			throw new ApplicationConfigurationException("Application is not configured");
