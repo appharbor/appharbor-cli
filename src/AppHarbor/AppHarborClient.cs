@@ -32,7 +32,8 @@ namespace AppHarbor
 
 		public User GetUser()
 		{
-			throw new NotImplementedException();
+			var appHarborApi = GetAppHarborApi();
+			return appHarborApi.GetUser();
 		}
 	}
 }
