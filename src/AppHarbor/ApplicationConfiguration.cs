@@ -33,7 +33,7 @@ namespace AppHarbor
 			}
 		}
 
-		public void SetupApplication(string id, User user)
+		public virtual void SetupApplication(string id, User user)
 		{
 			var repositoryUrl = string.Format("https://{0}@appharbor.com/{1}.git", user.Username, id);
 
