@@ -13,12 +13,9 @@ namespace AppHarbor.Tests
 	{
 		public static string ConfigurationFile = Path.GetFullPath(".appharbor");
 
-		[Fact]
-		public void ShouldReturnApplicationIdIfConfigurationFileExists()
+		[Theory, AutoCommandData]
+		public void ShouldReturnApplicationIdIfConfigurationFileExists(Mock<IFileSystem> fileSystem, string applicationName)
 		{
-			var fileSystem = new Mock<IFileSystem>();
-			var applicationName = "bar";
-
 			var configurationFile = ConfigurationFile;
 			var stream = new MemoryStream(Encoding.Default.GetBytes(applicationName));
 
@@ -28,11 +25,10 @@ namespace AppHarbor.Tests
 			Assert.Equal(applicationName, applicationConfiguration.GetApplicationId());
 		}
 
-		[Fact]
-		public void ShouldThrowIfApplicationFileDoesNotExist()
+		[Theory, AutoCommandData]
+		public void ShouldThrowIfApplicationFileDoesNotExist(InMemoryFileSystem fileSystem, IGitExecutor gitExecutor)
 		{
-			var fileSystem = new InMemoryFileSystem();
-			var applicationConfiguration = new ApplicationConfiguration(fileSystem, null);
+			var applicationConfiguration = new ApplicationConfiguration(fileSystem, gitExecutor);
 
 			var exception = Assert.Throws<ApplicationConfigurationException>(() => applicationConfiguration.GetApplicationId());
 			Assert.Equal("Application is not configured", exception.Message);
