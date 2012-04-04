@@ -3,7 +3,7 @@ using AppHarbor.Model;
 
 namespace AppHarbor
 {
-	public class AppHarborClient
+	public class AppHarborClient : IAppHarborClient
 	{
 		private readonly AuthInfo _authInfo;
 
