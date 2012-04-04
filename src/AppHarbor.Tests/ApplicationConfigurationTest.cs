@@ -20,7 +20,7 @@ namespace AppHarbor.Tests
 
 			fileSystem.Setup(x => x.OpenRead(configurationFile)).Returns(stream);
 
-			var applicationConfiguration = new ApplicationConfiguration(fileSystem.Object);
+			var applicationConfiguration = new ApplicationConfiguration(fileSystem.Object, null);
 			Assert.Equal(applicationName, applicationConfiguration.GetApplicationId());
 		}
 
@@ -28,7 +28,7 @@ namespace AppHarbor.Tests
 		public void ShouldThrowIfApplicationFileDoesNotExist()
 		{
 			var fileSystem = new InMemoryFileSystem();
-			var applicationConfiguration = new ApplicationConfiguration(fileSystem);
+			var applicationConfiguration = new ApplicationConfiguration(fileSystem, null);
 
 			var exception = Assert.Throws<ApplicationConfigurationException>(() => applicationConfiguration.GetApplicationId());
 			Assert.Equal("Application is not configured", exception.Message);

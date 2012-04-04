@@ -5,10 +5,12 @@ namespace AppHarbor
 	public class ApplicationConfiguration
 	{
 		private readonly IFileSystem _fileSystem;
+		private readonly IGitExecutor _gitExecutor;
 
-		public ApplicationConfiguration(IFileSystem fileSystem)
+		public ApplicationConfiguration(IFileSystem fileSystem, IGitExecutor gitExecutor)
 		{
 			_fileSystem = fileSystem;
+			_gitExecutor = gitExecutor;
 		}
 
 		public string GetApplicationId()
