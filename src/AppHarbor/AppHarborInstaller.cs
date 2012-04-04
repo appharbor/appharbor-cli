@@ -20,10 +20,9 @@ namespace AppHarbor
 				.ImplementedBy<AccessTokenConfiguration>());
 
 			container.Register(Component
-				.For<AppHarborClient>()
+				.For<IAppHarborClient>()
 				.UsingFactoryMethod(x =>
 				{
-					var accessTokenConfiguration = container.Resolve<AccessTokenConfiguration>();
 					return new AppHarborClient(accessTokenConfiguration.GetAccessToken());
 				}));
 
