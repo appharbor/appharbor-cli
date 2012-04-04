@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Text;
@@ -16,7 +17,7 @@ namespace AppHarbor
 			_gitExecutable = new FileInfo(gitExecutablePath);
 		}
 
-		public virtual void Execute(string command, DirectoryInfo repositoryDirectory)
+		public virtual IEnumerable<string> Execute(string command, DirectoryInfo repositoryDirectory)
 		{
 			var processArguments = new StringBuilder();
 
@@ -45,6 +46,11 @@ namespace AppHarbor
 				if (!string.IsNullOrEmpty(error))
 				{
 					throw new InvalidOperationException(error);
+				}
+
+				while (process.StandardOutput.Peek() > 0)
+				{
+					yield return process.StandardOutput.ReadLine();
 				}
 			}
 		}
