@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace AppHarbor
+namespace AppHarbor.Commands
 {
 	public class HelpCommand : ICommand
 	{

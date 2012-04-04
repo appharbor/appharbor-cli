@@ -82,10 +82,10 @@
     <Compile Include="CommandException.cs" />
     <Compile Include="CommandHelpAttribute.cs" />
     <Compile Include="Commands\CreateCommand.cs" />
+    <Compile Include="Commands\HelpCommand.cs" />
     <Compile Include="Commands\LoginCommand.cs" />
     <Compile Include="Commands\LogoutCommand.cs" />
     <Compile Include="GitExecutor.cs" />
-    <Compile Include="HelpCommand.cs" />
     <Compile Include="IAccessTokenConfiguration.cs" />
     <Compile Include="IAppHarborClient.cs" />
     <Compile Include="IApplicationConfiguration.cs" />
