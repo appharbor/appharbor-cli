@@ -49,18 +49,5 @@ namespace AppHarbor
 				}
 			}
 		}
-
-		public virtual bool IsInstalled()
-		{
-			try
-			{
-				Execute("--version", new DirectoryInfo("c:\\"));
-			}
-			catch (InvalidOperationException)
-			{
-				return false;
-			}
-			return true;
-		}
 	}
 }

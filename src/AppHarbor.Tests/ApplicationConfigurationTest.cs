@@ -41,7 +41,6 @@ namespace AppHarbor.Tests
 		[Theory, AutoCommandData]
 		public void ShouldTryAndSetUpGitRemoteIfPossible([Frozen]Mock<IGitExecutor> gitExecutor, [Frozen]Mock<IAppHarborClient> client, ApplicationConfiguration applicationConfiguration, User user, string id)
 		{
-			gitExecutor.Setup(x => x.IsInstalled()).Returns(true);
 			client.Setup(x => x.GetUser()).Returns(user);
 
 			using (var writer = new StringWriter())
@@ -62,7 +61,6 @@ namespace AppHarbor.Tests
 		[Theory, AutoCommandData]
 		public void ShouldShowRepositoryUrlIfGitSetupFailed([Frozen]Mock<IGitExecutor> gitExecutor, ApplicationConfiguration applicationConfiguration, IAppHarborClient client, string id)
 		{
-			gitExecutor.Setup(x => x.IsInstalled()).Returns(true);
 			gitExecutor.Setup(x => x.Execute(It.IsAny<string>(), It.IsAny<DirectoryInfo>())).Throws<InvalidOperationException>();
 
 			using (var writer = new StringWriter())
