@@ -41,7 +41,7 @@ namespace AppHarbor
 			try
 			{
 				_gitExecutor.Execute(string.Format("remote add appharbor https://{0}@appharbor.com/{1}.git", user.Username, id),
-					new DirectoryInfo(Directory.GetCurrentDirectory()));
+					CurrentDirectory);
 
 				Console.WriteLine("Added \"appharbor\" as a remote repository. Push to AppHarbor with git push appharbor master");
 				return;
@@ -61,6 +61,14 @@ namespace AppHarbor
 			}
 
 			Console.WriteLine("Wrote application configuration to {0}", ConfigurationFile);
+		}
+
+		private static DirectoryInfo CurrentDirectory
+		{
+			get
+			{
+				return new DirectoryInfo(Directory.GetCurrentDirectory());
+			}
 		}
 
 		private static FileInfo ConfigurationFile
