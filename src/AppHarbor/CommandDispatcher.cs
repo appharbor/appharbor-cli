@@ -7,19 +7,21 @@ namespace AppHarbor
 {
 	public class CommandDispatcher
 	{
-		private readonly IEnumerable<Type> _commandTypes;
+		private readonly IEnumerable<Type> _candidateTypes;
 		private readonly IKernel _kernel;
 
 		public CommandDispatcher(IEnumerable<Type> candidateTypes, IKernel kernel)
 		{
-			_commandTypes = candidateTypes;
+			_candidateTypes = candidateTypes;
 			_kernel = kernel;
 		}
 
 		public void Dispatch(string[] args)
 		{
+			var commandTypes = _candidateTypes.Where(x => typeof(ICommand).IsAssignableFrom(x));
+
 			var commandName = args[0];
-			var matchingType = _commandTypes.FirstOrDefault(x =>
+			var matchingType = commandTypes.FirstOrDefault(x =>
 				typeof(ICommand).IsAssignableFrom(x) && x.Name.ToLower().StartsWith(commandName.ToLower()));
 
 			if (matchingType == null)
