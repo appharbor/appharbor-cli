@@ -29,8 +29,9 @@ namespace AppHarbor
 			}
 			catch (FileNotFoundException)
 			{
-				throw new ApplicationConfigurationException("Application is not configured");
 			}
+
+			throw new ApplicationConfigurationException("Application is not configured");
 		}
 
 		public virtual void SetupApplication(string id, User user)
