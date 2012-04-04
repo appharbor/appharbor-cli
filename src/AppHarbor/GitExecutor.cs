@@ -21,9 +21,8 @@ namespace AppHarbor
 			var processArguments = new StringBuilder();
 
 			processArguments.AppendFormat("/C ");
-			processArguments.AppendFormat("{0} ", _gitExecutable.Name);
+			processArguments.AppendFormat("\"{0}\" ", _gitExecutable.FullName);
 			processArguments.AppendFormat("{0} ", command);
-			processArguments.AppendFormat("--git-dir=\"{0}\" ", repositoryDirectory.FullName);
 
 			var process = new Process
 			{
@@ -32,8 +31,9 @@ namespace AppHarbor
 					Arguments = processArguments.ToString(),
 					CreateNoWindow = true,
 					RedirectStandardError = true,
+					RedirectStandardOutput = true,
 					UseShellExecute = false,
-					WorkingDirectory = _gitExecutable.Directory.FullName,
+					WorkingDirectory = repositoryDirectory.FullName,
 				},
 			};
 
@@ -41,7 +41,6 @@ namespace AppHarbor
 			{
 				process.Start();
 				process.WaitForExit();
-
 				string error = process.StandardError.ReadToEnd();
 				if (!string.IsNullOrEmpty(error))
 				{
