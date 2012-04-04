@@ -59,5 +59,27 @@ namespace AppHarbor.Tests.Commands
 			gitExecutor.Verify(x => x.Execute(It.IsAny<string>(), It.IsAny<DirectoryInfo>()), Times.Never());
 			gitExecutor.Verify(x => x.IsInstalled(), Times.Once());
 		}
+
+		[Theory, AutoCommandData]
+		public void ShouldSetUpGitRemoteIfGitIsInstalled([Frozen]Mock<IGitExecutor> gitExecutor, [Frozen]Mock<IAppHarborClient> client, CreateCommand command, string[] arguments, CreateResult<string> result, User user)
+		{
+			gitExecutor.Setup(x => x.IsInstalled()).Returns(true);
+			client.Setup(x => x.CreateApplication(It.IsAny<string>(), It.IsAny<string>())).Returns(result);
+			client.Setup(x => x.GetUser()).Returns(user);
+
+			using (var writer = new StringWriter())
+			{
+				Console.SetOut(writer);
+
+				command.Execute(arguments);
+
+				Assert.Contains("Added \"appharbor\" as a remote repository. Push to AppHarbor with git push appharbor master", writer.ToString());
+			}
+
+			var gitCommand = string.Format("remote add appharbor https://{0}@appharbor.com/{1}.git", user.Username, result.ID);
+			gitExecutor.Verify(x => 
+				x.Execute(gitCommand, It.Is<DirectoryInfo>(y => y.FullName == Directory.GetCurrentDirectory())), 
+				Times.Once());
+		}
 	}
 }

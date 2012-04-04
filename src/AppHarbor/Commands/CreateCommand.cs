@@ -30,6 +30,13 @@ namespace AppHarbor.Commands
 
 			if (_gitExecutor.IsInstalled())
 			{
+				var user = _appHarborClient.GetUser();
+				var repositoryUrl = string.Format("https://{0}@appharbor.com/{1}.git", user.Username, result.ID);
+
+				_gitExecutor.Execute(string.Format("remote add appharbor https://{0}@appharbor.com/{1}.git", user.Username, result.ID),
+					new DirectoryInfo(Directory.GetCurrentDirectory()));
+
+				Console.WriteLine("Added \"appharbor\" as a remote repository. Push to AppHarbor with git push appharbor master");
 			}
 		}
 	}
