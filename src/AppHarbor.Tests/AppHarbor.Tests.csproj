@@ -82,6 +82,7 @@
     <Compile Include="AutoCommandDataAttribute.cs" />
     <Compile Include="CommandDispatcherTest.cs" />
     <Compile Include="Commands\CreateCommandTest.cs" />
+    <Compile Include="Commands\HelpCommandTest.cs" />
     <Compile Include="Commands\LoginCommandTest.cs" />
     <Compile Include="Commands\LogoutCommandTest.cs" />
     <Compile Include="DelegateOutputStream.cs" />
