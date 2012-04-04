@@ -50,52 +50,5 @@ namespace AppHarbor.Tests.Commands
 				Assert.Equal(string.Format(string.Concat("Created application \"{0}\" | URL: https://{0}.apphb.com", Environment.NewLine), applicationSlug), writer.ToString());
 			}
 		}
-
-		[Theory, AutoCommandData]
-		public void ShouldNotSetupGitIfNotInstalled([Frozen]Mock<IGitExecutor> gitExecutor, CreateCommand command, string[] arguments)
-		{
-			command.Execute(arguments);
-
-			gitExecutor.Verify(x => x.Execute(It.IsAny<string>(), It.IsAny<DirectoryInfo>()), Times.Never());
-			gitExecutor.Verify(x => x.IsInstalled(), Times.Once());
-		}
-
-		[Theory, AutoCommandData]
-		public void ShouldSetUpGitRemoteIfGitIsInstalled([Frozen]Mock<IGitExecutor> gitExecutor, [Frozen]Mock<IAppHarborClient> client, CreateCommand command, string[] arguments, CreateResult<string> result, User user)
-		{
-			gitExecutor.Setup(x => x.IsInstalled()).Returns(true);
-			client.Setup(x => x.CreateApplication(It.IsAny<string>(), It.IsAny<string>())).Returns(result);
-			client.Setup(x => x.GetUser()).Returns(user);
-
-			using (var writer = new StringWriter())
-			{
-				Console.SetOut(writer);
-
-				command.Execute(arguments);
-
-				Assert.Contains("Added \"appharbor\" as a remote repository. Push to AppHarbor with git push appharbor master", writer.ToString());
-			}
-
-			var gitCommand = string.Format("remote add appharbor https://{0}@appharbor.com/{1}.git", user.Username, result.ID);
-			gitExecutor.Verify(x => 
-				x.Execute(gitCommand, It.Is<DirectoryInfo>(y => y.FullName == Directory.GetCurrentDirectory())), 
-				Times.Once());
-		}
-
-		[Theory, AutoCommandData]
-		public void ShouldShowRepositoryUrlIfGitSetupFailed([Frozen]Mock<IGitExecutor> gitExecutor, CreateCommand command, string[] arguments)
-		{
-			gitExecutor.Setup(x => x.IsInstalled()).Returns(true);
-			gitExecutor.Setup(x => x.Execute(It.IsAny<string>(), It.IsAny<DirectoryInfo>())).Throws<InvalidOperationException>();
-
-			using (var writer = new StringWriter())
-			{
-				Console.SetOut(writer);
-
-				command.Execute(arguments);
-
-				Assert.Contains("Couldn't add appharbor repository as a git remote. Repository URL is: https://@appharbor.com/.git", writer.ToString());
-			}
-		}
 	}
 }

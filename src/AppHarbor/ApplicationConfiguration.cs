@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 
 namespace AppHarbor
 {
@@ -30,6 +31,27 @@ namespace AppHarbor
 			catch (FileNotFoundException)
 			{
 				throw new ApplicationConfigurationException("Application is not configured");
+			}
+		}
+
+		public void SetupApplication(string id, IAppHarborClient appHarborClient)
+		{
+			if (_gitExecutor.IsInstalled())
+			{
+				var user = appHarborClient.GetUser();
+				var repositoryUrl = string.Format("https://{0}@appharbor.com/{1}.git", user.Username, id);
+
+				try
+				{
+					_gitExecutor.Execute(string.Format("remote add appharbor https://{0}@appharbor.com/{1}.git", user.Username, id),
+						new DirectoryInfo(Directory.GetCurrentDirectory()));
+
+					Console.WriteLine("Added \"appharbor\" as a remote repository. Push to AppHarbor with git push appharbor master");
+				}
+				catch (InvalidOperationException)
+				{
+					Console.WriteLine("Couldn't add appharbor repository as a git remote. Repository URL is: {0}", repositoryUrl);
+				}
 			}
 		}
 	}
