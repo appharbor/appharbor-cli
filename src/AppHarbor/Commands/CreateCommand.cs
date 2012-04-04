@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.IO;
 
 namespace AppHarbor.Commands
 {
@@ -26,6 +27,10 @@ namespace AppHarbor.Commands
 			var result = _appHarborClient.CreateApplication(arguments.First(), arguments.Skip(1).FirstOrDefault());
 
 			Console.WriteLine("Created application \"{0}\" | URL: https://{0}.apphb.com", result.ID);
+
+			if (_gitExecutor.IsInstalled())
+			{
+			}
 		}
 	}
 }

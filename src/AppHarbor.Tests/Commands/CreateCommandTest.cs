@@ -50,5 +50,14 @@ namespace AppHarbor.Tests.Commands
 				Assert.Equal(string.Format(string.Concat("Created application \"{0}\" | URL: https://{0}.apphb.com", Environment.NewLine), applicationSlug), writer.ToString());
 			}
 		}
+
+		[Theory, AutoCommandData]
+		public void ShouldNotSetupGitIfNotInstalled([Frozen]Mock<IGitExecutor> gitExecutor, CreateCommand command, string[] arguments)
+		{
+			command.Execute(arguments);
+
+			gitExecutor.Verify(x => x.Execute(It.IsAny<string>(), It.IsAny<DirectoryInfo>()), Times.Never());
+			gitExecutor.Verify(x => x.IsInstalled(), Times.Once());
+		}
 	}
 }
