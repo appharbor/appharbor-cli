@@ -85,6 +85,7 @@
     <Compile Include="Commands\LoginCommand.cs" />
     <Compile Include="Commands\LogoutCommand.cs" />
     <Compile Include="GitExecutor.cs" />
+    <Compile Include="HelpCommand.cs" />
     <Compile Include="IAccessTokenConfiguration.cs" />
     <Compile Include="IAppHarborClient.cs" />
     <Compile Include="IApplicationConfiguration.cs" />
