@@ -29,5 +29,10 @@ namespace AppHarbor
 				throw new CommandException("You're not logged in. Log in with \"appharbor login\"");
 			}
 		}
+
+		public User GetUser()
+		{
+			throw new NotImplementedException();
+		}
 	}
 }
