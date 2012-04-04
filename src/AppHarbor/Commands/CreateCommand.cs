@@ -33,10 +33,17 @@ namespace AppHarbor.Commands
 				var user = _appHarborClient.GetUser();
 				var repositoryUrl = string.Format("https://{0}@appharbor.com/{1}.git", user.Username, result.ID);
 
-				_gitExecutor.Execute(string.Format("remote add appharbor https://{0}@appharbor.com/{1}.git", user.Username, result.ID),
-					new DirectoryInfo(Directory.GetCurrentDirectory()));
+				try
+				{
+					_gitExecutor.Execute(string.Format("remote add appharbor https://{0}@appharbor.com/{1}.git", user.Username, result.ID),
+						new DirectoryInfo(Directory.GetCurrentDirectory()));
 
-				Console.WriteLine("Added \"appharbor\" as a remote repository. Push to AppHarbor with git push appharbor master");
+					Console.WriteLine("Added \"appharbor\" as a remote repository. Push to AppHarbor with git push appharbor master");
+				}
+				catch (InvalidOperationException)
+				{
+					Console.WriteLine("Couldn't add appharbor repository as a git remote. Repository URL is: {0}", repositoryUrl);
+				}
 			}
 		}
 	}

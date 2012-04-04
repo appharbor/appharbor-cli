@@ -81,5 +81,21 @@ namespace AppHarbor.Tests.Commands
 				x.Execute(gitCommand, It.Is<DirectoryInfo>(y => y.FullName == Directory.GetCurrentDirectory())), 
 				Times.Once());
 		}
+
+		[Theory, AutoCommandData]
+		public void ShouldShowRepositoryUrlIfGitSetupFailed([Frozen]Mock<IGitExecutor> gitExecutor, CreateCommand command, string[] arguments)
+		{
+			gitExecutor.Setup(x => x.IsInstalled()).Returns(true);
+			gitExecutor.Setup(x => x.Execute(It.IsAny<string>(), It.IsAny<DirectoryInfo>())).Throws<InvalidOperationException>();
+
+			using (var writer = new StringWriter())
+			{
+				Console.SetOut(writer);
+
+				command.Execute(arguments);
+
+				Assert.Contains("Couldn't add appharbor repository as a git remote. Repository URL is: https://@appharbor.com/.git", writer.ToString());
+			}
+		}
 	}
 }
