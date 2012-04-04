@@ -17,12 +17,9 @@ namespace AppHarbor
 
 		public string GetApplicationId()
 		{
-			var directory = Directory.GetCurrentDirectory();
-			var appharborConfigurationFile = new FileInfo(Path.Combine(directory, ".appharbor"));
-
 			try
 			{
-				using (var stream = _fileSystem.OpenRead(appharborConfigurationFile.FullName))
+				using (var stream = _fileSystem.OpenRead(ConfigurationFile.FullName))
 				{
 					using (var reader = new StreamReader(stream))
 					{
@@ -53,6 +50,16 @@ namespace AppHarbor
 			}
 
 			Console.WriteLine("Couldn't add appharbor repository as a git remote. Repository URL is: {0}", repositoryUrl);
+		}
+
+		private static FileInfo ConfigurationFile
+		{
+			get
+			{
+				var directory = Directory.GetCurrentDirectory();
+				var appharborConfigurationFile = new FileInfo(Path.Combine(directory, ".appharbor"));
+				return appharborConfigurationFile;
+			}
 		}
 	}
 }
