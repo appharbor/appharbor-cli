@@ -53,6 +53,10 @@ namespace AppHarbor
 
 			using (var stream = _fileSystem.OpenWrite(ConfigurationFile.FullName))
 			{
+				using (var writer = new StreamWriter(stream))
+				{
+					writer.Write(id);
+				}
 			}
 		}
 

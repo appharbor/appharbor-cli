@@ -71,8 +71,13 @@ namespace AppHarbor.Tests
 		public void ShouldCreateAppHarborConfigurationFileIfGitSetupFailed([Frozen]Mock<IGitExecutor> gitExecutor, [Frozen]Mock<IFileSystem> fileSystem, ApplicationConfiguration applicationConfiguration, string id, User user)
 		{
 			gitExecutor.Setup(x => x.Execute(It.IsAny<string>(), It.IsAny<DirectoryInfo>())).Throws<InvalidOperationException>();
+			Action<MemoryStream> VerifyConfigurationContent = stream => Assert.Equal(Encoding.Default.GetBytes(id), stream.ToArray());
 
-			applicationConfiguration.SetupApplication(id, user);
+			using (var stream = new DelegateOutputStream(VerifyConfigurationContent))
+			{
+				fileSystem.Setup(x => x.OpenWrite(ConfigurationFile)).Returns(stream);
+				applicationConfiguration.SetupApplication(id, user);
+			}
 
 			fileSystem.Verify(x => x.OpenWrite(ConfigurationFile), Times.Once());
 		}
