@@ -23,6 +23,7 @@ namespace AppHarbor
 				.For<IAppHarborClient>()
 				.UsingFactoryMethod(x =>
 				{
+					var accessTokenConfiguration = container.Resolve<IAccessTokenConfiguration>();
 					return new AppHarborClient(accessTokenConfiguration.GetAccessToken());
 				}));
 
