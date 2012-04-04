@@ -19,6 +19,9 @@ namespace AppHarbor
 			{
 				commandDispatcher.Dispatch(args);
 			}
+
+			Console.WriteLine("Usage: appharbor COMMAND [command-options]");
+			Console.WriteLine("");
 		}
 	}
 }
