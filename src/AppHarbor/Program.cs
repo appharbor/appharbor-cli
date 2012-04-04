@@ -15,15 +15,15 @@ namespace AppHarbor
 
 			var commandDispatcher = container.Resolve<CommandDispatcher>();
 
-			if (args.Any())
+			if (!args.Any())
 			{
-				commandDispatcher.Dispatch(args);
+				Console.WriteLine("Usage: appharbor COMMAND [command-options]");
+				Console.WriteLine("");
+
+				Console.WriteLine("Help topics (type \"appharbor help TOPIC\"):");
 			}
 
-			Console.WriteLine("Usage: appharbor COMMAND [command-options]");
-			Console.WriteLine("");
-
-			Console.WriteLine("Help topics (type \"appharbor help TOPIC\"):");
+			commandDispatcher.Dispatch(args);
 		}
 	}
 }
