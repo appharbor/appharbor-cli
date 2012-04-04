@@ -28,6 +28,10 @@ namespace AppHarbor
 				}));
 
 			container.Register(Component
+				.For<IApplicationConfiguration>()
+				.ImplementedBy<ApplicationConfiguration>());
+
+			container.Register(Component
 				.For<CommandDispatcher>()
 				.UsingFactoryMethod(x =>
 				{
