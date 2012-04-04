@@ -41,13 +41,11 @@ namespace AppHarbor.Tests
 		[Theory, AutoCommandData]
 		public void ShouldTryAndSetUpGitRemoteIfPossible([Frozen]Mock<IGitExecutor> gitExecutor, [Frozen]Mock<IAppHarborClient> client, ApplicationConfiguration applicationConfiguration, User user, string id)
 		{
-			client.Setup(x => x.GetUser()).Returns(user);
-
 			using (var writer = new StringWriter())
 			{
 				Console.SetOut(writer);
 
-				applicationConfiguration.SetupApplication(id, client.Object);
+				applicationConfiguration.SetupApplication(id, user);
 
 				Assert.Contains("Added \"appharbor\" as a remote repository. Push to AppHarbor with git push appharbor master", writer.ToString());
 			}
@@ -59,7 +57,7 @@ namespace AppHarbor.Tests
 		}
 
 		[Theory, AutoCommandData]
-		public void ShouldShowRepositoryUrlIfGitSetupFailed([Frozen]Mock<IGitExecutor> gitExecutor, ApplicationConfiguration applicationConfiguration, IAppHarborClient client, string id)
+		public void ShouldShowRepositoryUrlIfGitSetupFailed([Frozen]Mock<IGitExecutor> gitExecutor, ApplicationConfiguration applicationConfiguration, User user, string id)
 		{
 			gitExecutor.Setup(x => x.Execute(It.IsAny<string>(), It.IsAny<DirectoryInfo>())).Throws<InvalidOperationException>();
 
@@ -67,9 +65,9 @@ namespace AppHarbor.Tests
 			{
 				Console.SetOut(writer);
 
-				applicationConfiguration.SetupApplication(id, client);
+				applicationConfiguration.SetupApplication(id, user);
 
-				Assert.Contains(string.Format("Couldn't add appharbor repository as a git remote. Repository URL is: https://@appharbor.com/{0}.git", id), writer.ToString());
+				Assert.Contains(string.Format("Couldn't add appharbor repository as a git remote. Repository URL is: https://{0}@appharbor.com/{1}.git", user.Username, id), writer.ToString());
 			}
 		}
 	}

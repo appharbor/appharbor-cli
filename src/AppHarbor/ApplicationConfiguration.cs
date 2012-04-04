@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using AppHarbor.Model;
 
 namespace AppHarbor
 {
@@ -34,9 +35,8 @@ namespace AppHarbor
 			}
 		}
 
-		public void SetupApplication(string id, IAppHarborClient appHarborClient)
+		public void SetupApplication(string id, User user)
 		{
-			var user = appHarborClient.GetUser();
 			var repositoryUrl = string.Format("https://{0}@appharbor.com/{1}.git", user.Username, id);
 
 			try
