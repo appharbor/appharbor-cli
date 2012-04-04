@@ -22,12 +22,13 @@ namespace AppHarbor
 
 			try
 			{
-				var stream = _fileSystem.OpenRead(appharborConfigurationFile.FullName);
-				using (var reader = new StreamReader(stream))
+				using (var stream = _fileSystem.OpenRead(appharborConfigurationFile.FullName))
 				{
-					return reader.ReadToEnd();
+					using (var reader = new StreamReader(stream))
+					{
+						return reader.ReadToEnd();
+					}
 				}
-
 			}
 			catch (FileNotFoundException)
 			{
