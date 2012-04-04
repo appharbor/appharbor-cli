@@ -1,6 +1,12 @@
-﻿namespace AppHarbor
+﻿using System;
+
+namespace AppHarbor
 {
-	public class HelpCommand
+	public class HelpCommand : ICommand
 	{
+		public void Execute(string[] arguments)
+		{
+			throw new NotImplementedException();
+		}
 	}
 }
