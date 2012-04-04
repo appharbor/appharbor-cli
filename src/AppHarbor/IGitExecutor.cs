@@ -5,6 +5,6 @@ namespace AppHarbor
 {
 	public interface IGitExecutor
 	{
-		IEnumerable<string> Execute(string command, System.IO.DirectoryInfo repositoryDirectory);
+		IList<string> Execute(string command, System.IO.DirectoryInfo repositoryDirectory);
 	}
 }

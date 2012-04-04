@@ -17,7 +17,7 @@ namespace AppHarbor
 			_gitExecutable = new FileInfo(gitExecutablePath);
 		}
 
-		public virtual IEnumerable<string> Execute(string command, DirectoryInfo repositoryDirectory)
+		public virtual IList<string> Execute(string command, DirectoryInfo repositoryDirectory)
 		{
 			var processArguments = new StringBuilder();
 
@@ -48,10 +48,13 @@ namespace AppHarbor
 					throw new InvalidOperationException(error);
 				}
 
+				var output = new List<string>();
 				while (process.StandardOutput.Peek() > 0)
 				{
-					yield return process.StandardOutput.ReadLine();
+					output.Add(process.StandardOutput.ReadLine());
 				}
+
+				return output;
 			}
 		}
 	}
