@@ -39,6 +39,10 @@ namespace AppHarbor
 				}));
 
 			container.Register(Component
+				.For<IGitExecutor>()
+				.ImplementedBy<GitExecutor>());
+
+			container.Register(Component
 				.For<IFileSystem>()
 				.ImplementedBy<PhysicalFileSystem>()
 				.LifeStyle.Transient);
