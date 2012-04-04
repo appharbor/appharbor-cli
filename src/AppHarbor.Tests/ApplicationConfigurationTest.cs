@@ -26,9 +26,9 @@ namespace AppHarbor.Tests
 		}
 
 		[Theory, AutoCommandData]
-		public void ShouldThrowIfApplicationFileDoesNotExist(InMemoryFileSystem fileSystem, IGitExecutor gitExecutor)
+		public void ShouldThrowIfApplicationFileDoesNotExist([Frozen]Mock<IFileSystem> fileSystem, ApplicationConfiguration applicationConfiguration)
 		{
-			var applicationConfiguration = new ApplicationConfiguration(fileSystem, gitExecutor);
+			fileSystem.Setup(x => x.OpenRead(It.IsAny<string>())).Throws<FileNotFoundException>();
 
 			var exception = Assert.Throws<ApplicationConfigurationException>(() => applicationConfiguration.GetApplicationId());
 			Assert.Equal("Application is not configured", exception.Message);
