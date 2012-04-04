@@ -22,6 +22,8 @@ namespace AppHarbor
 
 			Console.WriteLine("Usage: appharbor COMMAND [command-options]");
 			Console.WriteLine("");
+
+			Console.WriteLine("Help topics (type \"appharbor help TOPIC\"):");
 		}
 	}
 }
