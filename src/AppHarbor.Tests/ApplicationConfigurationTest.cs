@@ -53,9 +53,10 @@ namespace AppHarbor.Tests
 		}
 
 		[Theory, AutoCommandData]
-		public void ShouldShowRepositoryUrlIfGitSetupFailed([Frozen]Mock<IGitExecutor> gitExecutor, ApplicationConfiguration applicationConfiguration, User user, string id)
+		public void ShouldShowRepositoryUrlIfGitSetupFailed([Frozen]Mock<IGitExecutor> gitExecutor, [Frozen]Mock<IFileSystem> fileSystem, ApplicationConfiguration applicationConfiguration, User user, string id)
 		{
 			gitExecutor.Setup(x => x.Execute(It.IsAny<string>(), It.IsAny<DirectoryInfo>())).Throws<InvalidOperationException>();
+			fileSystem.Setup(x => x.OpenWrite(ConfigurationFile)).Returns(new MemoryStream());
 
 			using (var writer = new StringWriter())
 			{
