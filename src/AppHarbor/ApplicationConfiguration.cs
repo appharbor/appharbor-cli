@@ -58,6 +58,8 @@ namespace AppHarbor
 					writer.Write(id);
 				}
 			}
+
+			Console.WriteLine("Wrote application configuration to {0}", ConfigurationFile);
 		}
 
 		private static FileInfo ConfigurationFile

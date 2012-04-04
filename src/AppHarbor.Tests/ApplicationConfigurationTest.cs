@@ -64,7 +64,9 @@ namespace AppHarbor.Tests
 
 				applicationConfiguration.SetupApplication(id, user);
 
-				Assert.Contains(string.Format("Couldn't add appharbor repository as a git remote. Repository URL is: https://{0}@appharbor.com/{1}.git", user.Username, id), writer.ToString());
+				var output = writer.ToString();
+				Assert.Contains(string.Format("Couldn't add appharbor repository as a git remote. Repository URL is: https://{0}@appharbor.com/{1}.git", user.Username, id), output);
+				Assert.Contains(string.Format("Wrote application configuration to {0}", ConfigurationFile), output);
 			}
 		}
 
