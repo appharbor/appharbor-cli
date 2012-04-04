@@ -50,6 +50,10 @@ namespace AppHarbor
 			}
 
 			Console.WriteLine("Couldn't add appharbor repository as a git remote. Repository URL is: {0}", repositoryUrl);
+
+			using (var stream = _fileSystem.OpenWrite(ConfigurationFile.FullName))
+			{
+			}
 		}
 
 		private static FileInfo ConfigurationFile
