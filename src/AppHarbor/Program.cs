@@ -15,7 +15,10 @@ namespace AppHarbor
 
 			var commandDispatcher = container.Resolve<CommandDispatcher>();
 
-			commandDispatcher.Dispatch(args);
+			if (args.Any())
+			{
+				commandDispatcher.Dispatch(args);
+			}
 		}
 	}
 }
