@@ -45,6 +45,7 @@ namespace AppHarbor
 					new DirectoryInfo(Directory.GetCurrentDirectory()));
 
 				Console.WriteLine("Added \"appharbor\" as a remote repository. Push to AppHarbor with git push appharbor master");
+				return;
 			}
 			catch (InvalidOperationException)
 			{
