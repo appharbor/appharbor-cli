@@ -2,6 +2,7 @@
 
 namespace AppHarbor.Commands
 {
+	[CommandHelp("Login to AppHarbor")]
 	public class LoginCommand : ICommand
 	{
 		private readonly IAccessTokenConfiguration _accessTokenConfiguration;
