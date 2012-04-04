@@ -86,6 +86,7 @@
     <Compile Include="GitExecutor.cs" />
     <Compile Include="IAccessTokenConfiguration.cs" />
     <Compile Include="IAppHarborClient.cs" />
+    <Compile Include="IApplicationConfiguration.cs" />
     <Compile Include="ICommand.cs" />
     <Compile Include="IFileSystem.cs" />
     <Compile Include="IGitExecutor.cs" />

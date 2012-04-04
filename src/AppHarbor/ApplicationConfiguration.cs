@@ -4,7 +4,7 @@ using AppHarbor.Model;
 
 namespace AppHarbor
 {
-	public class ApplicationConfiguration
+	public class ApplicationConfiguration : IApplicationConfiguration
 	{
 		private readonly IFileSystem _fileSystem;
 		private readonly IGitExecutor _gitExecutor;
