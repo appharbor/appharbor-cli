@@ -47,7 +47,6 @@ namespace AppHarbor.Tests
 			var exception = Assert.Throws<ArgumentException>(() => commandDispatcher.Dispatch(new string[] { commandName }));
 		}
 
-
 		public static IEnumerable<object[]> FooArguments
 		{
 			get
