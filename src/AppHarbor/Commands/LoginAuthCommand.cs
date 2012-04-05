@@ -1,5 +1,6 @@
 ﻿using System;
 using RestSharp;
+using RestSharp.Contrib;
 
 namespace AppHarbor.Commands
 {
@@ -40,7 +41,7 @@ namespace AppHarbor.Commands
 			request.AddParameter("password", password);
 
 			var response = restClient.Execute(request);
-			return response.Content.Split('=', '&')[1];
+			return HttpUtility.ParseQueryString(response.Content.Split('=', '&')[1])["access_token"];
 		}
 	}
 }
