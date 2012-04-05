@@ -53,7 +53,7 @@ namespace AppHarbor.Tests
 			var matcher = new TypeNameMatcher<IFoo>(new Type[] { FooCommandType });
 
 			var exception = Assert.Throws<ArgumentException>(() => matcher.GetMatchedType(commandName, null));
-			Assert.Equal(string.Format("No commands matches {0}. See \"appharbor help\".", commandName), exception.Message);
+			Assert.Equal(string.Format("No commands matches \"{0}\".", commandName), exception.Message);
 		}
 
 		[Theory]

@@ -36,7 +36,7 @@ namespace AppHarbor
 				throw new ArgumentException(string.Format("More than one command matches \"{0}\".", commandName));
 			}
 
-			throw new ArgumentException(string.Format("No commands matches {0}. See \"appharbor help\".", commandName));
+			throw new ArgumentException(string.Format("No commands matches \"{0}\".", commandName));
 		}
 	}
 }
