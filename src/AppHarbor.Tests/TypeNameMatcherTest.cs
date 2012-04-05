@@ -13,6 +13,8 @@ namespace AppHarbor.Tests
 
 		class Foo : IFoo { }
 
+		private static Type FooType = typeof(Foo);
+
 		[Fact]
 		public void ShouldThrowIfInitializedWithUnnasignableType()
 		{
@@ -20,19 +22,19 @@ namespace AppHarbor.Tests
 		}
 
 		[Theory]
-		[InlineData("Foo", typeof(Foo))]
-		[InlineData("foo", typeof(Foo))]
-		public void ShouldGetTypeStartingWithCommandName(string commandName, Type fooType)
+		[InlineData("Foo")]
+		[InlineData("foo")]
+		public void ShouldGetTypeStartingWithCommandName(string commandName)
 		{
-			var matcher = new TypeNameMatcher<IFoo>(new Type[] { fooType });
-			Assert.Equal(fooType, matcher.GetMatchedType(commandName));
+			var matcher = new TypeNameMatcher<IFoo>(new Type[] { FooType });
+			Assert.Equal(FooType, matcher.GetMatchedType(commandName));
 		}
 
 		[Theory]
-		[InlineData("Bar", typeof(Foo))]
-		public void ShouldThrowWhenNoTypesMatches(string commandName, Type fooType)
+		[InlineData("Bar")]
+		public void ShouldThrowWhenNoTypesMatches(string commandName)
 		{
-			var matcher = new TypeNameMatcher<IFoo>(new Type[] { fooType });
+			var matcher = new TypeNameMatcher<IFoo>(new Type[] { FooType });
 			Assert.Throws<ArgumentException>(() => matcher.GetMatchedType(commandName));
 		}
 	}
