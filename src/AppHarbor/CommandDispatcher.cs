@@ -18,7 +18,9 @@ namespace AppHarbor
 
 		public void Dispatch(string[] args)
 		{
-			var matchingType = _typeNameMatcher.GetMatchedType(args.First(), args.Skip(1).FirstOrDefault());
+			var splitted = args[0].Split(':');
+			var matchingType = _typeNameMatcher.GetMatchedType(splitted.Last(),
+				splitted.Reverse().Skip(1).FirstOrDefault());
 
 			var command = (ICommand)_kernel.Resolve(matchingType);
 

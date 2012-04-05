@@ -17,8 +17,8 @@ namespace AppHarbor.Tests
 
 		[Theory]
 		[InlineAutoCommandData("foo", "foo", null)]
-		[InlineAutoCommandData("foo:bar", "foo", "bar")]
-		public void ShouldDispatchCommandWithASingleParameter(
+		[InlineAutoCommandData("foo:bar", "bar", "foo")]
+		public void ShouldDispatchCommandWithoutParameters(
 			string argument,
 			string commandName,
 			string scope,
