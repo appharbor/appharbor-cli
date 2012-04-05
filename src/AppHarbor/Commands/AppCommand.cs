@@ -2,6 +2,7 @@
 
 namespace AppHarbor.Commands
 {
+	[CommandHelp("List your applications")]
 	public class AppCommand : ICommand
 	{
 		private readonly IAppHarborClient _client;
