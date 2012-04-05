@@ -26,7 +26,7 @@ namespace AppHarbor.Tests.Commands
 					loginCommand.Setup(x => x.GetAccessToken(username, password)).Returns("foo");
 					loginCommand.Object.Execute(new string[] { });
 
-					var expected = string.Format("Username:{0}Password:{0}", Environment.NewLine);
+					var expected = string.Format("Username:{0}Password:{0}Successfully logged in as {1}{0}", Environment.NewLine, username);
 					Assert.Equal(expected, writer.ToString());
 					accessTokenConfigurationMock.Verify(x => x.SetAccessToken("foo"), Times.Once());
 				}

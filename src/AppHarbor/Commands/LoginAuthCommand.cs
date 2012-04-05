@@ -29,6 +29,7 @@ namespace AppHarbor.Commands
 
 			var accessToken = GetAccessToken(username, password);
 			_accessTokenConfiguration.SetAccessToken(accessToken);
+			Console.WriteLine(string.Format("Successfully logged in as {0}", username));
 		}
 
 		public virtual string GetAccessToken(string username, string password)
