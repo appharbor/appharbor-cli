@@ -37,5 +37,26 @@ namespace AppHarbor.Tests
 
 			command.Verify(x => x.Execute(It.Is<string[]>(y => !y.Any())));
 		}
+
+		[Theory]
+		[InlineAutoCommandData("foo:bar baz", "bar", "foo", "baz")]
+		public void ShouldDispatchCommandWithParameter(
+			string argument,
+			string commandName,
+			string scope,
+			string commandArgument,
+			[Frozen]Mock<ITypeNameMatcher> typeNameMatcher,
+			[Frozen]Mock<IKernel> kernel,
+			Mock<FooCommand> command,
+			CommandDispatcher commandDispatcher)
+		{
+			var commandType = typeof(FooCommand);
+			typeNameMatcher.Setup(x => x.GetMatchedType(commandName, scope)).Returns(commandType);
+			kernel.Setup(x => x.Resolve(commandType)).Returns(command.Object);
+
+			commandDispatcher.Dispatch(argument.Split());
+
+			command.Verify(x => x.Execute(It.Is<string[]>(y => y.Length == 1 && y.Any(z => z == commandArgument))));
+		}
 	}
 }
