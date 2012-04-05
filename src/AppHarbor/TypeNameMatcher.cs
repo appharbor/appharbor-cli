@@ -25,9 +25,9 @@ namespace AppHarbor
 			{
 				return scopedTypes.Single(x => x.Name.ToLower().StartsWith(commandName.ToLower()));
 			}
-			catch (InvalidOperationException)
+			catch (InvalidOperationException exception)
 			{
-				throw new ArgumentException("No candidate type matches", "commandName");
+				throw new ArgumentException("Error while matching type", "commandName", exception);
 			}
 		}
 	}
