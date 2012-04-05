@@ -17,10 +17,9 @@ namespace AppHarbor
 			return Environment.GetEnvironmentVariable(TokenEnvironmentVariable, TokenEnvironmentVariableTarget);
 		}
 
-		public virtual void SetAccessToken(string username, string password)
+		public virtual void SetAccessToken(string accessToken)
 		{
-			throw new NotImplementedException();
-			//Environment.SetEnvironmentVariable(TokenEnvironmentVariable, "foo", TokenEnvironmentVariableTarget);
+			Environment.SetEnvironmentVariable(TokenEnvironmentVariable, accessToken, TokenEnvironmentVariableTarget);
 		}
 	}
 }
