@@ -5,9 +5,9 @@ namespace AppHarbor.Commands
 	[CommandHelp("Logout of AppHarbor")]
 	public class LogoutAuthCommand : ICommand
 	{
-		private readonly AccessTokenConfiguration _accessTokenConfiguration;
+		private readonly IAccessTokenConfiguration _accessTokenConfiguration;
 
-		public LogoutAuthCommand(AccessTokenConfiguration accessTokenConfiguration)
+		public LogoutAuthCommand(IAccessTokenConfiguration accessTokenConfiguration)
 		{
 			_accessTokenConfiguration = accessTokenConfiguration;
 		}
