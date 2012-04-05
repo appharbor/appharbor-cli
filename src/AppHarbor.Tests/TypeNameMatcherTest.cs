@@ -48,5 +48,13 @@ namespace AppHarbor.Tests
 			var matcher = new TypeNameMatcher<IFoo>(new Type[] { FooCommandType });
 			Assert.Throws<ArgumentException>(() => matcher.GetMatchedType(commandName, null));
 		}
+
+		[Theory]
+		[InlineData("Bar")]
+		public void ShouldReturnScopedCommand(string scope)
+		{
+			var matcher = new TypeNameMatcher<IFoo>(new Type[] { FooCommandType, FooBarCommandType });
+			matcher.GetMatchedType("foo", scope);
+		}
 	}
 }
