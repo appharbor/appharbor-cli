@@ -7,27 +7,18 @@ namespace AppHarbor
 {
 	public class CommandDispatcher
 	{
-		private readonly IEnumerable<Type> _candidateTypes;
+		private readonly TypeNameMatcher<ICommand> _typeNameMatcher;
 		private readonly IKernel _kernel;
 
-		public CommandDispatcher(IEnumerable<Type> candidateTypes, IKernel kernel)
+		public CommandDispatcher(TypeNameMatcher<ICommand> typeNameMatcher, IKernel kernel)
 		{
-			_candidateTypes = candidateTypes;
+			_typeNameMatcher = typeNameMatcher;
 			_kernel = kernel;
 		}
 
 		public void Dispatch(string[] args)
 		{
-			var commandTypes = _candidateTypes.Where(x => typeof(ICommand).IsAssignableFrom(x));
-
-			var commandName = args[0];
-			var matchingType = commandTypes.FirstOrDefault(x =>
-				typeof(ICommand).IsAssignableFrom(x) && x.Name.ToLower().StartsWith(commandName.ToLower()));
-
-			if (matchingType == null)
-			{
-				throw new ArgumentException(string.Format("The command \"{0}\" does not exist", commandName));
-			}
+			var matchingType = _typeNameMatcher.GetMatchedType(args.First(), args.Skip(1).FirstOrDefault());
 
 			var command = (ICommand)_kernel.Resolve(matchingType);
 

@@ -23,7 +23,7 @@ namespace AppHarbor.Tests
 		{
 			var kernelMock = new Mock<IKernel>();
 			var fooCommandType = typeof(FooCommand);
-			var commandDispatcher = new CommandDispatcher(new Type[] { fooCommandType }, kernelMock.Object );
+			var commandDispatcher = new CommandDispatcher(new TypeNameMatcher<ICommand>(new Type[] { fooCommandType }), kernelMock.Object);
 
 			var commandMock = new Mock<FooCommand>();
 			kernelMock.Setup(x => x.Resolve(It.Is<Type>(y => y == fooCommandType))).Returns(commandMock.Object);
@@ -42,10 +42,9 @@ namespace AppHarbor.Tests
 		{
 			var kernelMock = new Mock<IKernel>();
 			var fooCommandType = typeof(FooCommand);
-			var commandDispatcher = new CommandDispatcher(new Type[] { fooCommandType }, kernelMock.Object );
+			var commandDispatcher = new CommandDispatcher(new TypeNameMatcher<ICommand>(new Type[] { fooCommandType }), kernelMock.Object);
 
 			var exception = Assert.Throws<ArgumentException>(() => commandDispatcher.Dispatch(new string[] { commandName }));
-			Assert.Equal(string.Format("The command \"{0}\" does not exist", commandName), exception.Message);
 		}
 
 
