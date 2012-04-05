@@ -28,7 +28,7 @@ namespace AppHarbor.Tests.Commands
 
 					var expected = string.Format("Username:{0}Password:{0}", Environment.NewLine);
 					Assert.Equal(expected, writer.ToString());
-					accessTokenConfigurationMock.Verify(x => x.SetAccessToken(username, password), Times.Once());
+					accessTokenConfigurationMock.Verify(x => x.SetAccessToken("foo"), Times.Once());
 				}
 			}
 		}

@@ -25,7 +25,7 @@ namespace AppHarbor.Commands
 			Console.WriteLine("Password:");
 			var password = Console.ReadLine();
 
-			_accessTokenConfiguration.SetAccessToken(username, password);
+			_accessTokenConfiguration.SetAccessToken("foo");
 		}
 	}
 }

@@ -6,6 +6,6 @@ namespace AppHarbor
 	{
 		void DeleteAccessToken();
 		string GetAccessToken();
-		void SetAccessToken(string username, string password);
+		void SetAccessToken(string accessToken);
 	}
 }
