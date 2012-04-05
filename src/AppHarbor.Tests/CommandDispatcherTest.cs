@@ -44,11 +44,9 @@ namespace AppHarbor.Tests
 			CommandDispatcher commandDispatcher)
 		{
 			typeNameMatcher.Setup(x => x.GetMatchedType(argument)).Returns(FooCommandType);
-
 			kernel.Setup(x => x.Resolve(FooCommandType)).Returns(command.Object);
 
-			var dispatchArguments = new string[] { argument };
-			commandDispatcher.Dispatch(dispatchArguments);
+			commandDispatcher.Dispatch(new string[] { argument });
 
 			command.Verify(x => x.Execute(It.Is<string[]>(y => !y.Any())));
 		}
