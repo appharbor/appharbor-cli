@@ -4,13 +4,13 @@ using AppHarbor.Commands;
 
 namespace AppHarbor.Tests.Commands
 {
-	public class LogoutCommandTest
+	public class LogoutAuthCommandTest
 	{
 		[Fact]
 		public void ShouldLogoutUser()
 		{
 			var accessTokenConfigurationMock = new Mock<AccessTokenConfiguration>();
-			var logoutCommand = new LogoutCommand(accessTokenConfigurationMock.Object);
+			var logoutCommand = new LogoutAuthCommand(accessTokenConfigurationMock.Object);
 
 			logoutCommand.Execute(new string[0]);
 			accessTokenConfigurationMock.Verify(x => x.DeleteAccessToken(), Times.Once());
