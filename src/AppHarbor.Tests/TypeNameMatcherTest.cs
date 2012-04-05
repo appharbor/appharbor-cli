@@ -27,7 +27,7 @@ namespace AppHarbor.Tests
 		public void ShouldGetTypeStartingWithCommandName(string commandName)
 		{
 			var matcher = new TypeNameMatcher<IFoo>(new Type[] { FooType });
-			Assert.Equal(FooType, matcher.GetMatchedType(commandName));
+			Assert.Equal(FooType, matcher.GetMatchedType(commandName, null));
 		}
 
 		[Theory]
@@ -35,7 +35,7 @@ namespace AppHarbor.Tests
 		public void ShouldThrowWhenMoreThanOneTypeMatches(string commandName)
 		{
 			var matcher = new TypeNameMatcher<IFoo>(new Type[] { FooType, FooType });
-			Assert.Throws<ArgumentException>(() => matcher.GetMatchedType(commandName));
+			Assert.Throws<ArgumentException>(() => matcher.GetMatchedType(commandName, null));
 		}
 
 		[Theory]
@@ -43,7 +43,7 @@ namespace AppHarbor.Tests
 		public void ShouldThrowWhenNoTypesMatches(string commandName)
 		{
 			var matcher = new TypeNameMatcher<IFoo>(new Type[] { FooType });
-			Assert.Throws<ArgumentException>(() => matcher.GetMatchedType(commandName));
+			Assert.Throws<ArgumentException>(() => matcher.GetMatchedType(commandName, null));
 		}
 	}
 }

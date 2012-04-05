@@ -17,7 +17,7 @@ namespace AppHarbor
 			_candidateTypes = candidateTypes;
 		}
 
-		public Type GetMatchedType(string commandName)
+		public Type GetMatchedType(string commandName, string scope)
 		{
 			try
 			{
