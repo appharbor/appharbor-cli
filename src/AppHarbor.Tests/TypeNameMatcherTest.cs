@@ -21,6 +21,7 @@ namespace AppHarbor.Tests
 
 		[Theory]
 		[InlineData("Foo", typeof(Foo))]
+		[InlineData("foo", typeof(Foo))]
 		public void ShouldGetTypeStartingWithCommandName(string commandName, Type fooType)
 		{
 			var matcher = new TypeNameMatcher<IFoo>(new Type[] { fooType });
