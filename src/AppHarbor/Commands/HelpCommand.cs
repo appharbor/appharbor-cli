@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace AppHarbor.Commands
 {
-	[CommandHelp("Display help summary or help for a specific command", "[COMMAND]")]
+	[CommandHelp("Display help summary")]
 	public class HelpCommand : ICommand
 	{
 		private readonly IEnumerable<Type> _commandTypes;
