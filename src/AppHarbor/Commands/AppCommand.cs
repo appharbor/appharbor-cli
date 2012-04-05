@@ -13,7 +13,11 @@ namespace AppHarbor.Commands
 
 		public void Execute(string[] arguments)
 		{
-			throw new NotImplementedException();
+			var applications = _client.GetApplications();
+			foreach (var application in applications)
+			{
+				Console.WriteLine(application.Slug);
+			}
 		}
 	}
 }
