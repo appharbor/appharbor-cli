@@ -15,6 +15,7 @@ namespace AppHarbor.Commands
 		public void Execute(string[] arguments)
 		{
 			_accessTokenConfiguration.DeleteAccessToken();
+			Console.WriteLine("Successfully logged out.");
 		}
 	}
 }
