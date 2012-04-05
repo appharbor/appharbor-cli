@@ -29,6 +29,8 @@ namespace AppHarbor.Tests
 			kernel.Setup(x => x.Resolve(FooCommandType)).Returns(command.Object);
 
 			commandDispatcher.Dispatch(new string[0]);
+
+			typeNameMatcher.VerifyAll();
 		}
 
 		[Theory]
