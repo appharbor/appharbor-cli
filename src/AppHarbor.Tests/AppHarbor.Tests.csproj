@@ -89,6 +89,7 @@
     <Compile Include="InlineAutoCommandDataAttribute.cs" />
     <Compile Include="InMemoryFileSystem.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TypeNameMatcherTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
