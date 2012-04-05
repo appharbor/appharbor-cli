@@ -22,9 +22,9 @@ namespace AppHarbor.Tests.Commands
 					Console.SetIn(reader);
 
 					accessTokenConfigurationMock.Setup(x => x.GetAccessToken()).Returns((string)null);
-					var loginCommand = new LoginAuthCommand(accessTokenConfigurationMock.Object);
-
-					loginCommand.Execute(new string[] { });
+					var loginCommand = new Mock<LoginAuthCommand>(accessTokenConfigurationMock.Object);
+					loginCommand.Setup(x => x.GetAccessToken(username, password)).Returns("foo");
+					loginCommand.Object.Execute(new string[] { });
 
 					var expected = string.Format("Username:{0}Password:{0}", Environment.NewLine);
 					Assert.Equal(expected, writer.ToString());

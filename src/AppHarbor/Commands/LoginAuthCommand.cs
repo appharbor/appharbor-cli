@@ -1,4 +1,5 @@
 ﻿using System;
+using RestSharp;
 
 namespace AppHarbor.Commands
 {
@@ -25,7 +26,21 @@ namespace AppHarbor.Commands
 			Console.WriteLine("Password:");
 			var password = Console.ReadLine();
 
-			_accessTokenConfiguration.SetAccessToken("foo");
+			var accessToken = GetAccessToken(username, password);
+			_accessTokenConfiguration.SetAccessToken(accessToken);
+		}
+
+		public virtual string GetAccessToken(string username, string password)
+		{
+			//NOTE: Remove when merged into AppHarbor.NET library
+			var restClient = new RestClient("https://appharbor-token-client.apphb.com");
+			var request = new RestRequest("/token", Method.POST);
+
+			request.AddParameter("username", username);
+			request.AddParameter("password", password);
+
+			var response = restClient.Execute(request);
+			return response.Content.Split('=', '&')[1];
 		}
 	}
 }
