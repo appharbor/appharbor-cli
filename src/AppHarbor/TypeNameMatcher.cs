@@ -22,14 +22,21 @@ namespace AppHarbor
 			var scopedTypes = _candidateTypes
 				.Where(x => x.Name.ToLower().EndsWith(string.Concat(scope, "Command").ToLower()));
 
+			Type command;
 			try
 			{
-				return scopedTypes.Single(x => x.Name.ToLower().StartsWith(commandName.ToLower()));
+				command = scopedTypes.SingleOrDefault(x => x.Name.ToLower().StartsWith(commandName.ToLower()));
+				if (command != null)
+				{
+					return command;
+				}
 			}
-			catch (InvalidOperationException exception)
+			catch (InvalidOperationException)
 			{
-				throw new ArgumentException(string.Format("No commands matches {0}. See \"appharbor help\".", commandName), exception);
+				throw new ArgumentException(string.Format("More than one command matches \"{0}\".", commandName));
 			}
+
+			throw new ArgumentException(string.Format("No commands matches {0}. See \"appharbor help\".", commandName));
 		}
 	}
 }

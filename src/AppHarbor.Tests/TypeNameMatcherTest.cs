@@ -41,7 +41,9 @@ namespace AppHarbor.Tests
 		public void ShouldThrowWhenMoreThanOneTypeMatches(string commandName)
 		{
 			var matcher = new TypeNameMatcher<IFoo>(new Type[] { FooBazCommandType, FooBarCommandType });
-			Assert.Throws<ArgumentException>(() => matcher.GetMatchedType(commandName, null));
+
+			var exception = Assert.Throws<ArgumentException>(() => matcher.GetMatchedType(commandName, null));
+			Assert.Equal(string.Format("More than one command matches \"{0}\".", commandName), exception.Message);
 		}
 
 		[Theory]
