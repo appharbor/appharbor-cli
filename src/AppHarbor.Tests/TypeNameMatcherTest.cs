@@ -31,6 +31,14 @@ namespace AppHarbor.Tests
 		}
 
 		[Theory]
+		[InlineData("Foo")]
+		public void ShouldThrowWhenMoreThanOneTypeMatches(string commandName)
+		{
+			var matcher = new TypeNameMatcher<IFoo>(new Type[] { FooType, FooType });
+			Assert.Throws<ArgumentException>(() => matcher.GetMatchedType(commandName));
+		}
+
+		[Theory]
 		[InlineData("Bar")]
 		public void ShouldThrowWhenNoTypesMatches(string commandName)
 		{
