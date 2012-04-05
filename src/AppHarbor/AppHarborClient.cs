@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using AppHarbor.Model;
 
 namespace AppHarbor
@@ -16,6 +17,11 @@ namespace AppHarbor
 		{
 			var appHarborApi = GetAppHarborApi();
 			return appHarborApi.CreateApplication(name, regionIdentifier);
+		}
+
+		public IEnumerable<Application> GetApplications()
+		{
+			throw new NotImplementedException();
 		}
 
 		private AppHarborApi GetAppHarborApi()
