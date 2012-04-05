@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using Castle.MicroKernel;
 using Moq;
 using Ploeh.AutoFixture.Xunit;
@@ -8,6 +9,8 @@ namespace AppHarbor.Tests
 {
 	public class CommandDispatcherTest
 	{
+		private static Type FooCommandType = typeof(FooCommand);
+
 		public class FooCommand : ICommand
 		{
 			public virtual void Execute(string[] arguments)
@@ -22,9 +25,8 @@ namespace AppHarbor.Tests
 			Mock<FooCommand> command,
 			CommandDispatcher commandDispatcher)
 		{
-			var commandType = typeof(FooCommand);
-			typeNameMatcher.Setup(x => x.GetMatchedType("help")).Returns(commandType);
-			kernel.Setup(x => x.Resolve(commandType)).Returns(command.Object);
+			typeNameMatcher.Setup(x => x.GetMatchedType("help")).Returns(FooCommandType);
+			kernel.Setup(x => x.Resolve(FooCommandType)).Returns(command.Object);
 
 			commandDispatcher.Dispatch(new string[0]);
 		}
@@ -39,10 +41,9 @@ namespace AppHarbor.Tests
 			Mock<FooCommand> command,
 			CommandDispatcher commandDispatcher)
 		{
-			var commandType = typeof(FooCommand);
-			typeNameMatcher.Setup(x => x.GetMatchedType(argument)).Returns(commandType);
+			typeNameMatcher.Setup(x => x.GetMatchedType(argument)).Returns(FooCommandType);
 
-			kernel.Setup(x => x.Resolve(commandType)).Returns(command.Object);
+			kernel.Setup(x => x.Resolve(FooCommandType)).Returns(command.Object);
 
 			var dispatchArguments = new string[] { argument };
 			commandDispatcher.Dispatch(dispatchArguments);
@@ -61,9 +62,8 @@ namespace AppHarbor.Tests
 			Mock<FooCommand> command,
 			CommandDispatcher commandDispatcher)
 		{
-			var commandType = typeof(FooCommand);
-			typeNameMatcher.Setup(x => x.GetMatchedType(argument.Split().First())).Returns(commandType);
-			kernel.Setup(x => x.Resolve(commandType)).Returns(command.Object);
+			typeNameMatcher.Setup(x => x.GetMatchedType(argument.Split().First())).Returns(FooCommandType);
+			kernel.Setup(x => x.Resolve(FooCommandType)).Returns(command.Object);
 
 			commandDispatcher.Dispatch(argument.Split());
 
