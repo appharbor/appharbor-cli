@@ -17,7 +17,7 @@ namespace AppHarbor
 			_candidateTypes = candidateTypes;
 		}
 
-		public Type GetMatchedType(string commandName, string scope)
+		public virtual Type GetMatchedType(string commandName, string scope)
 		{
 			var typeNameSuffix = "Command";
 			var scopedTypes = _candidateTypes
