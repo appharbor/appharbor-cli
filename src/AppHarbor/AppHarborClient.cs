@@ -25,6 +25,12 @@ namespace AppHarbor
 			return appHarborApi.GetApplications();
 		}
 
+		public User GetUser()
+		{
+			var appHarborApi = GetAppHarborApi();
+			return appHarborApi.GetUser();
+		}
+
 		private AppHarborApi GetAppHarborApi()
 		{
 			try
@@ -35,12 +41,6 @@ namespace AppHarbor
 			{
 				throw new CommandException("You're not logged in. Log in with \"appharbor login\"");
 			}
-		}
-
-		public User GetUser()
-		{
-			var appHarborApi = GetAppHarborApi();
-			return appHarborApi.GetUser();
 		}
 	}
 }
