@@ -8,7 +8,7 @@ using Xunit.Extensions;
 
 namespace AppHarbor.Tests.Commands
 {
-	public class LoginAuthCommandTest
+	public class AuthLoginCommandTest
 	{
 		[Theory, AutoData]
 		public void ShouldSetAppHarborTokenIfUserIsntLoggedIn(string username, string password, [Frozen]Mock<IAccessTokenConfiguration> accessTokenConfigurationMock)
@@ -22,7 +22,7 @@ namespace AppHarbor.Tests.Commands
 					Console.SetIn(reader);
 
 					accessTokenConfigurationMock.Setup(x => x.GetAccessToken()).Returns((string)null);
-					var loginCommand = new LoginAuthCommand(accessTokenConfigurationMock.Object);
+					var loginCommand = new AuthLoginCommand(accessTokenConfigurationMock.Object);
 
 					loginCommand.Execute(new string[] { });
 
@@ -38,7 +38,7 @@ namespace AppHarbor.Tests.Commands
 		{
 			accessTokenConfigurationMock.Setup(x => x.GetAccessToken()).Returns("foo");
 
-			var loginCommand = new LoginAuthCommand(accessTokenConfigurationMock.Object);
+			var loginCommand = new AuthLoginCommand(accessTokenConfigurationMock.Object);
 
 			var exception = Assert.Throws<CommandException>(() => loginCommand.Execute(new string[] { }));
 			Assert.Equal("You're already logged in", exception.Message);

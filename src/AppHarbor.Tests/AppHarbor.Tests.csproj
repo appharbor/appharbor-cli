@@ -81,10 +81,10 @@
     <Compile Include="ApplicationConfigurationTest.cs" />
     <Compile Include="AutoCommandDataAttribute.cs" />
     <Compile Include="CommandDispatcherTest.cs" />
-    <Compile Include="Commands\CreateAppCommandTest.cs" />
+    <Compile Include="Commands\AppCreateCommandTest.cs" />
     <Compile Include="Commands\HelpCommandTest.cs" />
-    <Compile Include="Commands\LoginAuthCommandTest.cs" />
-    <Compile Include="Commands\LogoutAuthCommandTest.cs" />
+    <Compile Include="Commands\AuthLoginCommandTest.cs" />
+    <Compile Include="Commands\AuthLogoutAuthCommandTest.cs" />
     <Compile Include="DelegateOutputStream.cs" />
     <Compile Include="InlineAutoCommandDataAttribute.cs" />
     <Compile Include="InMemoryFileSystem.cs" />
@@ -103,6 +103,10 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\nuget.targets" />
+  <PropertyGroup>
+    <PreBuildEvent>
+    </PreBuildEvent>
+  </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

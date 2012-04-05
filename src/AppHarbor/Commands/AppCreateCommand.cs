@@ -4,12 +4,12 @@ using System.Linq;
 namespace AppHarbor.Commands
 {
 	[CommandHelp("Create an application", "[NAME]")]
-	public class CreateAppCommand : ICommand
+	public class AppCreateCommand : ICommand
 	{
 		private readonly IAppHarborClient _appHarborClient;
 		private readonly IApplicationConfiguration _applicationConfiguration;
 
-		public CreateAppCommand(IAppHarborClient appHarborClient, IApplicationConfiguration applicationConfiguration)
+		public AppCreateCommand(IAppHarborClient appHarborClient, IApplicationConfiguration applicationConfiguration)
 		{
 			_appHarborClient = appHarborClient;
 			_applicationConfiguration = applicationConfiguration;

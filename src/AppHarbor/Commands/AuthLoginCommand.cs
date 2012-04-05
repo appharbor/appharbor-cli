@@ -3,11 +3,11 @@
 namespace AppHarbor.Commands
 {
 	[CommandHelp("Login to AppHarbor")]
-	public class LoginAuthCommand : ICommand
+	public class AuthLoginCommand : ICommand
 	{
 		private readonly IAccessTokenConfiguration _accessTokenConfiguration;
 
-		public LoginAuthCommand(IAccessTokenConfiguration accessTokenConfiguration)
+		public AuthLoginCommand(IAccessTokenConfiguration accessTokenConfiguration)
 		{
 			_accessTokenConfiguration = accessTokenConfiguration;
 		}
