@@ -42,7 +42,7 @@ namespace AppHarbor.Commands
 			request.AddParameter("password", password);
 
 			var response = restClient.Execute(request);
-			var accessToken = HttpUtility.ParseQueryString(response.Content.Split('=', '&')[1])["access_token"];
+			var accessToken = HttpUtility.ParseQueryString(response.Content)["access_token"];
 
 			if (accessToken == null)
 			{
