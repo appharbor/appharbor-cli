@@ -47,11 +47,7 @@ namespace AppHarbor
 
 			container.Register(Component
 				.For<ITypeNameMatcher>()
-				.UsingFactoryMethod(x =>
-				{
-					return new TypeNameMatcher<ICommand>(Assembly.GetExecutingAssembly().GetExportedTypes()
-						.Where(y => typeof(ICommand).IsAssignableFrom(y)));
-				}));
+				.ImplementedBy<TypeNameMatcher<ICommand>>());
 
 			container.Register(Component
 				.For<IGitExecutor>()
