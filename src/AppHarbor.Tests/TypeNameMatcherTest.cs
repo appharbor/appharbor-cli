@@ -29,7 +29,7 @@ namespace AppHarbor.Tests
 		public void ShouldGetTypeStartingWithCommandName(string commandName)
 		{
 			var matcher = new TypeNameMatcher<IFoo>(new Type[] { FooCommandType });
-			Assert.Equal(FooCommandType, matcher.GetMatchedType(commandName, null));
+			Assert.Equal(FooCommandType, matcher.GetMatchedType(commandName));
 		}
 
 		[Theory]
@@ -38,7 +38,7 @@ namespace AppHarbor.Tests
 		{
 			var matcher = new TypeNameMatcher<IFoo>(new Type[] { FooBazCommandType, FooBarCommandType });
 
-			var exception = Assert.Throws<ArgumentException>(() => matcher.GetMatchedType(commandName, null));
+			var exception = Assert.Throws<ArgumentException>(() => matcher.GetMatchedType(commandName));
 			Assert.Equal(string.Format("More than one command matches \"{0}\".", commandName), exception.Message);
 		}
 
@@ -48,7 +48,7 @@ namespace AppHarbor.Tests
 		public void ShouldNotThrowWhenCommandNameMatchesCommandCompletely(string commandName)
 		{
 			var matcher = new TypeNameMatcher<IFoo>(new Type[] { FooCommandType, FooBarCommandType });
-			Assert.Equal(FooCommandType, matcher.GetMatchedType(commandName, null));
+			Assert.Equal(FooCommandType, matcher.GetMatchedType(commandName));
 		}
 
 		[Theory]
@@ -57,7 +57,7 @@ namespace AppHarbor.Tests
 		{
 			var matcher = new TypeNameMatcher<IFoo>(new Type[] { FooCommandType });
 
-			var exception = Assert.Throws<ArgumentException>(() => matcher.GetMatchedType(commandName, null));
+			var exception = Assert.Throws<ArgumentException>(() => matcher.GetMatchedType(commandName));
 			Assert.Equal(string.Format("No commands matches \"{0}\".", commandName), exception.Message);
 		}
 
@@ -67,7 +67,7 @@ namespace AppHarbor.Tests
 		public void ShouldReturnScopedCommand(string scope)
 		{
 			var matcher = new TypeNameMatcher<IFoo>(new Type[] { FooCommandType, FooBarCommandType });
-			matcher.GetMatchedType("foo", scope);
+			matcher.GetMatchedType(string.Concat(scope, ":", "foo"));
 		}
 	}
 }

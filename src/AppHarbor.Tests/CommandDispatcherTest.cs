@@ -16,19 +16,17 @@ namespace AppHarbor.Tests
 		}
 
 		[Theory]
-		[InlineAutoCommandData("foo", "foo", null)]
-		[InlineAutoCommandData("foo:bar", "bar", "foo")]
+		[InlineAutoCommandData("foo")]
+		[InlineAutoCommandData("foo:bar")]
 		public void ShouldDispatchCommandWithoutParameters(
 			string argument,
-			string commandName,
-			string scope,
 			[Frozen]Mock<ITypeNameMatcher> typeNameMatcher,
 			[Frozen]Mock<IKernel> kernel,
 			Mock<FooCommand> command,
 			CommandDispatcher commandDispatcher)
 		{
 			var commandType = typeof(FooCommand);
-			typeNameMatcher.Setup(x => x.GetMatchedType(commandName, scope)).Returns(commandType);
+			typeNameMatcher.Setup(x => x.GetMatchedType(argument)).Returns(commandType);
 
 			kernel.Setup(x => x.Resolve(commandType)).Returns(command.Object);
 
@@ -39,11 +37,10 @@ namespace AppHarbor.Tests
 		}
 
 		[Theory]
-		[InlineAutoCommandData("foo:bar baz", "bar", "foo", "baz")]
+		[InlineAutoCommandData("foo:bar baz", "baz")]
+		[InlineAutoCommandData("foo baz", "baz")]
 		public void ShouldDispatchCommandWithParameter(
 			string argument,
-			string commandName,
-			string scope,
 			string commandArgument,
 			[Frozen]Mock<ITypeNameMatcher> typeNameMatcher,
 			[Frozen]Mock<IKernel> kernel,
@@ -51,7 +48,7 @@ namespace AppHarbor.Tests
 			CommandDispatcher commandDispatcher)
 		{
 			var commandType = typeof(FooCommand);
-			typeNameMatcher.Setup(x => x.GetMatchedType(commandName, scope)).Returns(commandType);
+			typeNameMatcher.Setup(x => x.GetMatchedType(argument.Split().First())).Returns(commandType);
 			kernel.Setup(x => x.Resolve(commandType)).Returns(command.Object);
 
 			commandDispatcher.Dispatch(argument.Split());

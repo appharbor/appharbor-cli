@@ -17,8 +17,12 @@ namespace AppHarbor
 			_candidateTypes = candidateTypes;
 		}
 
-		public virtual Type GetMatchedType(string commandName, string scope)
+		public virtual Type GetMatchedType(string commandArgument)
 		{
+			var splitted = commandArgument.Split(':');
+			var commandName = splitted.Last();
+			var scope = splitted.Reverse().Skip(1).FirstOrDefault();
+
 			var typeNameSuffix = "Command";
 			var scopedTypes = _candidateTypes
 				.Where(x => x.Name.ToLower().EndsWith(string.Concat(scope, typeNameSuffix).ToLower()));
