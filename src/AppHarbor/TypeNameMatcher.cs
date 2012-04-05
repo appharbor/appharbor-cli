@@ -19,7 +19,14 @@ namespace AppHarbor
 
 		public Type GetMatchedType(string commandName)
 		{
-			return _candidateTypes.Single(x => x.Name.ToLower().StartsWith(commandName.ToLower()));
+			try
+			{
+				return _candidateTypes.Single(x => x.Name.ToLower().StartsWith(commandName.ToLower()));
+			}
+			catch (InvalidOperationException)
+			{
+				throw new ArgumentException("No candidate type matches", "commandName");
+			}
 		}
 	}
 }

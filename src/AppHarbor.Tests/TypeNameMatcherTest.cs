@@ -27,5 +27,13 @@ namespace AppHarbor.Tests
 			var matcher = new TypeNameMatcher<IFoo>(new Type[] { fooType });
 			Assert.Equal(fooType, matcher.GetMatchedType(commandName));
 		}
+
+		[Theory]
+		[InlineData("Bar", typeof(Foo))]
+		public void ShouldThrowWhenNoTypesMatches(string commandName, Type fooType)
+		{
+			var matcher = new TypeNameMatcher<IFoo>(new Type[] { fooType });
+			Assert.Throws<ArgumentException>(() => matcher.GetMatchedType(commandName));
+		}
 	}
 }
