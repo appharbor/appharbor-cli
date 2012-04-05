@@ -1,4 +1,5 @@
 ﻿using System.Reflection;
+using System.Linq;
 using Castle.MicroKernel.Registration;
 using Castle.MicroKernel.Resolvers.SpecializedResolvers;
 using Castle.MicroKernel.SubSystems.Configuration;
@@ -32,10 +33,14 @@ namespace AppHarbor
 				.ImplementedBy<ApplicationConfiguration>());
 
 			container.Register(Component
-				.For<CommandDispatcher>()
+				.For<CommandDispatcher>());
+
+			container.Register(Component
+				.For<TypeNameMatcher<ICommand>>()
 				.UsingFactoryMethod(x =>
 				{
-					return new CommandDispatcher(Assembly.GetExecutingAssembly().GetExportedTypes(), container.Kernel);
+					return new TypeNameMatcher<ICommand>(Assembly.GetExecutingAssembly().GetExportedTypes()
+						.Where(y => typeof(ICommand).IsAssignableFrom(y)));
 				}));
 
 			container.Register(Component
