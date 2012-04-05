@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace AppHarbor
 {
-	public class TypeNameMatcher<T>
+	public class TypeNameMatcher<T> : ITypeNameMatcher
 	{
 		private readonly IEnumerable<Type> _candidateTypes;
 
