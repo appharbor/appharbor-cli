@@ -41,7 +41,14 @@ namespace AppHarbor.Commands
 			request.AddParameter("password", password);
 
 			var response = restClient.Execute(request);
-			return HttpUtility.ParseQueryString(response.Content.Split('=', '&')[1])["access_token"];
+			var accessToken = HttpUtility.ParseQueryString(response.Content.Split('=', '&')[1])["access_token"];
+
+			if (accessToken == null)
+			{
+				throw new CommandException("Couldn't log in. Try again");
+			}
+
+			return accessToken;
 		}
 	}
 }
