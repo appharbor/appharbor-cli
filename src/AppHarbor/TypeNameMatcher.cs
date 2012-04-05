@@ -28,7 +28,7 @@ namespace AppHarbor
 			}
 			catch (InvalidOperationException exception)
 			{
-				throw new ArgumentException("Error while matching type", "commandName", exception);
+				throw new ArgumentException(string.Format("No commands matches {0}. See \"appharbor help\".", commandName), exception);
 			}
 		}
 	}

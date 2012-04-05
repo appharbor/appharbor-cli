@@ -46,7 +46,9 @@ namespace AppHarbor.Tests
 		public void ShouldThrowWhenNoTypesMatches(string commandName)
 		{
 			var matcher = new TypeNameMatcher<IFoo>(new Type[] { FooCommandType });
-			Assert.Throws<ArgumentException>(() => matcher.GetMatchedType(commandName, null));
+
+			var exception = Assert.Throws<ArgumentException>(() => matcher.GetMatchedType(commandName, null));
+			Assert.Equal(string.Format("No commands matches {0}. See \"appharbor help\".", commandName), exception.Message);
 		}
 
 		[Theory]
