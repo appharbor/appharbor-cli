@@ -50,6 +50,7 @@ namespace AppHarbor.Tests
 		}
 
 		[Theory]
+		[InlineData("bar")]
 		[InlineData("Bar")]
 		public void ShouldReturnScopedCommand(string scope)
 		{

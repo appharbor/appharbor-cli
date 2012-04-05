@@ -19,7 +19,8 @@ namespace AppHarbor
 
 		public Type GetMatchedType(string commandName, string scope)
 		{
-			var scopedTypes = _candidateTypes.Where(x => x.Name.EndsWith(string.Concat(scope, "Command")));
+			var scopedTypes = _candidateTypes
+				.Where(x => x.Name.ToLower().EndsWith(string.Concat(scope, "Command").ToLower()));
 
 			try
 			{
