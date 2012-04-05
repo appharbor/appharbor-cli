@@ -16,5 +16,10 @@ namespace AppHarbor
 			}
 			_candidateTypes = candidateTypes;
 		}
+
+		public Type GetMatchedType(string commandName)
+		{
+			return _candidateTypes.Single(x => x.Name.StartsWith(commandName));
+		}
 	}
 }
