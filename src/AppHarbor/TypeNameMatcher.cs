@@ -1,4 +1,4 @@
-﻿amespace AppHarbor
+﻿namespace AppHarbor
 {
 	public class TypeNameMatcher
 	{
