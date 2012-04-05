@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace AppHarbor
 {
@@ -9,6 +10,10 @@ namespace AppHarbor
 
 		public TypeNameMatcher(IEnumerable<Type> candidateTypes)
 		{
+			if (candidateTypes.Any(x => !typeof(T).IsAssignableFrom(x)))
+			{
+				throw new ArgumentException(string.Format("{0} must be assignable from all injected types", typeof(T).FullName), "candidateTypes");
+			}
 			_candidateTypes = candidateTypes;
 		}
 	}
