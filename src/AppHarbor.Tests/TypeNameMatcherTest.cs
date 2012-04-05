@@ -15,8 +15,11 @@ namespace AppHarbor.Tests
 
 		class FooBarCommand : IFoo { }
 
+		class FooBazCommand : IFoo { }
+
 		private static Type FooCommandType = typeof(FooCommand);
 		private static Type FooBarCommandType = typeof(FooBarCommand);
+		private static Type FooBazCommandType = typeof(FooBazCommand);
 
 		[Fact]
 		public void ShouldThrowIfInitializedWithUnnasignableType()
@@ -37,7 +40,7 @@ namespace AppHarbor.Tests
 		[InlineData("Foo")]
 		public void ShouldThrowWhenMoreThanOneTypeMatches(string commandName)
 		{
-			var matcher = new TypeNameMatcher<IFoo>(new Type[] { FooCommandType, FooBarCommandType });
+			var matcher = new TypeNameMatcher<IFoo>(new Type[] { FooBazCommandType, FooBarCommandType });
 			Assert.Throws<ArgumentException>(() => matcher.GetMatchedType(commandName, null));
 		}
 
