@@ -21,10 +21,10 @@ namespace AppHarbor.Commands
 				throw new CommandException("You're already logged in");
 			}
 
-			Console.WriteLine("Username:");
+			Console.Write("Username: ");
 			var username = Console.ReadLine();
 
-			Console.WriteLine("Password:");
+			Console.Write("Password: ");
 			var password = Console.ReadLine();
 
 			var accessToken = GetAccessToken(username, password);
