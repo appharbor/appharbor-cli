@@ -7,10 +7,10 @@ namespace AppHarbor
 {
 	public class CommandDispatcher
 	{
-		private readonly TypeNameMatcher<ICommand> _typeNameMatcher;
+		private readonly ITypeNameMatcher _typeNameMatcher;
 		private readonly IKernel _kernel;
 
-		public CommandDispatcher(TypeNameMatcher<ICommand> typeNameMatcher, IKernel kernel)
+		public CommandDispatcher(ITypeNameMatcher typeNameMatcher, IKernel kernel)
 		{
 			_typeNameMatcher = typeNameMatcher;
 			_kernel = kernel;

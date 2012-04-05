@@ -36,7 +36,7 @@ namespace AppHarbor
 				.For<CommandDispatcher>());
 
 			container.Register(Component
-				.For<TypeNameMatcher<ICommand>>()
+				.For<ITypeNameMatcher>()
 				.UsingFactoryMethod(x =>
 				{
 					return new TypeNameMatcher<ICommand>(Assembly.GetExecutingAssembly().GetExportedTypes()
