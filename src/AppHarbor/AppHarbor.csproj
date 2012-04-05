@@ -81,10 +81,10 @@
     <Compile Include="CommandDispatcher.cs" />
     <Compile Include="CommandException.cs" />
     <Compile Include="CommandHelpAttribute.cs" />
-    <Compile Include="Commands\AppCreateCommand.cs" />
+    <Compile Include="Commands\CreateAppCommand.cs" />
     <Compile Include="Commands\HelpCommand.cs" />
-    <Compile Include="Commands\AuthLoginCommand.cs" />
-    <Compile Include="Commands\AuthLogoutCommand.cs" />
+    <Compile Include="Commands\LoginAuthCommand.cs" />
+    <Compile Include="Commands\LogoutAuthCommand.cs" />
     <Compile Include="GitExecutor.cs" />
     <Compile Include="IAccessTokenConfiguration.cs" />
     <Compile Include="IAppHarborClient.cs" />

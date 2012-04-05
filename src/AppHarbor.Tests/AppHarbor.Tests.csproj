@@ -81,10 +81,10 @@
     <Compile Include="ApplicationConfigurationTest.cs" />
     <Compile Include="AutoCommandDataAttribute.cs" />
     <Compile Include="CommandDispatcherTest.cs" />
-    <Compile Include="Commands\AppCreateCommandTest.cs" />
+    <Compile Include="Commands\CreateAppCommandTest.cs" />
     <Compile Include="Commands\HelpCommandTest.cs" />
-    <Compile Include="Commands\AuthLoginCommandTest.cs" />
-    <Compile Include="Commands\AuthLogoutAuthCommandTest.cs" />
+    <Compile Include="Commands\LoginAuthCommandTest.cs" />
+    <Compile Include="Commands\LogoutAuthCommandTest.cs" />
     <Compile Include="DelegateOutputStream.cs" />
     <Compile Include="InlineAutoCommandDataAttribute.cs" />
     <Compile Include="InMemoryFileSystem.cs" />
