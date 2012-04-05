@@ -19,10 +19,20 @@ namespace AppHarbor
 
 		public Type GetMatchedType(string commandName, string scope)
 		{
+			var typeNameSuffix = "Command";
 			var scopedTypes = _candidateTypes
-				.Where(x => x.Name.ToLower().EndsWith(string.Concat(scope, "Command").ToLower()));
+				.Where(x => x.Name.ToLower().EndsWith(string.Concat(scope, typeNameSuffix).ToLower()));
 
 			Type command;
+
+			try
+			{
+				return _candidateTypes.Single(x => x.Name.ToLower() == string.Concat(commandName, typeNameSuffix).ToLower());
+			}
+			catch (InvalidOperationException)
+			{
+			}
+
 			try
 			{
 				command = scopedTypes.SingleOrDefault(x => x.Name.ToLower().StartsWith(commandName.ToLower()));

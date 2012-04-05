@@ -47,6 +47,15 @@ namespace AppHarbor.Tests
 		}
 
 		[Theory]
+		[InlineData("foo")]
+		[InlineData("Foo")]
+		public void ShouldNotThrowWhenCommandNameMatchesCommandCompletely(string commandName)
+		{
+			var matcher = new TypeNameMatcher<IFoo>(new Type[] { FooCommandType, FooBarCommandType });
+			Assert.Equal(FooCommandType, matcher.GetMatchedType(commandName, null));
+		}
+
+		[Theory]
 		[InlineData("Bar")]
 		public void ShouldThrowWhenNoTypesMatches(string commandName)
 		{
