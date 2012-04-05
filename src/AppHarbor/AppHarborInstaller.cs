@@ -1,5 +1,7 @@
-﻿using System.Reflection;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using Castle.MicroKernel.Registration;
 using Castle.MicroKernel.Resolvers.SpecializedResolvers;
 using Castle.MicroKernel.SubSystems.Configuration;
@@ -15,6 +17,14 @@ namespace AppHarbor
 
 			container.Register(AllTypes.FromThisAssembly()
 				.BasedOn<ICommand>());
+
+			container.Register(Component
+				.For<IEnumerable<Type>>()
+				.UsingFactoryMethod(x =>
+				{
+					return Assembly.GetExecutingAssembly().GetExportedTypes()
+						.Where(y => typeof(ICommand).IsAssignableFrom(y));
+				}));
 
 			container.Register(Component
 				.For<IAccessTokenConfiguration>()
