@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace AppHarbor
 {
-	public class TypeNameMatcher
+	public class TypeNameMatcher<T>
 	{
 		private readonly IEnumerable<Type> _candidateTypes;
 
