@@ -36,8 +36,8 @@ namespace AppHarbor.Tests
 		}
 
 		[Theory]
-		[InlineData("bar")]
-		[InlineData("foobar")]
+		[InlineAutoCommandData("bar")]
+		[InlineAutoCommandData("foobar")]
 		public void ShouldNotMatchCommandThatDoesntExist(string commandName)
 		{
 			var kernelMock = new Mock<IKernel>();
