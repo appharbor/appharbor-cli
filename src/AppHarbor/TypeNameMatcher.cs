@@ -27,7 +27,7 @@ namespace AppHarbor
 
 			try
 			{
-				return _candidateTypes.Single(x => x.Name.ToLower() == string.Concat(commandName, typeNameSuffix).ToLower());
+				return scopedTypes.Single(x => x.Name.ToLower() == string.Concat(commandName, typeNameSuffix).ToLower());
 			}
 			catch (InvalidOperationException)
 			{
