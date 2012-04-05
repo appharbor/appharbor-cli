@@ -15,6 +15,20 @@ namespace AppHarbor.Tests
 			}
 		}
 
+		[Theory, AutoCommandData]
+		public void ShouldDispatchHelpWhenNoCommand(
+			[Frozen]Mock<ITypeNameMatcher> typeNameMatcher,
+			[Frozen]Mock<IKernel> kernel,
+			Mock<FooCommand> command,
+			CommandDispatcher commandDispatcher)
+		{
+			var commandType = typeof(FooCommand);
+			typeNameMatcher.Setup(x => x.GetMatchedType("help")).Returns(commandType);
+			kernel.Setup(x => x.Resolve(commandType)).Returns(command.Object);
+
+			commandDispatcher.Dispatch(new string[0]);
+		}
+
 		[Theory]
 		[InlineAutoCommandData("foo")]
 		[InlineAutoCommandData("foo:bar")]

@@ -18,7 +18,7 @@ namespace AppHarbor
 
 		public void Dispatch(string[] args)
 		{
-			var matchingType = _typeNameMatcher.GetMatchedType(args[0]);
+			var matchingType = _typeNameMatcher.GetMatchedType(args.Any() ? args[0] : "help");
 
 			var command = (ICommand)_kernel.Resolve(matchingType);
 
