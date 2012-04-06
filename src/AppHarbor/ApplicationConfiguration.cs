@@ -45,19 +45,14 @@ namespace AppHarbor
 
 		public virtual void SetupApplication(string id, User user)
 		{
-			var repositoryUrl = string.Format("https://{0}@appharbor.com/{1}.git", user.Username, id);
-
 			try
 			{
-				_gitExecutor.Execute(string.Format("remote add appharbor {0}", repositoryUrl),
-					CurrentDirectory);
-
-				Console.WriteLine("Added \"appharbor\" as a remote repository. Push to AppHarbor with git push appharbor master");
+				_repositoryConfigurer.Configure(id, user);
 				return;
 			}
-			catch (InvalidOperationException)
+			catch (RepositoryConfigurationException exception)
 			{
-				Console.WriteLine("Couldn't add appharbor repository as a git remote. Repository URL is: {0}", repositoryUrl);
+				Console.WriteLine(exception.Message);
 			}
 
 			using (var stream = _fileSystem.OpenWrite(ConfigurationFile.FullName))

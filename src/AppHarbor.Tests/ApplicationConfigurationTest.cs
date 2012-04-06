@@ -14,14 +14,14 @@ namespace AppHarbor.Tests
 		public static string ConfigurationFile = Path.GetFullPath(".appharbor");
 
 		[Theory, AutoCommandData]
-		public void ShouldReturnApplicationIdIfConfigurationFileExists(Mock<IFileSystem> fileSystem, string applicationName)
+		public void ShouldReturnApplicationIdIfConfigurationFileExists(Mock<IFileSystem> fileSystem, IGitRepositoryConfigurer repositoryConfigurer, string applicationName)
 		{
 			var configurationFile = ConfigurationFile;
 			var stream = new MemoryStream(Encoding.Default.GetBytes(applicationName));
 
 			fileSystem.Setup(x => x.OpenRead(configurationFile)).Returns(stream);
 
-			var applicationConfiguration = new ApplicationConfiguration(fileSystem.Object, null);
+			var applicationConfiguration = new ApplicationConfiguration(fileSystem.Object, null, repositoryConfigurer);
 			Assert.Equal(applicationName, applicationConfiguration.GetApplicationId());
 		}
 
@@ -47,46 +47,31 @@ namespace AppHarbor.Tests
 			Assert.Equal("Application is not configured", exception.Message);
 		}
 
-		[Theory, AutoCommandData]
-		public void ShouldTryAndSetUpGitRemoteIfPossible([Frozen]Mock<IGitExecutor> gitExecutor, [Frozen]Mock<IAppHarborClient> client, ApplicationConfiguration applicationConfiguration, User user, string id)
-		{
-			using (var writer = new StringWriter())
-			{
-				Console.SetOut(writer);
 
-				applicationConfiguration.SetupApplication(id, user);
-
-				Assert.Contains("Added \"appharbor\" as a remote repository. Push to AppHarbor with git push appharbor master", writer.ToString());
-			}
-
-			var gitCommand = string.Format("remote add appharbor https://{0}@appharbor.com/{1}.git", user.Username, id);
-			gitExecutor.Verify(x =>
-				x.Execute(gitCommand, It.Is<DirectoryInfo>(y => y.FullName == Directory.GetCurrentDirectory())),
-				Times.Once());
-		}
 
 		[Theory, AutoCommandData]
-		public void ShouldShowRepositoryUrlIfGitSetupFailed([Frozen]Mock<IGitExecutor> gitExecutor, [Frozen]Mock<IFileSystem> fileSystem, ApplicationConfiguration applicationConfiguration, User user, string id)
+		public void ShouldOutputRepositoryExceptionIfRepositorySetupFailed([Frozen]Mock<IGitRepositoryConfigurer> repositoryConfigurer, [Frozen]Mock<IFileSystem> fileSystem, ApplicationConfiguration applicationConfiguration, string exceptionMessage)
 		{
-			gitExecutor.Setup(x => x.Execute(It.IsAny<string>(), It.IsAny<DirectoryInfo>())).Throws<InvalidOperationException>();
 			fileSystem.Setup(x => x.OpenWrite(ConfigurationFile)).Returns(new MemoryStream());
+			repositoryConfigurer.Setup(x => x.Configure(It.IsAny<string>(), It.IsAny<User>()))
+				.Throws(new RepositoryConfigurationException(exceptionMessage));
 
 			using (var writer = new StringWriter())
 			{
 				Console.SetOut(writer);
 
-				applicationConfiguration.SetupApplication(id, user);
+				applicationConfiguration.SetupApplication(It.IsAny<string>(), It.IsAny<User>());
 
 				var output = writer.ToString();
-				Assert.Contains(string.Format("Couldn't add appharbor repository as a git remote. Repository URL is: https://{0}@appharbor.com/{1}.git", user.Username, id), output);
+				Assert.Contains(exceptionMessage, output);
 				Assert.Contains(string.Format("Wrote application configuration to {0}", ConfigurationFile), output);
 			}
 		}
 
 		[Theory, AutoCommandData]
-		public void ShouldCreateAppHarborConfigurationFileIfGitSetupFailed([Frozen]Mock<IGitExecutor> gitExecutor, [Frozen]Mock<IFileSystem> fileSystem, ApplicationConfiguration applicationConfiguration, string id, User user)
+		public void ShouldCreateAppHarborConfigurationFileIfGitSetupFailed([Frozen]Mock<IGitRepositoryConfigurer> repositoryConfigurer, [Frozen]Mock<IFileSystem> fileSystem, ApplicationConfiguration applicationConfiguration, string id, User user)
 		{
-			gitExecutor.Setup(x => x.Execute(It.IsAny<string>(), It.IsAny<DirectoryInfo>())).Throws<InvalidOperationException>();
+			repositoryConfigurer.Setup(x => x.Configure(It.IsAny<string>(), It.IsAny<User>())).Throws<RepositoryConfigurationException>();
 			Action<MemoryStream> VerifyConfigurationContent = stream => Assert.Equal(Encoding.Default.GetBytes(id), stream.ToArray());
 
 			using (var stream = new DelegateOutputStream(VerifyConfigurationContent))
