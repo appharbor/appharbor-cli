@@ -30,5 +30,10 @@ namespace AppHarbor
 					string.Format("Couldn't add appharbor repository as a git remote. Repository URL is: {0}", repositoryUrl));
 			}
 		}
+
+		public string GetApplicationId()
+		{
+			throw new NotImplementedException();
+		}
 	}
 }

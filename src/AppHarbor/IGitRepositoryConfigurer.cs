@@ -5,5 +5,6 @@ namespace AppHarbor
 	public interface IGitRepositoryConfigurer
 	{
 		void Configure(string id, User user);
+		string GetApplicationId();
 	}
 }
