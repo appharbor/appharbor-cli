@@ -28,6 +28,19 @@ namespace AppHarbor
 
 			try
 			{
+				_gitCommand.Execute("status");
+			}
+			catch (GitCommandException)
+			{
+				Console.Write("Git repository is not initialized in this folder. Do you want to initialize it (type \"y\")?");
+				if (Console.ReadLine() != "y")
+				{
+					throw new RepositoryConfigurationException("Git repository was not initialized");
+				}
+			}
+
+			try
+			{
 				_gitCommand.Execute(string.Format("remote add appharbor {0}", repositoryUrl));
 
 				Console.WriteLine("Added \"appharbor\" as a remote repository. Push to AppHarbor with git push appharbor master");

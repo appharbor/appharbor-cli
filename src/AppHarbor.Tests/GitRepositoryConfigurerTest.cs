@@ -46,6 +46,25 @@ namespace AppHarbor.Tests
 		}
 
 		[Theory, AutoCommandData]
+		public void ShouldAskForGitInitializationAndThrowIfNotWanted([Frozen]Mock<IGitCommand> gitCommand, GitRepositoryConfigurer repositoryConfigurer, string id, User user)
+		{
+			gitCommand.Setup(x => x.Execute("status")).Throws<GitCommandException>();
+
+			using (var writer = new StringWriter())
+			{
+				Console.SetOut(writer);
+				using (var reader = new StringReader(string.Format("n", Environment.NewLine)))
+				{
+					Console.SetIn(reader);
+					var exception = Assert.Throws<RepositoryConfigurationException>(() => repositoryConfigurer.Configure(id, user));
+
+					Assert.Equal("Git repository was not initialized", exception.Message);
+					Assert.Equal("Git repository is not initialized in this folder. Do you want to initialize it (type \"y\")?", writer.ToString());
+				}
+			}
+		}
+
+		[Theory, AutoCommandData]
 		public void ShouldReturnApplicationIdIfAppHarborRemoteExists([Frozen]Mock<IGitCommand> gitCommand, GitRepositoryConfigurer repositoryConfigurer, string id)
 		{
 			gitCommand.Setup(x => x.Execute("config remote.appharbor.url"))
