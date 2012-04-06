@@ -19,7 +19,7 @@ namespace AppHarbor.Tests
 
 				repositoryConfigurer.Configure(id, user);
 
-				Assert.Contains("Added \"appharbor\" as a remote repository. Push to AppHarbor with git push appharbor master", writer.ToString());
+				Assert.Contains("Added \"appharbor\" as a remote repository. Push to AppHarbor with git push appharbor master.", writer.ToString());
 			}
 
 			gitCommand.Verify(x => x.Execute(string.Format("remote add appharbor {0}", GetRepositoryUrl(id, user))), Times.Once());
@@ -32,7 +32,7 @@ namespace AppHarbor.Tests
 			gitCommand.Setup(x => x.Execute(string.Format("remote add appharbor {0}", repositoryUrl))).Throws<GitCommandException>();
 
 			var exception = Assert.Throws<RepositoryConfigurationException>(() => repositoryConfigurer.Configure(id, user));
-			Assert.Equal(string.Format("Couldn't add appharbor repository as a git remote. Repository URL is: {0}", repositoryUrl),
+			Assert.Equal(string.Format("Couldn't add appharbor repository as a git remote. Repository URL is: {0}.", repositoryUrl),
 				exception.Message);
 		}
 
@@ -58,7 +58,7 @@ namespace AppHarbor.Tests
 					Console.SetIn(reader);
 					var exception = Assert.Throws<RepositoryConfigurationException>(() => repositoryConfigurer.Configure(id, user));
 
-					Assert.Equal("Git repository was not initialized", exception.Message);
+					Assert.Equal("Git repository was not initialized.", exception.Message);
 					Assert.Equal("Git repository is not initialized in this folder. Do you want to initialize it (type \"y\")?", writer.ToString());
 				}
 			}
@@ -79,7 +79,7 @@ namespace AppHarbor.Tests
 					repositoryConfigurer.Configure(id, user);
 
 					gitCommand.Verify(x => x.Execute("init"), Times.Once());
-					Assert.Contains("Git repository was initialized", writer.ToString());
+					Assert.Contains("Git repository was initialized.", writer.ToString());
 				}
 			}
 		}
