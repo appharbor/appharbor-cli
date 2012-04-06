@@ -39,13 +39,28 @@ namespace AppHarbor.Tests.Commands
 		}
 
 		[Theory, AutoCommandData]
-		public void ShouldSetupApplicationLocallyAfterCreation([Frozen]Mock<IApplicationConfiguration> applicationConfiguration, [Frozen]Mock<IAppHarborClient> client, CreateAppCommand command, CreateResult<string> result, User user, string[] arguments)
+		public void ShouldSetupApplicationLocallyAfterCreationIfNotConfigured([Frozen]Mock<IApplicationConfiguration> applicationConfiguration, [Frozen]Mock<IAppHarborClient> client, CreateAppCommand command, CreateResult<string> result, User user, string[] arguments)
 		{
 			client.Setup(x => x.CreateApplication(It.IsAny<string>(), It.IsAny<string>())).Returns(result);
 			client.Setup(x => x.GetUser()).Returns(user);
+			applicationConfiguration.Setup(x => x.GetApplicationId()).Throws<ApplicationConfigurationException>();
 
 			command.Execute(arguments);
 			applicationConfiguration.Verify(x => x.SetupApplication(result.ID, user), Times.Once());
+		}
+
+		[Theory, AutoCommandData]
+		public void ShouldNotSetupApplicationIfAlreadyConfigured([Frozen]Mock<IApplicationConfiguration> applicationConfiguration, CreateAppCommand command, string[] arguments, string applicationName)
+		{
+			applicationConfiguration.Setup(x => x.GetApplicationId()).Returns(applicationName);
+			using (var writer = new StringWriter())
+			{
+				Console.SetOut(writer);
+
+				command.Execute(arguments);
+
+				Assert.Contains(string.Format("This directory is already configured to track application \"{0}\".", applicationName), writer.ToString());
+			}
 		}
 
 		[Theory, AutoCommandData]
