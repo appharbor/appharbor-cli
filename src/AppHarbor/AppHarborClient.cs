@@ -21,7 +21,8 @@ namespace AppHarbor
 
 		public Application GetApplication(string id)
 		{
-			throw new NotImplementedException();
+			var appHarborApi = GetAppHarborApi();
+			return appHarborApi.GetApplication(id);
 		}
 
 		public IEnumerable<Application> GetApplications()
