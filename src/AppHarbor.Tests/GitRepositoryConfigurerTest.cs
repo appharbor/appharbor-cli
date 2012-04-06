@@ -22,10 +22,15 @@ namespace AppHarbor.Tests
 				Assert.Contains("Added \"appharbor\" as a remote repository. Push to AppHarbor with git push appharbor master", writer.ToString());
 			}
 
-			var gitCommand = string.Format("remote add appharbor https://{0}@appharbor.com/{1}.git", user.Username, id);
+			var gitCommand = string.Format("remote add appharbor {0}", GetRepositoryUrl(id, user));
 			gitExecutor.Verify(x =>
 				x.Execute(gitCommand, It.Is<DirectoryInfo>(y => y.FullName == Directory.GetCurrentDirectory())),
 				Times.Once());
+		}
+
+		private static string GetRepositoryUrl(string id, User user)
+		{
+			return string.Format("https://{0}@appharbor.com/{1}.git", user.Username, id);
 		}
 	}
 }
