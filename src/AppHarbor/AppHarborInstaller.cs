@@ -54,6 +54,10 @@ namespace AppHarbor
 				.ImplementedBy<GitCommand>());
 
 			container.Register(Component
+				.For<IGitRepositoryConfigurer>()
+				.ImplementedBy<GitRepositoryConfigurer>());
+
+			container.Register(Component
 				.For<IFileSystem>()
 				.ImplementedBy<PhysicalFileSystem>()
 				.LifeStyle.Transient);
