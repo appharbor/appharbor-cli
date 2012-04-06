@@ -15,37 +15,36 @@ namespace AppHarbor
 
 		public CreateResult<string> CreateApplication(string name, string regionIdentifier = null)
 		{
-			var appHarborApi = GetAppHarborApi();
-			return appHarborApi.CreateApplication(name, regionIdentifier);
+			return _api.CreateApplication(name, regionIdentifier);
 		}
 
 		public Application GetApplication(string id)
 		{
-			var appHarborApi = GetAppHarborApi();
-			return appHarborApi.GetApplication(id);
+			return _api.GetApplication(id);
 		}
 
 		public IEnumerable<Application> GetApplications()
 		{
-			var appHarborApi = GetAppHarborApi();
-			return appHarborApi.GetApplications();
+			return _api.GetApplications();
 		}
 
 		public User GetUser()
 		{
-			var appHarborApi = GetAppHarborApi();
-			return appHarborApi.GetUser();
+			return _api.GetUser();
 		}
 
-		private AppHarborApi GetAppHarborApi()
+		private AppHarborApi _api
 		{
-			try
+			get
 			{
-				return new AppHarborApi(_authInfo);
-			}
-			catch (ArgumentNullException)
-			{
-				throw new CommandException("You're not logged in. Log in with \"appharbor login\"");
+				try
+				{
+					return new AppHarborApi(_authInfo);
+				}
+				catch (ArgumentNullException)
+				{
+					throw new CommandException("You're not logged in. Log in with \"appharbor login\"");
+				}
 			}
 		}
 	}
