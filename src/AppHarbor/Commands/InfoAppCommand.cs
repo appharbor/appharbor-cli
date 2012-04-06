@@ -2,6 +2,7 @@
 
 namespace AppHarbor.Commands
 {
+	[CommandHelp("Get application details")]
 	public class InfoAppCommand : ICommand
 	{
 		private readonly IAppHarborClient _client;
