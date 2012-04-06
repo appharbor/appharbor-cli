@@ -19,6 +19,11 @@ namespace AppHarbor
 			return appHarborApi.CreateApplication(name, regionIdentifier);
 		}
 
+		public Application GetApplication(string id)
+		{
+			throw new NotImplementedException();
+		}
+
 		public IEnumerable<Application> GetApplications()
 		{
 			var appHarborApi = GetAppHarborApi();
