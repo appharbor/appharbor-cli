@@ -79,6 +79,7 @@ namespace AppHarbor.Tests
 					repositoryConfigurer.Configure(id, user);
 
 					gitCommand.Verify(x => x.Execute("init"), Times.Once());
+					Assert.Contains("Git repository was initialized", writer.ToString());
 				}
 			}
 		}

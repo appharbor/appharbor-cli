@@ -39,6 +39,7 @@ namespace AppHarbor
 				}
 
 				_gitCommand.Execute("init");
+				Console.WriteLine("Git repository was initialized");
 			}
 
 			try
