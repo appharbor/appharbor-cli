@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.IO;
 using AppHarbor.Model;
 
@@ -19,8 +20,7 @@ namespace AppHarbor
 
 			try
 			{
-				_executor.Execute(string.Format("remote add appharbor {0}", repositoryUrl),
-					new DirectoryInfo(Directory.GetCurrentDirectory()));
+				_executor.Execute(string.Format("remote add appharbor {0}", repositoryUrl), CurrentDirectory);
 
 				Console.WriteLine("Added \"appharbor\" as a remote repository. Push to AppHarbor with git push appharbor master");
 			}
@@ -34,6 +34,14 @@ namespace AppHarbor
 		public string GetApplicationId()
 		{
 			throw new NotImplementedException();
+		}
+
+		private static DirectoryInfo CurrentDirectory
+		{
+			get
+			{
+				return new DirectoryInfo(Directory.GetCurrentDirectory());
+			}
 		}
 	}
 }
