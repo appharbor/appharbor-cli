@@ -11,7 +11,7 @@ namespace AppHarbor.Tests
 	public class GitRepositoryConfigurerTest
 	{
 		[Theory, AutoCommandData]
-		public void ShouldTryAndSetUpGitRemoteIfPossible([Frozen]Mock<IGitExecutor> gitExecutor, [Frozen]Mock<IAppHarborClient> client, GitRepositoryConfigurer repositoryConfigurer, User user, string id)
+		public void ShouldTryAndSetUpGitRemoteIfPossible([Frozen]Mock<IGitExecutor> gitExecutor, GitRepositoryConfigurer repositoryConfigurer, User user, string id)
 		{
 			using (var writer = new StringWriter())
 			{
