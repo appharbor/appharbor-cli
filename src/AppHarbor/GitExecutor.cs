@@ -17,7 +17,7 @@ namespace AppHarbor
 			_gitExecutable = new FileInfo(gitExecutablePath);
 		}
 
-		public virtual IList<string> Execute(string command, DirectoryInfo repositoryDirectory)
+		public virtual IList<string> Execute(string command)
 		{
 			var processArguments = new StringBuilder();
 
@@ -34,7 +34,7 @@ namespace AppHarbor
 					RedirectStandardError = true,
 					RedirectStandardOutput = true,
 					UseShellExecute = false,
-					WorkingDirectory = repositoryDirectory.FullName,
+					WorkingDirectory = CurrentDirectory.FullName,
 				},
 			};
 
@@ -55,6 +55,14 @@ namespace AppHarbor
 				}
 
 				return output;
+			}
+		}
+
+		private static DirectoryInfo CurrentDirectory
+		{
+			get
+			{
+				return new DirectoryInfo(Directory.GetCurrentDirectory());
 			}
 		}
 	}

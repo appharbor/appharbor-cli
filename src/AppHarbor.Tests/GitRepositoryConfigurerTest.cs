@@ -23,16 +23,14 @@ namespace AppHarbor.Tests
 			}
 
 			var gitCommand = string.Format("remote add appharbor {0}", GetRepositoryUrl(id, user));
-			gitExecutor.Verify(x =>
-				x.Execute(gitCommand, It.Is<DirectoryInfo>(y => y.FullName == Directory.GetCurrentDirectory())),
-				Times.Once());
+			gitExecutor.Verify(x => x.Execute(gitCommand), Times.Once());
 		}
 
 		[Theory, AutoCommandData]
 		public void ShouldThrowExceptionIfGitRemoteCantBeAdded([Frozen]Mock<IGitExecutor> executor, GitRepositoryConfigurer repositoryConfigurer, string id, User user)
 		{
 			var repositoryUrl = GetRepositoryUrl(id, user);
-			executor.Setup(x => x.Execute(string.Format("remote add appharbor {0}", repositoryUrl), It.IsAny<DirectoryInfo>())).Throws<InvalidOperationException>();
+			executor.Setup(x => x.Execute(string.Format("remote add appharbor {0}", repositoryUrl))).Throws<InvalidOperationException>();
 
 			var exception = Assert.Throws<RepositoryConfigurationException>(() => repositoryConfigurer.Configure(id, user));
 			Assert.Equal(string.Format("Couldn't add appharbor repository as a git remote. Repository URL is: {0}", repositoryUrl),
@@ -42,7 +40,7 @@ namespace AppHarbor.Tests
 		[Theory, AutoCommandData]
 		public void ShouldThrowIfGitIsNotInstalled([Frozen]Mock<IGitExecutor> executor, GitRepositoryConfigurer repositoryConfigurer, string id, User user)
 		{
-			executor.Setup(x => x.Execute("--version", It.IsAny<DirectoryInfo>())).Throws<InvalidOperationException>();
+			executor.Setup(x => x.Execute("--version")).Throws<InvalidOperationException>();
 
 			var exception = Assert.Throws<RepositoryConfigurationException>(() => repositoryConfigurer.Configure(id, user));
 			Assert.Equal(string.Format("Git is not installed.", GetRepositoryUrl(id, user)), exception.Message);
@@ -51,7 +49,7 @@ namespace AppHarbor.Tests
 		[Theory, AutoCommandData]
 		public void ShouldReturnApplicationIdIfAppHarborRemoteExists([Frozen]Mock<IGitExecutor> executor, GitRepositoryConfigurer repositoryConfigurer, string id)
 		{
-			executor.Setup(x => x.Execute("config remote.appharbor.url", It.IsAny<DirectoryInfo>()))
+			executor.Setup(x => x.Execute("config remote.appharbor.url"))
 				.Returns(new string[] { string.Format("https://foo@appharbor.com/{0}.git", id) });
 
 			Assert.Equal(id, repositoryConfigurer.GetApplicationId());

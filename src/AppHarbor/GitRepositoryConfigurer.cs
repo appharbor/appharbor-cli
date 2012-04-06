@@ -1,5 +1,4 @@
 ﻿using System;
-using System.IO;
 using System.Linq;
 using AppHarbor.Model;
 
@@ -20,7 +19,7 @@ namespace AppHarbor
 
 			try
 			{
-				_executor.Execute("--version", CurrentDirectory);
+				_executor.Execute("--version");
 			}
 			catch (InvalidOperationException)
 			{
@@ -29,7 +28,7 @@ namespace AppHarbor
 
 			try
 			{
-				_executor.Execute(string.Format("remote add appharbor {0}", repositoryUrl), CurrentDirectory);
+				_executor.Execute(string.Format("remote add appharbor {0}", repositoryUrl));
 
 				Console.WriteLine("Added \"appharbor\" as a remote repository. Push to AppHarbor with git push appharbor master");
 			}
@@ -42,21 +41,13 @@ namespace AppHarbor
 
 		public string GetApplicationId()
 		{
-			var url = _executor.Execute("config remote.appharbor.url", CurrentDirectory).FirstOrDefault();
+			var url = _executor.Execute("config remote.appharbor.url").FirstOrDefault();
 			if (url == null)
 			{
 				throw new RepositoryConfigurationException();
 			}
 
 			return url.Split(new string[] { "/", ".git" }, StringSplitOptions.RemoveEmptyEntries).Last();
-		}
-
-		private static DirectoryInfo CurrentDirectory
-		{
-			get
-			{
-				return new DirectoryInfo(Directory.GetCurrentDirectory());
-			}
 		}
 	}
 }
