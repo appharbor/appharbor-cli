@@ -2,7 +2,7 @@
 
 namespace AppHarbor
 {
-	interface IGitRepositoryConfigurer
+	public interface IGitRepositoryConfigurer
 	{
 		void Configure(string id, User user);
 	}
