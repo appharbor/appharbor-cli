@@ -1,10 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.IO;
 
 namespace AppHarbor
 {
 	public interface IGitExecutor
 	{
-		IList<string> Execute(string command, System.IO.DirectoryInfo repositoryDirectory);
+		IList<string> Execute(string command, DirectoryInfo repositoryDirectory);
 	}
 }
