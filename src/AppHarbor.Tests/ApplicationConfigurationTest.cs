@@ -26,16 +26,16 @@ namespace AppHarbor.Tests
 		}
 
 		[Theory, AutoCommandData]
-		public void ShouldReturnApplicationIdIfAppHarborRemoteExists([Frozen]Mock<IFileSystem> fileSystem, [Frozen]Mock<IGitExecutor> gitExecutor, ApplicationConfiguration applicationConfiguration, string applicationName)
+		public void ShouldReturnApplicationIdIfAppHarborRemoteExists([Frozen]Mock<IFileSystem> fileSystem, [Frozen]Mock<IGitExecutor> gitExecutor, ApplicationConfiguration applicationConfiguration, string id)
 		{
 			fileSystem.Setup(x => x.OpenRead(It.IsAny<string>())).Throws<FileNotFoundException>();
 
 			gitExecutor.Setup(x => x.Execute("config remote.appharbor.url", It.IsAny<DirectoryInfo>()))
-				.Returns(new string[] { string.Format("https://foo@appharbor.com/{0}.git", applicationName) });
+				.Returns(new string[] { string.Format("https://foo@appharbor.com/{0}.git", id) });
 
 			var actual = applicationConfiguration.GetApplicationId();
 
-			Assert.Equal(applicationName, actual);
+			Assert.Equal(id, actual);
 		}
 
 		[Theory, AutoCommandData]
