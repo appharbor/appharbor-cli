@@ -9,11 +9,13 @@ namespace AppHarbor
 	{
 		private readonly IFileSystem _fileSystem;
 		private readonly IGitExecutor _gitExecutor;
+		private readonly IGitRepositoryConfigurer _repositoryConfigurer;
 
-		public ApplicationConfiguration(IFileSystem fileSystem, IGitExecutor gitExecutor)
+		public ApplicationConfiguration(IFileSystem fileSystem, IGitExecutor gitExecutor, IGitRepositoryConfigurer repositoryConfigurer)
 		{
 			_fileSystem = fileSystem;
 			_gitExecutor = gitExecutor;
+			_repositoryConfigurer = repositoryConfigurer;
 		}
 
 		public string GetApplicationId()
