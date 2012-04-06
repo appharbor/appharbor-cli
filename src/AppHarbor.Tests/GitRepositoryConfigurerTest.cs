@@ -29,12 +29,13 @@ namespace AppHarbor.Tests
 		}
 
 		[Theory, AutoCommandData]
-		public void ShouldThrowExceptionIfGitCommandCantBeExecuted([Frozen]Mock<IGitExecutor> executor, GitRepositoryConfigurer repositoryConfigurer, string id, User user)
+		public void ShouldThrowExceptionIfGitRemoteCantBeAdded([Frozen]Mock<IGitExecutor> executor, GitRepositoryConfigurer repositoryConfigurer, string id, User user)
 		{
-			executor.Setup(x => x.Execute(It.IsAny<string>(), It.IsAny<DirectoryInfo>())).Throws<InvalidOperationException>();
+			var repositoryUrl = GetRepositoryUrl(id, user);
+			executor.Setup(x => x.Execute(string.Format("remote add appharbor {0}", repositoryUrl), It.IsAny<DirectoryInfo>())).Throws<InvalidOperationException>();
 
 			var exception = Assert.Throws<RepositoryConfigurationException>(() => repositoryConfigurer.Configure(id, user));
-			Assert.Equal(string.Format("Couldn't add appharbor repository as a git remote. Repository URL is: {0}", GetRepositoryUrl(id, user)),
+			Assert.Equal(string.Format("Couldn't add appharbor repository as a git remote. Repository URL is: {0}", repositoryUrl),
 				exception.Message);
 		}
 
