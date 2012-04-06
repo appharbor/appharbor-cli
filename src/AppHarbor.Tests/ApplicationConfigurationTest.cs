@@ -47,8 +47,6 @@ namespace AppHarbor.Tests
 			Assert.Equal("Application is not configured", exception.Message);
 		}
 
-
-
 		[Theory, AutoCommandData]
 		public void ShouldOutputRepositoryExceptionIfRepositorySetupFailed([Frozen]Mock<IGitRepositoryConfigurer> repositoryConfigurer, [Frozen]Mock<IFileSystem> fileSystem, ApplicationConfiguration applicationConfiguration, string exceptionMessage)
 		{
