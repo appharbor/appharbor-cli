@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Linq;
 using AppHarbor.Model;
 
@@ -8,6 +9,8 @@ namespace AppHarbor
 	{
 		private readonly IFileSystem _fileSystem;
 		private readonly IGitCommand _gitCommand;
+
+		public static string DefaultGitIgnore = @"[Oo]bj\n[Bb]in\ndeploy\ndeploy/*\n*.csproj.user\n*.suo\n*.cache\npackages/\n";
 
 		public GitRepositoryConfigurer(IFileSystem fileSystem, IGitCommand gitCommand)
 		{
@@ -41,7 +44,14 @@ namespace AppHarbor
 				}
 
 				_gitCommand.Execute("init");
-				Console.WriteLine("Git repository was initialized.");
+				using (var stream = _fileSystem.OpenWrite(Path.Combine(Directory.GetCurrentDirectory(), ".gitignore")))
+				{
+					using (var writer = new StreamWriter(stream))
+					{
+						writer.Write(DefaultGitIgnore);
+					}
+				}
+				Console.WriteLine("Git repository was initialized with default .gitignore file.");
 			}
 
 			try

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Text;
 using AppHarbor.Model;
 using Moq;
 using Ploeh.AutoFixture.Xunit;
@@ -65,7 +66,7 @@ namespace AppHarbor.Tests
 		}
 
 		[Theory, AutoCommandData]
-		public void ShouldInitializeRepositoryIfUserWantIt([Frozen]Mock<IGitCommand> gitCommand, GitRepositoryConfigurer repositoryConfigurer, string id, User user)
+		public void ShouldInitializeRepositoryIfUserWantIt([Frozen]Mock<IFileSystem> fileSystem, [Frozen]Mock<IGitCommand> gitCommand, GitRepositoryConfigurer repositoryConfigurer, string id, User user)
 		{
 			gitCommand.Setup(x => x.Execute("status")).Throws<GitCommandException>();
 
@@ -76,10 +77,19 @@ namespace AppHarbor.Tests
 				{
 					Console.SetIn(reader);
 
-					repositoryConfigurer.Configure(id, user);
+					var gitIgnoreFile = Path.Combine(Directory.GetCurrentDirectory(), ".gitignore");
+					Action<MemoryStream> VerifyGitIgnoreContent = stream =>
+						Assert.Equal(Encoding.Default.GetBytes(GitRepositoryConfigurer.DefaultGitIgnore), stream.ToArray());
 
+					using (var stream = new DelegateOutputStream(VerifyGitIgnoreContent))
+					{
+						fileSystem.Setup(x => x.OpenWrite(gitIgnoreFile)).Returns(stream);
+						repositoryConfigurer.Configure(id, user);
+					}
+
+					fileSystem.Verify(x => x.OpenWrite(gitIgnoreFile), Times.Once());
 					gitCommand.Verify(x => x.Execute("init"), Times.Once());
-					Assert.Contains("Git repository was initialized.", writer.ToString());
+					Assert.Contains("Git repository was initialized with default .gitignore file.", writer.ToString());
 				}
 			}
 		}
