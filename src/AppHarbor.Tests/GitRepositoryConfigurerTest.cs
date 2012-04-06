@@ -65,6 +65,25 @@ namespace AppHarbor.Tests
 		}
 
 		[Theory, AutoCommandData]
+		public void ShouldInitializeRepositoryIfUserWantIt([Frozen]Mock<IGitCommand> gitCommand, GitRepositoryConfigurer repositoryConfigurer, string id, User user)
+		{
+			gitCommand.Setup(x => x.Execute("status")).Throws<GitCommandException>();
+
+			using (var writer = new StringWriter())
+			{
+				Console.SetOut(writer);
+				using (var reader = new StringReader(string.Format("y", Environment.NewLine)))
+				{
+					Console.SetIn(reader);
+
+					repositoryConfigurer.Configure(id, user);
+
+					gitCommand.Verify(x => x.Execute("init"), Times.Once());
+				}
+			}
+		}
+
+		[Theory, AutoCommandData]
 		public void ShouldReturnApplicationIdIfAppHarborRemoteExists([Frozen]Mock<IGitCommand> gitCommand, GitRepositoryConfigurer repositoryConfigurer, string id)
 		{
 			gitCommand.Setup(x => x.Execute("config remote.appharbor.url"))

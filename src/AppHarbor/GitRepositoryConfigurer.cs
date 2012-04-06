@@ -37,6 +37,8 @@ namespace AppHarbor
 				{
 					throw new RepositoryConfigurationException("Git repository was not initialized");
 				}
+
+				_gitCommand.Execute("init");
 			}
 
 			try
