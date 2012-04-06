@@ -13,7 +13,7 @@ SolidCompression=yes
 OutputDir=userdocs:AppHarbor CLI setup output
 
 [Files]
-Source: "..\src\AppHarbor\bin\Release\*"; DestDir: "{app}"
+Source: "..\src\AppHarbor\bin\Release\*"; DestDir: "{app}"; Flags: ignoreversion
 
 [Registry]
 root: HKLM; Subkey: "SYSTEM\CurrentControlSet\Control\Session Manager\Environment"; ValueType: expandsz; ValueName: "Path"; ValueData: "{olddata};{app}"; Check: NeedsAddPath('{app}')
