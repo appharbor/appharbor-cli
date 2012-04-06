@@ -6,11 +6,11 @@ using System.Text;
 
 namespace AppHarbor
 {
-	public class GitExecutor : IGitExecutor
+	public class GitCommand : IGitCommand
 	{
 		private readonly FileInfo _gitExecutable;
 
-		public GitExecutor()
+		public GitCommand()
 		{
 			var programFilesPath = Environment.GetFolderPath(Environment.SpecialFolder.ProgramFilesX86);
 			var gitExecutablePath = Path.Combine(programFilesPath, "Git", "bin", "git.exe");

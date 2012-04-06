@@ -86,14 +86,14 @@
     <Compile Include="Commands\HelpCommand.cs" />
     <Compile Include="Commands\LoginAuthCommand.cs" />
     <Compile Include="Commands\LogoutAuthCommand.cs" />
-    <Compile Include="GitExecutor.cs" />
+    <Compile Include="GitCommand.cs" />
     <Compile Include="GitRepositoryConfigurer.cs" />
     <Compile Include="IAccessTokenConfiguration.cs" />
     <Compile Include="IAppHarborClient.cs" />
     <Compile Include="IApplicationConfiguration.cs" />
     <Compile Include="ICommand.cs" />
     <Compile Include="IFileSystem.cs" />
-    <Compile Include="IGitExecutor.cs" />
+    <Compile Include="IGitCommand.cs" />
     <Compile Include="IGitRepositoryConfigurer.cs" />
     <Compile Include="ITypeNameMatcher.cs" />
     <Compile Include="PhysicalFileSystem.cs" />

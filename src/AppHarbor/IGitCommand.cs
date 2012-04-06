@@ -2,7 +2,7 @@
 
 namespace AppHarbor
 {
-	public interface IGitExecutor
+	public interface IGitCommand
 	{
 		IList<string> Execute(string command);
 	}

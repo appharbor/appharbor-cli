@@ -6,11 +6,11 @@ namespace AppHarbor
 {
 	public class GitRepositoryConfigurer : IGitRepositoryConfigurer
 	{
-		private readonly IGitExecutor _executor;
+		private readonly IGitCommand _gitCommand;
 
-		public GitRepositoryConfigurer(IGitExecutor executor)
+		public GitRepositoryConfigurer(IGitCommand gitCommand)
 		{
-			_executor = executor;
+			_gitCommand = gitCommand;
 		}
 
 		public void Configure(string id, User user)
@@ -19,7 +19,7 @@ namespace AppHarbor
 
 			try
 			{
-				_executor.Execute("--version");
+				_gitCommand.Execute("--version");
 			}
 			catch (InvalidOperationException)
 			{
@@ -28,7 +28,7 @@ namespace AppHarbor
 
 			try
 			{
-				_executor.Execute(string.Format("remote add appharbor {0}", repositoryUrl));
+				_gitCommand.Execute(string.Format("remote add appharbor {0}", repositoryUrl));
 
 				Console.WriteLine("Added \"appharbor\" as a remote repository. Push to AppHarbor with git push appharbor master");
 			}
@@ -41,7 +41,7 @@ namespace AppHarbor
 
 		public string GetApplicationId()
 		{
-			var url = _executor.Execute("config remote.appharbor.url").FirstOrDefault();
+			var url = _gitCommand.Execute("config remote.appharbor.url").FirstOrDefault();
 			if (url == null)
 			{
 				throw new RepositoryConfigurationException();

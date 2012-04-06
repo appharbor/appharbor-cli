@@ -50,8 +50,8 @@ namespace AppHarbor
 				.ImplementedBy<TypeNameMatcher<ICommand>>());
 
 			container.Register(Component
-				.For<IGitExecutor>()
-				.ImplementedBy<GitExecutor>());
+				.For<IGitCommand>()
+				.ImplementedBy<GitCommand>());
 
 			container.Register(Component
 				.For<IFileSystem>()
