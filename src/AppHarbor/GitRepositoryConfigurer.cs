@@ -1,6 +1,6 @@
 ﻿using System;
-using System.Linq;
 using System.IO;
+using System.Linq;
 using AppHarbor.Model;
 
 namespace AppHarbor
@@ -33,7 +33,13 @@ namespace AppHarbor
 
 		public string GetApplicationId()
 		{
-			throw new NotImplementedException();
+			var url = _executor.Execute("config remote.appharbor.url", CurrentDirectory).FirstOrDefault();
+			if (url == null)
+			{
+				throw new RepositoryConfigurationException();
+			}
+
+			return url.Split(new string[] { "/", ".git" }, StringSplitOptions.RemoveEmptyEntries).Last();
 		}
 
 		private static DirectoryInfo CurrentDirectory

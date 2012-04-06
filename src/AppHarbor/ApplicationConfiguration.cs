@@ -1,6 +1,5 @@
 ﻿using System;
 using System.IO;
-using System.Linq;
 using AppHarbor.Model;
 
 namespace AppHarbor
@@ -8,13 +7,11 @@ namespace AppHarbor
 	public class ApplicationConfiguration : IApplicationConfiguration
 	{
 		private readonly IFileSystem _fileSystem;
-		private readonly IGitExecutor _gitExecutor;
 		private readonly IGitRepositoryConfigurer _repositoryConfigurer;
 
-		public ApplicationConfiguration(IFileSystem fileSystem, IGitExecutor gitExecutor, IGitRepositoryConfigurer repositoryConfigurer)
+		public ApplicationConfiguration(IFileSystem fileSystem, IGitRepositoryConfigurer repositoryConfigurer)
 		{
 			_fileSystem = fileSystem;
-			_gitExecutor = gitExecutor;
 			_repositoryConfigurer = repositoryConfigurer;
 		}
 
@@ -34,10 +31,12 @@ namespace AppHarbor
 			{
 			}
 
-			var url = _gitExecutor.Execute("config remote.appharbor.url", CurrentDirectory).FirstOrDefault();
-			if (url != null)
+			try
 			{
-				return url.Split(new string[] { "/", ".git" }, StringSplitOptions.RemoveEmptyEntries).Last();
+				return _repositoryConfigurer.GetApplicationId();
+			}
+			catch (RepositoryConfigurationException)
+			{
 			}
 
 			throw new ApplicationConfigurationException("Application is not configured");

@@ -21,27 +21,15 @@ namespace AppHarbor.Tests
 
 			fileSystem.Setup(x => x.OpenRead(configurationFile)).Returns(stream);
 
-			var applicationConfiguration = new ApplicationConfiguration(fileSystem.Object, null, repositoryConfigurer);
+			var applicationConfiguration = new ApplicationConfiguration(fileSystem.Object, repositoryConfigurer);
 			Assert.Equal(applicationName, applicationConfiguration.GetApplicationId());
 		}
 
 		[Theory, AutoCommandData]
-		public void ShouldReturnApplicationIdIfAppHarborRemoteExists([Frozen]Mock<IFileSystem> fileSystem, [Frozen]Mock<IGitExecutor> gitExecutor, ApplicationConfiguration applicationConfiguration, string id)
+		public void ShouldThrowIfApplicationFileAndGitConfigurationDoesNotExist([Frozen]Mock<IFileSystem> fileSystem, [Frozen]Mock<IGitRepositoryConfigurer> repositoryConfigurer, ApplicationConfiguration applicationConfiguration)
 		{
 			fileSystem.Setup(x => x.OpenRead(It.IsAny<string>())).Throws<FileNotFoundException>();
-
-			gitExecutor.Setup(x => x.Execute("config remote.appharbor.url", It.IsAny<DirectoryInfo>()))
-				.Returns(new string[] { string.Format("https://foo@appharbor.com/{0}.git", id) });
-
-			var actual = applicationConfiguration.GetApplicationId();
-
-			Assert.Equal(id, actual);
-		}
-
-		[Theory, AutoCommandData]
-		public void ShouldThrowIfApplicationFileDoesNotExist([Frozen]Mock<IFileSystem> fileSystem, ApplicationConfiguration applicationConfiguration)
-		{
-			fileSystem.Setup(x => x.OpenRead(It.IsAny<string>())).Throws<FileNotFoundException>();
+			repositoryConfigurer.Setup(x => x.GetApplicationId()).Throws<RepositoryConfigurationException>();
 
 			var exception = Assert.Throws<ApplicationConfigurationException>(() => applicationConfiguration.GetApplicationId());
 			Assert.Equal("Application is not configured", exception.Message);

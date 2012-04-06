@@ -38,6 +38,15 @@ namespace AppHarbor.Tests
 				exception.Message);
 		}
 
+		[Theory, AutoCommandData]
+		public void ShouldReturnApplicationIdIfAppHarborRemoteExists([Frozen]Mock<IGitExecutor> executor, GitRepositoryConfigurer repositoryConfigurer, string id)
+		{
+			executor.Setup(x => x.Execute("config remote.appharbor.url", It.IsAny<DirectoryInfo>()))
+				.Returns(new string[] { string.Format("https://foo@appharbor.com/{0}.git", id) });
+
+			Assert.Equal(id, repositoryConfigurer.GetApplicationId());
+		}
+
 		private static string GetRepositoryUrl(string id, User user)
 		{
 			return string.Format("https://{0}@appharbor.com/{1}.git", user.Username, id);
