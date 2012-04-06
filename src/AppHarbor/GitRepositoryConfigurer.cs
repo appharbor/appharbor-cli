@@ -10,7 +10,7 @@ namespace AppHarbor
 		private readonly IFileSystem _fileSystem;
 		private readonly IGitCommand _gitCommand;
 
-		public static string DefaultGitIgnore = @"[Oo]bj\n[Bb]in\ndeploy\ndeploy/*\n*.csproj.user\n*.suo\n*.cache\npackages/\n";
+		public static string DefaultGitIgnore = "[Oo]bj\n[Bb]in\ndeploy\ndeploy/*\n*.csproj.user\n*.suo\n*.cache\npackages/\n";
 
 		public GitRepositoryConfigurer(IFileSystem fileSystem, IGitCommand gitCommand)
 		{
