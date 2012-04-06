@@ -1,4 +1,7 @@
-﻿namespace AppHarbor
+﻿using System;
+using AppHarbor.Model;
+
+namespace AppHarbor
 {
 	public class GitRepositoryConfigurer
 	{
@@ -7,6 +10,11 @@
 		public GitRepositoryConfigurer(IGitExecutor executor)
 		{
 			_executor = executor;
+		}
+
+		public void Configure(string id, User user)
+		{
+			throw new NotImplementedException();
 		}
 	}
 }
