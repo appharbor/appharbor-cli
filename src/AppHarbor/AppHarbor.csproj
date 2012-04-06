@@ -94,6 +94,7 @@
     <Compile Include="ICommand.cs" />
     <Compile Include="IFileSystem.cs" />
     <Compile Include="IGitExecutor.cs" />
+    <Compile Include="IGitRepositoryConfigurer.cs" />
     <Compile Include="ITypeNameMatcher.cs" />
     <Compile Include="PhysicalFileSystem.cs" />
     <Compile Include="Program.cs" />

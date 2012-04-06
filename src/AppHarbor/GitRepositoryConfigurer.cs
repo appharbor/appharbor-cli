@@ -3,7 +3,7 @@ using AppHarbor.Model;
 
 namespace AppHarbor
 {
-	public class GitRepositoryConfigurer
+	public class GitRepositoryConfigurer : IGitRepositoryConfigurer
 	{
 		private readonly IGitExecutor _executor;
 
