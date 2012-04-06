@@ -6,11 +6,19 @@ namespace AppHarbor
 {
 	public class AppHarborClient : IAppHarborClient
 	{
-		private readonly AuthInfo _authInfo;
+		private readonly AppHarborApi _api;
 
 		public AppHarborClient(string AccessToken)
 		{
-			_authInfo = new AuthInfo { AccessToken = AccessToken };
+			var authInfo = new AuthInfo { AccessToken = AccessToken };
+			try
+			{
+				_api =  new AppHarborApi(authInfo);
+			}
+			catch (ArgumentNullException)
+			{
+				throw new CommandException("You're not logged in. Log in with \"appharbor login\"");
+			}
 		}
 
 		public CreateResult<string> CreateApplication(string name, string regionIdentifier = null)
@@ -31,21 +39,6 @@ namespace AppHarbor
 		public User GetUser()
 		{
 			return _api.GetUser();
-		}
-
-		private AppHarborApi _api
-		{
-			get
-			{
-				try
-				{
-					return new AppHarborApi(_authInfo);
-				}
-				catch (ArgumentNullException)
-				{
-					throw new CommandException("You're not logged in. Log in with \"appharbor login\"");
-				}
-			}
 		}
 	}
 }
