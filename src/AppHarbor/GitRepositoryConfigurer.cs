@@ -6,10 +6,12 @@ namespace AppHarbor
 {
 	public class GitRepositoryConfigurer : IGitRepositoryConfigurer
 	{
+		private readonly IFileSystem _fileSystem;
 		private readonly IGitCommand _gitCommand;
 
-		public GitRepositoryConfigurer(IGitCommand gitCommand)
+		public GitRepositoryConfigurer(IFileSystem fileSystem, IGitCommand gitCommand)
 		{
+			_fileSystem = fileSystem;
 			_gitCommand = gitCommand;
 		}
 
