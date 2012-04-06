@@ -20,6 +20,15 @@ namespace AppHarbor
 
 			try
 			{
+				_executor.Execute("--version", CurrentDirectory);
+			}
+			catch (InvalidOperationException)
+			{
+				throw new RepositoryConfigurationException(string.Format("Git is not installed."));
+			}
+
+			try
+			{
 				_executor.Execute(string.Format("remote add appharbor {0}", repositoryUrl), CurrentDirectory);
 
 				Console.WriteLine("Added \"appharbor\" as a remote repository. Push to AppHarbor with git push appharbor master");

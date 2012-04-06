@@ -40,6 +40,15 @@ namespace AppHarbor.Tests
 		}
 
 		[Theory, AutoCommandData]
+		public void ShouldThrowIfGitIsNotInstalled([Frozen]Mock<IGitExecutor> executor, GitRepositoryConfigurer repositoryConfigurer, string id, User user)
+		{
+			executor.Setup(x => x.Execute("--version", It.IsAny<DirectoryInfo>())).Throws<InvalidOperationException>();
+
+			var exception = Assert.Throws<RepositoryConfigurationException>(() => repositoryConfigurer.Configure(id, user));
+			Assert.Equal(string.Format("Git is not installed.", GetRepositoryUrl(id, user)), exception.Message);
+		}
+
+		[Theory, AutoCommandData]
 		public void ShouldReturnApplicationIdIfAppHarborRemoteExists([Frozen]Mock<IGitExecutor> executor, GitRepositoryConfigurer repositoryConfigurer, string id)
 		{
 			executor.Setup(x => x.Execute("config remote.appharbor.url", It.IsAny<DirectoryInfo>()))
