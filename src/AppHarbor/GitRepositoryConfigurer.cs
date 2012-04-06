@@ -21,7 +21,7 @@ namespace AppHarbor
 			{
 				_gitCommand.Execute("--version");
 			}
-			catch (InvalidOperationException)
+			catch (GitCommandException)
 			{
 				throw new RepositoryConfigurationException(string.Format("Git is not installed."));
 			}
@@ -32,7 +32,7 @@ namespace AppHarbor
 
 				Console.WriteLine("Added \"appharbor\" as a remote repository. Push to AppHarbor with git push appharbor master");
 			}
-			catch (InvalidOperationException)
+			catch (GitCommandException)
 			{
 				throw new RepositoryConfigurationException(
 					string.Format("Couldn't add appharbor repository as a git remote. Repository URL is: {0}", repositoryUrl));

@@ -29,7 +29,7 @@ namespace AppHarbor.Tests
 		public void ShouldThrowExceptionIfGitRemoteCantBeAdded([Frozen]Mock<IGitCommand> gitCommand, GitRepositoryConfigurer repositoryConfigurer, string id, User user)
 		{
 			var repositoryUrl = GetRepositoryUrl(id, user);
-			gitCommand.Setup(x => x.Execute(string.Format("remote add appharbor {0}", repositoryUrl))).Throws<InvalidOperationException>();
+			gitCommand.Setup(x => x.Execute(string.Format("remote add appharbor {0}", repositoryUrl))).Throws<GitCommandException>();
 
 			var exception = Assert.Throws<RepositoryConfigurationException>(() => repositoryConfigurer.Configure(id, user));
 			Assert.Equal(string.Format("Couldn't add appharbor repository as a git remote. Repository URL is: {0}", repositoryUrl),
@@ -39,7 +39,7 @@ namespace AppHarbor.Tests
 		[Theory, AutoCommandData]
 		public void ShouldThrowIfGitIsNotInstalled([Frozen]Mock<IGitCommand> gitCommand, GitRepositoryConfigurer repositoryConfigurer, string id, User user)
 		{
-			gitCommand.Setup(x => x.Execute("--version")).Throws<InvalidOperationException>();
+			gitCommand.Setup(x => x.Execute("--version")).Throws<GitCommandException>();
 
 			var exception = Assert.Throws<RepositoryConfigurationException>(() => repositoryConfigurer.Configure(id, user));
 			Assert.Equal(string.Format("Git is not installed.", GetRepositoryUrl(id, user)), exception.Message);

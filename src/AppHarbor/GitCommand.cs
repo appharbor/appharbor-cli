@@ -45,7 +45,7 @@ namespace AppHarbor
 				string error = process.StandardError.ReadToEnd();
 				if (!string.IsNullOrEmpty(error))
 				{
-					throw new InvalidOperationException(error);
+					throw new GitCommandException(error);
 				}
 
 				var output = new List<string>();
