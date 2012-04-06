@@ -47,7 +47,7 @@ namespace AppHarbor
 
 			try
 			{
-				_gitExecutor.Execute(string.Format("remote add appharbor https://{0}@appharbor.com/{1}.git", user.Username, id),
+				_gitExecutor.Execute(string.Format("remote add appharbor {0}", repositoryUrl),
 					CurrentDirectory);
 
 				Console.WriteLine("Added \"appharbor\" as a remote repository. Push to AppHarbor with git push appharbor master");
