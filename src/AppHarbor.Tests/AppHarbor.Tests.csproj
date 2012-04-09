@@ -89,6 +89,7 @@
     <Compile Include="Commands\LogoutAuthCommandTest.cs" />
     <Compile Include="DelegateOutputStream.cs" />
     <Compile Include="GitRepositoryConfigurerTest.cs" />
+    <Compile Include="IFoo.cs" />
     <Compile Include="InlineAutoCommandDataAttribute.cs" />
     <Compile Include="InMemoryFileSystem.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

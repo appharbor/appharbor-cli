@@ -7,8 +7,6 @@ namespace AppHarbor.Tests
 {
 	public class TypeNameMatcherTest
 	{
-		interface IFoo { }
-
 		class FooCommand : IFoo { }
 		class FooBarCommand : IFoo { }
 		class FooBazCommand : IFoo { }
