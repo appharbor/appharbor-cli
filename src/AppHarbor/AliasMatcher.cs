@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Collections.Generic;
 
 namespace AppHarbor
@@ -14,7 +15,8 @@ namespace AppHarbor
 
 		public Type GetMatchedType(string commandArgument)
 		{
-			throw new NotImplementedException();
+			return _candidateTypes.Single(
+				x => x.GetCustomAttributes(true).OfType<CommandHelpAttribute>().Single().Alias.ToLower() == commandArgument.ToLower());
 		}
 	}
 }
