@@ -29,5 +29,11 @@ namespace AppHarbor
 				throw new ArgumentException("Command doesn't match any command alias");
 			}
 		}
+
+
+		public bool IsSatisfiedBy(string commandArgument)
+		{
+			throw new NotImplementedException();
+		}
 	}
 }

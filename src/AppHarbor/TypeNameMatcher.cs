@@ -52,5 +52,11 @@ namespace AppHarbor
 
 			throw new ArgumentException(string.Format("No commands matches \"{0}\".", commandName));
 		}
+
+
+		public bool IsSatisfiedBy(string commandArgument)
+		{
+			throw new NotImplementedException();
+		}
 	}
 }
