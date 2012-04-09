@@ -10,6 +10,12 @@ namespace AppHarbor.Tests
 		[CommandHelp("foo", options: "", alias: "bar")]
 		class Foo { }
 
+		[Fact]
+		public void ShouldThrowIfInitializedWithTypesHavingNoCommandHelpAttribute()
+		{
+			Assert.Throws<ArgumentException>(() => new AliasMatcher(new List<Type> { typeof(string) }));
+		}
+
 		[Theory]
 		[InlineData("bar")]
 		[InlineData("Bar")]

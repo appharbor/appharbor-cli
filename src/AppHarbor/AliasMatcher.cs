@@ -10,6 +10,10 @@ namespace AppHarbor
 
 		public AliasMatcher(IEnumerable<Type> candidateTypes)
 		{
+			if (candidateTypes.Any(x => !x.GetCustomAttributes(true).OfType<CommandHelpAttribute>().Any()))
+			{
+				throw new ArgumentException("All candidate types must be decorated with CommandHelpAttribute");
+			}
 			_candidateTypes = candidateTypes;
 		}
 
