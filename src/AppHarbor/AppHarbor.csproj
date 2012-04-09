@@ -91,6 +91,7 @@
     <Compile Include="GitCommandException.cs" />
     <Compile Include="GitRepositoryConfigurer.cs" />
     <Compile Include="IAccessTokenConfiguration.cs" />
+    <Compile Include="IAliasMatcher.cs" />
     <Compile Include="IAppHarborClient.cs" />
     <Compile Include="IApplicationConfiguration.cs" />
     <Compile Include="ICommand.cs" />
