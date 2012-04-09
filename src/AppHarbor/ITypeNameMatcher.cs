@@ -1,9 +1,6 @@
-﻿using System;
-
-namespace AppHarbor
+﻿namespace AppHarbor
 {
-	public interface ITypeNameMatcher
+	public interface ITypeNameMatcher : ICommandMatcher
 	{
-		Type GetMatchedType(string commandArgument);
 	}
 }
