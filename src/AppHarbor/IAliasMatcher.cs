@@ -1,6 +1,6 @@
 ﻿namespace AppHarbor
 {
-	public interface IAliasMatcher
+	public interface IAliasMatcher : ICommandMatcher
 	{
 	}
 }
