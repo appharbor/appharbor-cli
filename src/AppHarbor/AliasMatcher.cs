@@ -15,8 +15,15 @@ namespace AppHarbor
 
 		public Type GetMatchedType(string commandArgument)
 		{
-			return _candidateTypes.Single(
-				x => x.GetCustomAttributes(true).OfType<CommandHelpAttribute>().Single().Alias.ToLower() == commandArgument.ToLower());
+			try
+			{
+				return _candidateTypes.Single(
+					x => x.GetCustomAttributes(true).OfType<CommandHelpAttribute>().Single().Alias.ToLower() == commandArgument.ToLower());
+			}
+			catch (InvalidOperationException)
+			{
+				throw new ArgumentException("Command doesn't match any command alias");
+			}
 		}
 	}
 }

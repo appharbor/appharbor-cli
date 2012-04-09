@@ -19,5 +19,11 @@ namespace AppHarbor.Tests
 			Assert.Equal(typeof(Foo), aliasMatcher.GetMatchedType(command));
 		}
 
+		[Fact]
+		public void ShouldNotMatchTypeWithoutMatchingAlias()
+		{
+			var aliasMatcher = new AliasMatcher(new List<Type> { typeof(Foo) });
+			Assert.Throws<ArgumentException>(() => aliasMatcher.GetMatchedType("baz"));
+		}
 	}
 }
