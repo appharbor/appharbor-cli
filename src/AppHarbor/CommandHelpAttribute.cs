@@ -4,10 +4,17 @@ namespace AppHarbor
 {
 	public class CommandHelpAttribute : Attribute
 	{
-		public CommandHelpAttribute(string description, string options = "")
+		public CommandHelpAttribute(string description, string options = "", string alias = "")
 		{
+			Alias = alias;
 			Description = description;
 			Options = options;
+		}
+
+		public string Alias
+		{
+			get;
+			private set;
 		}
 
 		public string Description
