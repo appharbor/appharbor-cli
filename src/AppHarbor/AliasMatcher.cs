@@ -32,7 +32,16 @@ namespace AppHarbor
 
 		public bool IsSatisfiedBy(string commandArgument)
 		{
-			throw new NotImplementedException();
+			try
+			{
+				GetMatchedType(commandArgument);
+				return true;
+			}
+			catch (ArgumentException)
+			{
+			}
+
+			return false;
 		}
 	}
 }
