@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Moq;
 using Xunit;
 using Xunit.Extensions;
 
@@ -66,6 +67,20 @@ namespace AppHarbor.Tests
 		{
 			var matcher = new TypeNameMatcher<IFoo>(new Type[] { FooCommandType, FooBarCommandType });
 			matcher.GetMatchedType(string.Concat(scope, ":", "foo"));
+		}
+
+		[Theory, AutoCommandData]
+		public void ShouldBeSatisfiedTypeIsReturned(Mock<TypeNameMatcher<IFoo>> matcher)
+		{
+			matcher.Setup(x => x.GetMatchedType(It.IsAny<string>())).Returns(typeof(string));
+			Assert.True(matcher.Object.IsSatisfiedBy("foo"));
+		}
+
+		[Theory, AutoCommandData]
+		public void ShouldNotBeSatisfiedWhenTypeCantBeFound(Mock<TypeNameMatcher<IFoo>> matcher)
+		{
+			matcher.Setup(x => x.GetMatchedType(It.IsAny<string>())).Throws<ArgumentException>();
+			Assert.False(matcher.Object.IsSatisfiedBy("foo"));
 		}
 	}
 }
