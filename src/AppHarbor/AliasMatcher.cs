@@ -30,7 +30,6 @@ namespace AppHarbor
 			}
 		}
 
-
 		public bool IsSatisfiedBy(string commandArgument)
 		{
 			throw new NotImplementedException();
