@@ -38,10 +38,9 @@ namespace AppHarbor
 				throw new DispatchException(string.Format("The command \"{0}\" doesn't match a command name or alias", string.Join(" ", args)));
 			}
 
-			var command = (ICommand)_kernel.Resolve(matchingType);
-
 			try
 			{
+				var command = (ICommand)_kernel.Resolve(matchingType);
 				command.Execute(args.Skip(argsToSkip).ToArray());
 			}
 			catch (CommandException exception)
