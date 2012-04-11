@@ -1,4 +1,4 @@
-﻿using System;
+﻿using System.IO;
 
 namespace AppHarbor.Commands
 {
@@ -6,16 +6,18 @@ namespace AppHarbor.Commands
 	public class LogoutAuthCommand : ICommand
 	{
 		private readonly IAccessTokenConfiguration _accessTokenConfiguration;
+		private readonly TextWriter _writer;
 
-		public LogoutAuthCommand(IAccessTokenConfiguration accessTokenConfiguration)
+		public LogoutAuthCommand(IAccessTokenConfiguration accessTokenConfiguration, TextWriter writer)
 		{
 			_accessTokenConfiguration = accessTokenConfiguration;
+			_writer = writer;
 		}
 
 		public void Execute(string[] arguments)
 		{
 			_accessTokenConfiguration.DeleteAccessToken();
-			Console.WriteLine("Successfully logged out.");
+			_writer.WriteLine("Successfully logged out.");
 		}
 	}
 }

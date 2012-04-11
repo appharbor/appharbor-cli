@@ -1,8 +1,7 @@
-﻿using Xunit;
-using Moq;
+﻿using System.IO;
 using AppHarbor.Commands;
-using System.IO;
-using System;
+using Moq;
+using Xunit;
 
 namespace AppHarbor.Tests.Commands
 {
@@ -12,16 +11,12 @@ namespace AppHarbor.Tests.Commands
 		public void ShouldLogoutUser()
 		{
 			var accessTokenConfigurationMock = new Mock<AccessTokenConfiguration>();
-			var logoutCommand = new LogoutAuthCommand(accessTokenConfigurationMock.Object);
+			var writer = new Mock<TextWriter>();
+			var logoutCommand = new LogoutAuthCommand(accessTokenConfigurationMock.Object, writer.Object);
 
-			using (var writer = new StringWriter())
-			{
-				Console.SetOut(writer);
+			logoutCommand.Execute(new string[0]);
 
-				logoutCommand.Execute(new string[0]);
-
-				Assert.Contains("Successfully logged out.", writer.ToString());
-			}
+			writer.Verify(x => x.WriteLine("Successfully logged out."));
 			accessTokenConfigurationMock.Verify(x => x.DeleteAccessToken(), Times.Once());
 		}
 	}
