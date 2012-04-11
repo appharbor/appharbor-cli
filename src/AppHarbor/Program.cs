@@ -15,7 +15,14 @@ namespace AppHarbor
 
 			var commandDispatcher = container.Resolve<CommandDispatcher>();
 
-			commandDispatcher.Dispatch(args);
+			try
+			{
+				commandDispatcher.Dispatch(args);
+			}
+			catch (DispatchException exception)
+			{
+				Console.WriteLine("Error: {0}", exception.Message);
+			}
 		}
 	}
 }

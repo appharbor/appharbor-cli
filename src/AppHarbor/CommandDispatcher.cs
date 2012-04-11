@@ -46,7 +46,7 @@ namespace AppHarbor
 			}
 			catch (CommandException exception)
 			{
-				Console.WriteLine(string.Format("Error: {0}", exception.Message));
+				throw new DispatchException(exception.Message);
 			}
 		}
 	}
