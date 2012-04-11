@@ -12,10 +12,10 @@ namespace AppHarbor.Commands
 		private readonly TextReader _reader;
 		private readonly TextWriter _writer;
 
-		public LoginAuthCommand(IAccessTokenConfiguration accessTokenConfiguration, IMaskedInput maskedConsoleInput, TextReader reader, TextWriter writer)
+		public LoginAuthCommand(IAccessTokenConfiguration accessTokenConfiguration, IMaskedInput maskedInput, TextReader reader, TextWriter writer)
 		{
 			_accessTokenConfiguration = accessTokenConfiguration;
-			_maskedInput = maskedConsoleInput;
+			_maskedInput = maskedInput;
 			_reader = reader;
 			_writer = writer;
 		}
