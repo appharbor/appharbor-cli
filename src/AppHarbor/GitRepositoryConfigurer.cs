@@ -9,14 +9,16 @@ namespace AppHarbor
 	{
 		private readonly IFileSystem _fileSystem;
 		private readonly IGitCommand _gitCommand;
+		private readonly TextReader _reader;
 		private readonly TextWriter _writer;
 
 		public static string DefaultGitIgnore = "[Oo]bj\n[Bb]in\ndeploy\ndeploy/*\n*.csproj.user\n*.suo\n*.cache\npackages/\n";
 
-		public GitRepositoryConfigurer(IFileSystem fileSystem, IGitCommand gitCommand, TextWriter writer)
+		public GitRepositoryConfigurer(IFileSystem fileSystem, IGitCommand gitCommand, TextReader reader, TextWriter writer)
 		{
 			_fileSystem = fileSystem;
 			_gitCommand = gitCommand;
+			_reader = reader;
 			_writer = writer;
 		}
 
