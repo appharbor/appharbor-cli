@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Linq;
 
 namespace AppHarbor.Commands
@@ -8,11 +9,13 @@ namespace AppHarbor.Commands
 	{
 		private readonly IAppHarborClient _appHarborClient;
 		private readonly IApplicationConfiguration _applicationConfiguration;
+		private readonly TextWriter _textWriter;
 
-		public CreateAppCommand(IAppHarborClient appHarborClient, IApplicationConfiguration applicationConfiguration)
+		public CreateAppCommand(IAppHarborClient appHarborClient, IApplicationConfiguration applicationConfiguration, TextWriter textWriter)
 		{
 			_appHarborClient = appHarborClient;
 			_applicationConfiguration = applicationConfiguration;
+			_textWriter = textWriter;
 		}
 
 		public void Execute(string[] arguments)
