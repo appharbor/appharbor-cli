@@ -8,6 +8,7 @@ namespace AppHarbor.Tests
 		public DomainCustomization()
 			: base(
 				new AutoMoqCustomization(),
+				new TextReaderCustomization(),
 				new TextWriterCustomization())
 		{
 		}
