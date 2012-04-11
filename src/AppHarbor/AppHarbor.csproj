@@ -88,6 +88,7 @@
     <Compile Include="Commands\InfoAppCommand.cs" />
     <Compile Include="Commands\LoginAuthCommand.cs" />
     <Compile Include="Commands\LogoutAuthCommand.cs" />
+    <Compile Include="DispatchException.cs" />
     <Compile Include="GitCommand.cs" />
     <Compile Include="GitCommandException.cs" />
     <Compile Include="GitRepositoryConfigurer.cs" />
