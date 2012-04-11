@@ -7,24 +7,24 @@ namespace AppHarbor
 		public virtual string Get()
 		{
 			string input = "";
-			ConsoleKeyInfo key;
+			ConsoleKeyInfo consoleKey;
 
 			do
 			{
-				key = Console.ReadKey(true);
+				consoleKey = Console.ReadKey(true);
 
-				if (key.Key != ConsoleKey.Backspace && key.Key != ConsoleKey.Enter)
+				if (consoleKey.Key != ConsoleKey.Backspace && consoleKey.Key != ConsoleKey.Enter)
 				{
-					input += key.KeyChar;
+					input += consoleKey.KeyChar;
 					Console.Write("*");
 				}
-				else if (key.Key == ConsoleKey.Backspace && input.Length > 0)
+				else if (consoleKey.Key == ConsoleKey.Backspace && input.Length > 0)
 				{
 					input = input.Substring(0, (input.Length - 1));
 					Console.Write("\b \b");
 				}
 			}
-			while (key.Key != ConsoleKey.Enter);
+			while (consoleKey.Key != ConsoleKey.Enter);
 
 			return input;
 		}
