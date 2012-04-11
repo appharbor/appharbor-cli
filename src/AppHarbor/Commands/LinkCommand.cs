@@ -4,8 +4,11 @@ namespace AppHarbor.Commands
 {
 	public class LinkCommand : ICommand
 	{
-		public LinkCommand()
+		private readonly IApplicationConfiguration _applicationConfiguration;
+
+		public LinkCommand(IApplicationConfiguration applicationConfiguration)
 		{
+			_applicationConfiguration = applicationConfiguration;
 		}
 
 		public void Execute(string[] arguments)
