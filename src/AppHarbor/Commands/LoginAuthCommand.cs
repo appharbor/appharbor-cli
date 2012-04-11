@@ -4,7 +4,7 @@ using RestSharp.Contrib;
 
 namespace AppHarbor.Commands
 {
-	[CommandHelp("Login to AppHarbor")]
+	[CommandHelp("Login to AppHarbor", alias: "login")]
 	public class LoginAuthCommand : ICommand
 	{
 		private readonly IAccessTokenConfiguration _accessTokenConfiguration;
