@@ -1,5 +1,6 @@
 ﻿using System;
-using Ploeh.AutoFixture
+using System.IO;
+using Ploeh.AutoFixture;
 
 namespace AppHarbor.Tests
 {
@@ -7,7 +8,7 @@ namespace AppHarbor.Tests
 	{
 		public void Customize(IFixture fixture)
 		{
-			throw new NotImplementedException();
+			fixture.Customize<TextWriter>(x => x.FromFactory(() => { return Console.Out; }));
 		}
 	}
 }
