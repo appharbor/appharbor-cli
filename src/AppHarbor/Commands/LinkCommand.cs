@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace AppHarbor.Commands
+﻿namespace AppHarbor.Commands
 {
 	public class LinkCommand : ICommand
 	{
@@ -19,7 +17,11 @@ namespace AppHarbor.Commands
 			{
 				throw new CommandException("Please specify an application id.");
 			}
-			throw new NotImplementedException();
+
+			var user = _appharborClient.GetUser();
+			var application = _appharborClient.GetApplication(arguments[0]);
+
+			_applicationConfiguration.SetupApplication(application.Slug, user);
 		}
 	}
 }
