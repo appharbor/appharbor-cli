@@ -10,15 +10,14 @@ namespace AppHarbor.Tests.Commands
 {
 	public class LoginAuthCommandTest
 	{
-		[Theory, AutoData]
-		public void ShouldSetAppHarborTokenIfUserIsntLoggedIn(string username, string password, [Frozen]Mock<TextWriter> writer, [Frozen]Mock<IAccessTokenConfiguration> accessTokenConfigurationMock)
+		[Theory, AutoCommandData]
+		public void ShouldSetAppHarborTokenIfUserIsntLoggedIn(string username, string password, [Frozen]Mock<TextWriter> writer, [Frozen]Mock<IAccessTokenConfiguration> accessTokenConfigurationMock, Mock<LoginAuthCommand> loginCommand)
 		{
 			using (var reader = new StringReader(string.Format("{0}{2}{1}{2}", username, password, Environment.NewLine)))
 			{
 				Console.SetIn(reader);
 
 				accessTokenConfigurationMock.Setup(x => x.GetAccessToken()).Returns((string)null);
-				var loginCommand = new Mock<LoginAuthCommand>(accessTokenConfigurationMock.Object, writer.Object);
 				loginCommand.Setup(x => x.GetAccessToken(username, password)).Returns("foo");
 				loginCommand.Object.Execute(new string[] { });
 
@@ -30,13 +29,10 @@ namespace AppHarbor.Tests.Commands
 			}
 		}
 
-		[Theory, AutoData]
-		public void ShouldThrowIfUserIsAlreadyLoggedIn([Frozen]Mock<TextWriter> writer, [Frozen]Mock<AccessTokenConfiguration> accessTokenConfigurationMock)
+		[Theory, AutoCommandData]
+		public void ShouldThrowIfUserIsAlreadyLoggedIn([Frozen]Mock<IAccessTokenConfiguration> accessTokenConfigurationMock, LoginAuthCommand loginCommand)
 		{
 			accessTokenConfigurationMock.Setup(x => x.GetAccessToken()).Returns("foo");
-
-			var loginCommand = new LoginAuthCommand(accessTokenConfigurationMock.Object, writer.Object);
-
 			var exception = Assert.Throws<CommandException>(() => loginCommand.Execute(new string[] { }));
 			Assert.Equal("You're already logged in", exception.Message);
 		}
