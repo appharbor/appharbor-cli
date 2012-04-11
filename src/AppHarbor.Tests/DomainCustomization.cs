@@ -6,7 +6,9 @@ namespace AppHarbor.Tests
 	public class DomainCustomization : CompositeCustomization
 	{
 		public DomainCustomization()
-			: base(new AutoMoqCustomization())
+			: base(
+				new AutoMoqCustomization(),
+				new TextWriterCustomization())
 		{
 		}
 	}
