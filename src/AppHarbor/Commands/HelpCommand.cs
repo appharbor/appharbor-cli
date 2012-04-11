@@ -28,10 +28,8 @@ namespace AppHarbor.Commands
 			_writer.WriteLine("");
 
 			foreach (var commandType in _commandTypes.Where(x => x.IsClass)
-				.OrderBy(x => Reverse(x.Name))
-				.Reverse()
-				.OrderBy(x => x.Name.Length)
-				.OrderBy(x => x.Name))
+				.OrderBy(x => GetScope(x))
+				.ThenBy(x => x.Name))
 			{
 				var usageStringBuilder = new StringBuilder();
 
@@ -55,6 +53,11 @@ namespace AppHarbor.Commands
 				}
 				_writer.WriteLine();
 			}
+		}
+
+		private static string GetScope(Type x)
+		{
+			return SplitUpperCase(x.Name).Where(y => y != "Command").Last();
 		}
 
 		private static string Reverse(string sz)
