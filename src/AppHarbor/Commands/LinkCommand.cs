@@ -1,4 +1,6 @@
-﻿namespace AppHarbor.Commands
+﻿using AppHarbor.Model;
+
+namespace AppHarbor.Commands
 {
 	public class LinkCommand : ICommand
 	{
@@ -19,7 +21,16 @@
 			}
 
 			var user = _appharborClient.GetUser();
-			var application = _appharborClient.GetApplication(arguments[0]);
+
+			Application application;
+			try
+			{
+				application = _appharborClient.GetApplication(arguments[0]);
+			}
+			catch (ApiException)
+			{
+				throw new CommandException("The application could not be found");
+			}
 
 			_applicationConfiguration.SetupApplication(application.Slug, user);
 		}

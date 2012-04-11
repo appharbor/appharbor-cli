@@ -31,5 +31,15 @@ namespace AppHarbor.Tests.Commands
 
 			applicationConfiguration.Verify(x => x.SetupApplication(application.Slug, user));
 		}
+
+		[Theory, AutoCommandData]
+		public void ShouldThrowIfApplicationCouldntBeFound([Frozen]Mock<IApplicationConfiguration> applicationConfiguration,
+			[Frozen]Mock<IAppHarborClient> appharborClient,
+			LinkCommand command)
+		{
+			appharborClient.Setup(x => x.GetApplication(It.IsAny<string>())).Throws<ApiException>();
+
+			Assert.Throws<CommandException>(() => command.Execute(new List<string> { "foo" }.ToArray()));
+		}
 	}
 }
