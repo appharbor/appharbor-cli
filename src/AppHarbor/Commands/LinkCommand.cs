@@ -15,6 +15,10 @@ namespace AppHarbor.Commands
 
 		public void Execute(string[] arguments)
 		{
+			if (arguments.Length == 0)
+			{
+				throw new CommandException("Please specify an application id.");
+			}
 			throw new NotImplementedException();
 		}
 	}
