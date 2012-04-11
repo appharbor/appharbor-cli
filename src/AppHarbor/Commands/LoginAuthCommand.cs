@@ -1,5 +1,4 @@
-﻿using System;
-using System.IO;
+﻿using System.IO;
 using RestSharp;
 using RestSharp.Contrib;
 
@@ -9,11 +8,13 @@ namespace AppHarbor.Commands
 	public class LoginAuthCommand : ICommand
 	{
 		private readonly IAccessTokenConfiguration _accessTokenConfiguration;
+		private readonly TextReader _reader;
 		private readonly TextWriter _writer;
 
-		public LoginAuthCommand(IAccessTokenConfiguration accessTokenConfiguration, TextWriter writer)
+		public LoginAuthCommand(IAccessTokenConfiguration accessTokenConfiguration, TextReader reader, TextWriter writer)
 		{
 			_accessTokenConfiguration = accessTokenConfiguration;
+			_reader = reader;
 			_writer = writer;
 		}
 
@@ -25,10 +26,10 @@ namespace AppHarbor.Commands
 			}
 
 			_writer.Write("Username: ");
-			var username = Console.ReadLine();
+			var username = _reader.ReadLine();
 
 			_writer.Write("Password: ");
-			var password = Console.ReadLine();
+			var password = _reader.ReadLine();
 
 			var accessToken = GetAccessToken(username, password);
 			_accessTokenConfiguration.SetAccessToken(accessToken);
