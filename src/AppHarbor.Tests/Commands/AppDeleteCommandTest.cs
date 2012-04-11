@@ -20,6 +20,7 @@ namespace AppHarbor.Tests.Commands
 
 			appharborClient.VerifyAll();
 			applicationConfiguration.VerifyAll();
+			applicationConfiguration.Verify(x => x.DeleteApplication());
 		}
 	}
 }

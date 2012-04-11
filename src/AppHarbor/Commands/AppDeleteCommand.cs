@@ -16,6 +16,8 @@
 		{
 			var id = _applicationConfiguration.GetApplicationId();
 			_appharborClient.DeleteApplication(id);
+
+			_applicationConfiguration.DeleteApplication();
 		}
 	}
 }
