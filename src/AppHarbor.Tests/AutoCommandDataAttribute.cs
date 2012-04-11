@@ -7,7 +7,7 @@ namespace AppHarbor.Tests
 	public class AutoCommandDataAttribute : AutoDataAttribute
 	{
 		public AutoCommandDataAttribute()
-			: base(new Fixture().Customize(new AutoMoqCustomization()))
+			: base(new Fixture().Customize(new DomainCustomization()))
 		{
 		}
 	}
