@@ -7,6 +7,7 @@ namespace AppHarbor
 	{
 		CreateResult<string> CreateApplication(string name, string regionIdentifier = null);
 		Application GetApplication(string id);
+		void DeleteApplication(string id);
 		IEnumerable<Application> GetApplications();
 		User GetUser();
 	}

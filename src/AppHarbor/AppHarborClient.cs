@@ -32,6 +32,14 @@ namespace AppHarbor
 			return result;
 		}
 
+		public void DeleteApplication(string id)
+		{
+			if (!_api.DeleteApplication(id))
+			{
+				throw new ApiException();
+			}
+		}
+
 		public Application GetApplication(string id)
 		{
 			var application = _api.GetApplication(id);
