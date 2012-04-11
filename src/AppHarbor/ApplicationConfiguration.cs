@@ -84,5 +84,10 @@ namespace AppHarbor
 				return appharborConfigurationFile;
 			}
 		}
+
+		public void DeleteApplication()
+		{
+			throw new NotImplementedException();
+		}
 	}
 }
