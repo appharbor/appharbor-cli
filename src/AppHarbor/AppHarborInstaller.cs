@@ -80,6 +80,10 @@ namespace AppHarbor
 				.For<IFileSystem>()
 				.ImplementedBy<PhysicalFileSystem>()
 				.LifeStyle.Transient);
+
+			container.Register(Component
+				.For<IMaskedInput>()
+				.ImplementedBy<MaskedConsoleInput>());
 		}
 	}
 }
