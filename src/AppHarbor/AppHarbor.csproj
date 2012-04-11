@@ -103,6 +103,7 @@
     <Compile Include="IGitCommand.cs" />
     <Compile Include="IGitRepositoryConfigurer.cs" />
     <Compile Include="ITypeNameMatcher.cs" />
+    <Compile Include="MaskedConsoleInput.cs" />
     <Compile Include="PhysicalFileSystem.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
