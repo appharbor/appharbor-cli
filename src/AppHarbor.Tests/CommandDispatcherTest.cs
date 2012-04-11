@@ -11,6 +11,7 @@ namespace AppHarbor.Tests
 	{
 		private static Type FooCommandType = typeof(FooCommand);
 
+		[CommandHelp("foo description", options: "", alias: "qux")]
 		public class FooCommand : ICommand
 		{
 			public virtual void Execute(string[] arguments)
@@ -72,6 +73,29 @@ namespace AppHarbor.Tests
 			kernel.Setup(x => x.Resolve(FooCommandType)).Returns(command.Object);
 
 			commandDispatcher.Dispatch(new string[] { scope, commandName, commandParameter });
+
+			command.Verify(x => x.Execute(It.Is<string[]>(y => y.Length == 1 && y.Any(z => z == commandParameter))));
+		}
+
+		[Theory]
+		[InlineAutoCommandData("qux bar", "qux", "bar")]
+		public void ShouldDispatchAliasCommandWithParameter(
+			string commandArgument,
+			string alias,
+			string commandParameter,
+			[Frozen]Mock<ITypeNameMatcher> typeNameMatcher,
+			[Frozen]Mock<IAliasMatcher> aliasMatcher,
+			[Frozen]Mock<IKernel> kernel,
+			Mock<FooCommand> command,
+			CommandDispatcher commandDispatcher)
+		{
+			typeNameMatcher.Setup(x => x.IsSatisfiedBy(It.IsAny<string>())).Returns(false);
+			aliasMatcher.Setup(x => x.IsSatisfiedBy(alias)).Returns(true);
+
+			aliasMatcher.Setup(x => x.GetMatchedType(alias)).Returns(FooCommandType);
+			kernel.Setup(x => x.Resolve(FooCommandType)).Returns(command.Object);
+
+			commandDispatcher.Dispatch(new string[] { alias, commandParameter });
 
 			command.Verify(x => x.Execute(It.Is<string[]>(y => y.Length == 1 && y.Any(z => z == commandParameter))));
 		}

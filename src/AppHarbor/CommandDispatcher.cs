@@ -21,16 +21,24 @@ namespace AppHarbor
 		{
 			var commandArgument = args.Any() ? string.Concat(args.Skip(1).FirstOrDefault(), args[0]) : "help";
 			Type matchingType = null;
+			int argsToSkip = 0;
+
 			if (_typeNameMatcher.IsSatisfiedBy(commandArgument))
 			{
 				matchingType = _typeNameMatcher.GetMatchedType(commandArgument);
+				argsToSkip = 2;
+			}
+			else if (_aliasMatcher.IsSatisfiedBy(args[0]))
+			{
+				matchingType = _aliasMatcher.GetMatchedType(args[0]);
+				argsToSkip = 1;
 			}
 
 			var command = (ICommand)_kernel.Resolve(matchingType);
 
 			try
 			{
-				command.Execute(args.Skip(2).ToArray());
+				command.Execute(args.Skip(argsToSkip).ToArray());
 			}
 			catch (CommandException exception)
 			{
