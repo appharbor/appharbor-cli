@@ -1,4 +1,5 @@
-﻿using System;
+﻿using System.IO;
+using Moq;
 using Ploeh.AutoFixture;
 
 namespace AppHarbor.Tests
@@ -7,7 +8,9 @@ namespace AppHarbor.Tests
 	{
 		public void Customize(IFixture fixture)
 		{
-			throw new NotImplementedException();
+			var textReaderMock = new Mock<TextReader>();
+			fixture.Customize<TextReader>(x => x.FromFactory(() => { return textReaderMock.Object; }));
+			fixture.Customize<Mock<TextReader>>(x => x.FromFactory(() => { return textReaderMock; }));
 		}
 	}
 }
