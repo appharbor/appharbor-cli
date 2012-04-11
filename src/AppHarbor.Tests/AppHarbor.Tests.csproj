@@ -87,6 +87,7 @@
     <Compile Include="Commands\CreateAppCommandTest.cs" />
     <Compile Include="Commands\HelpCommandTest.cs" />
     <Compile Include="Commands\InfoAppCommandTest.cs" />
+    <Compile Include="Commands\LinkCommandTest.cs" />
     <Compile Include="Commands\LoginAuthCommandTest.cs" />
     <Compile Include="Commands\LogoutAuthCommandTest.cs" />
     <Compile Include="DelegateOutputStream.cs" />
