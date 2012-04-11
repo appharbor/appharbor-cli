@@ -5,8 +5,11 @@ namespace AppHarbor.Commands
 	[CommandHelp("Delete application")]
 	public class AppDeleteCommand : ICommand
 	{
-		public AppDeleteCommand()
+		private readonly IAppHarborClient _appharborClient;
+
+		public AppDeleteCommand(IAppHarborClient appharborClient)
 		{
+			_appharborClient = appharborClient;
 		}
 
 		public void Execute(string[] arguments)
