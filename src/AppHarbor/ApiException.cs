@@ -1,6 +1,8 @@
-﻿namespace AppHarbor
+﻿using System;
+
+namespace AppHarbor
 {
-	public class ApiException
+	public class ApiException : Exception
 	{
 	}
 }
