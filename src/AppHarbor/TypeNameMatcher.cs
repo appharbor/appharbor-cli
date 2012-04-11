@@ -17,40 +17,17 @@ namespace AppHarbor
 			_candidateTypes = candidateTypes;
 		}
 
-		public virtual Type GetMatchedType(string commandArgument)
+		public virtual Type GetMatchedType(string command)
 		{
-			var splitted = commandArgument.Split(':');
-			var commandName = splitted.Last();
-			var scope = splitted.Reverse().Skip(1).FirstOrDefault();
-
-			var typeNameSuffix = "Command";
-			var scopedTypes = _candidateTypes
-				.Where(x => x.Name.ToLower().EndsWith(string.Concat(scope, typeNameSuffix).ToLower()));
-
-			Type command;
-
 			try
 			{
-				return scopedTypes.Single(x => x.Name.ToLower() == string.Concat(commandName, typeNameSuffix).ToLower());
+				return _candidateTypes.Single(x => x.Name.ToLower() == string.Concat(command, "Command").ToLower());
 			}
 			catch (InvalidOperationException)
 			{
 			}
 
-			try
-			{
-				command = scopedTypes.SingleOrDefault(x => x.Name.ToLower().StartsWith(commandName.ToLower()));
-				if (command != null)
-				{
-					return command;
-				}
-			}
-			catch (InvalidOperationException)
-			{
-				throw new ArgumentException(string.Format("More than one command matches \"{0}\".", commandName));
-			}
-
-			throw new ArgumentException(string.Format("No commands matches \"{0}\".", commandName));
+			throw new ArgumentException(string.Format("The command \"{0}\" is invalid.", command));
 		}
 
 

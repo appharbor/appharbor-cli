@@ -32,16 +32,6 @@ namespace AppHarbor.Tests
 		}
 
 		[Theory]
-		[InlineData("Foo")]
-		public void ShouldThrowWhenMoreThanOneTypeMatches(string commandName)
-		{
-			var matcher = new TypeNameMatcher<IFoo>(new Type[] { FooBazCommandType, FooBarCommandType });
-
-			var exception = Assert.Throws<ArgumentException>(() => matcher.GetMatchedType(commandName));
-			Assert.Equal(string.Format("More than one command matches \"{0}\".", commandName), exception.Message);
-		}
-
-		[Theory]
 		[InlineData("foo")]
 		[InlineData("Foo")]
 		public void ShouldNotThrowWhenCommandNameMatchesCommandCompletely(string commandName)
@@ -57,7 +47,7 @@ namespace AppHarbor.Tests
 			var matcher = new TypeNameMatcher<IFoo>(new Type[] { FooCommandType });
 
 			var exception = Assert.Throws<ArgumentException>(() => matcher.GetMatchedType(commandName));
-			Assert.Equal(string.Format("No commands matches \"{0}\".", commandName), exception.Message);
+			Assert.Equal(string.Format("The command \"{0}\" is invalid.", commandName), exception.Message);
 		}
 
 		[Theory]
@@ -66,7 +56,7 @@ namespace AppHarbor.Tests
 		public void ShouldReturnScopedCommand(string scope)
 		{
 			var matcher = new TypeNameMatcher<IFoo>(new Type[] { FooCommandType, FooBarCommandType });
-			matcher.GetMatchedType(string.Concat(scope, ":", "foo"));
+			matcher.GetMatchedType(string.Concat("foo", scope));
 		}
 
 		[Theory, AutoCommandData]
