@@ -23,22 +23,45 @@ namespace AppHarbor
 
 		public CreateResult<string> CreateApplication(string name, string regionIdentifier = null)
 		{
-			return _api.CreateApplication(name, regionIdentifier);
+			var result = _api.CreateApplication(name, regionIdentifier);
+			if (result.Status != CreateStatus.Created)
+			{
+				throw new ApiException();
+			}
+
+			return result;
 		}
 
 		public Application GetApplication(string id)
 		{
-			return _api.GetApplication(id);
+			var application = _api.GetApplication(id);
+			if (application == null)
+			{
+				throw new ApiException();
+			}
+
+			return application;
 		}
 
 		public IEnumerable<Application> GetApplications()
 		{
-			return _api.GetApplications();
+			var applications = _api.GetApplications();
+			if (applications == null)
+			{
+				throw new ApiException();
+			}
+
+			return applications;
 		}
 
 		public User GetUser()
 		{
-			return _api.GetUser();
+			var user = _api.GetUser();
+			if (user == null)
+			{
+				throw new ApiException();
+			}
+			return user;
 		}
 	}
 }
