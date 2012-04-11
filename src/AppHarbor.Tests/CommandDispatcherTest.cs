@@ -3,6 +3,7 @@ using System.Linq;
 using Castle.MicroKernel;
 using Moq;
 using Ploeh.AutoFixture.Xunit;
+using Xunit;
 using Xunit.Extensions;
 
 namespace AppHarbor.Tests
@@ -98,6 +99,18 @@ namespace AppHarbor.Tests
 			commandDispatcher.Dispatch(new string[] { alias, commandParameter });
 
 			command.Verify(x => x.Execute(It.Is<string[]>(y => y.Length == 1 && y.Any(z => z == commandParameter))));
+		}
+
+		[Theory, AutoCommandData]
+		public void ShouldThrowIfNoTypeMatcherAreSatisfied(string commandArgument,
+			[Frozen]Mock<ITypeNameMatcher> typeNameMatcher,
+			[Frozen]Mock<IAliasMatcher> aliasMatcher,
+			CommandDispatcher commandDispatcher)
+		{
+			typeNameMatcher.Setup(x => x.IsSatisfiedBy(It.IsAny<string>())).Returns(false);
+			aliasMatcher.Setup(x => x.IsSatisfiedBy(It.IsAny<string>())).Returns(false);
+
+			Assert.Throws<ArgumentException>(() => commandDispatcher.Dispatch(new string[] { commandArgument }));
 		}
 	}
 }

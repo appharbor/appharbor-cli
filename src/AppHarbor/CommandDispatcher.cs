@@ -33,6 +33,10 @@ namespace AppHarbor
 				matchingType = _aliasMatcher.GetMatchedType(args[0]);
 				argsToSkip = 1;
 			}
+			else
+			{
+				throw new ArgumentException("The command \"{0}\" doesn't match a command or alias");
+			}
 
 			var command = (ICommand)_kernel.Resolve(matchingType);
 
