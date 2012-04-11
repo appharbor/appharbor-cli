@@ -25,16 +25,12 @@ namespace AppHarbor.Tests.Commands
 		public void ShouldOutputHelpInformation()
 		{
 			var types = new List<Type> { FooCommandType, BazQuxCommandType, FooBarCommandType };
-			var helpCommand = new HelpCommand(types);
+			var writer = new StringWriter();
+			var helpCommand = new HelpCommand(types, writer);
 
-			using (var writer = new StringWriter())
-			{
-				Console.SetOut(writer);
+			helpCommand.Execute(new string[0]);
 
-				helpCommand.Execute(new string[0]);
-
-				Assert.Equal("Usage: appharbor COMMAND [command-options]\r\n\r\nAvailable commands:\r\n\r\n  qux:baz [quz]          #  Ipsum lol\r\n  bar:foo [bar]          #  Lorem Ipsum motherfucker\r\n  foo [bar]              #  Lorem Ipsum motherfucker\r\n", writer.ToString());
-			}
+			Assert.Equal("Usage: appharbor COMMAND [command-options]\r\n\r\nAvailable commands:\r\n\r\n  qux:baz [quz]          #  Ipsum lol\r\n  bar:foo [bar]          #  Lorem Ipsum motherfucker\r\n  foo [bar]              #  Lorem Ipsum motherfucker\r\n", writer.ToString());
 		}
 	}
 }

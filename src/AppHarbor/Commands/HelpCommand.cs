@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
+using System.IO;
 using System.Linq;
 using System.Text;
 
@@ -10,19 +11,21 @@ namespace AppHarbor.Commands
 	public class HelpCommand : ICommand
 	{
 		private readonly IEnumerable<Type> _commandTypes;
+		private readonly TextWriter _writer;
 
-		public HelpCommand(IEnumerable<Type> commandTypes)
+		public HelpCommand(IEnumerable<Type> commandTypes, TextWriter writer)
 		{
 			_commandTypes = commandTypes;
+			_writer = writer;
 		}
 
 		public void Execute(string[] arguments)
 		{
-			Console.WriteLine("Usage: appharbor COMMAND [command-options]");
-			Console.WriteLine("");
+			_writer.WriteLine("Usage: appharbor COMMAND [command-options]");
+			_writer.WriteLine("");
 
-			Console.WriteLine("Available commands:");
-			Console.WriteLine("");
+			_writer.WriteLine("Available commands:");
+			_writer.WriteLine("");
 
 			foreach (var commandType in _commandTypes.Where(x => x.IsClass)
 				.OrderBy(x => Reverse(x.Name))
@@ -43,9 +46,9 @@ namespace AppHarbor.Commands
 					usageStringBuilder.Append(" ");
 				}
 
-				Console.Write(usageStringBuilder.ToString().ToLower());
-				Console.Write(string.Concat("#  ", helpAttribute.Description));
-				Console.WriteLine();
+				_writer.Write(usageStringBuilder.ToString().ToLower());
+				_writer.Write(string.Concat("#  ", helpAttribute.Description));
+				_writer.WriteLine();
 			}
 		}
 
