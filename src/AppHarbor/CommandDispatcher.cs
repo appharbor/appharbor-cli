@@ -6,11 +6,13 @@ namespace AppHarbor
 {
 	public class CommandDispatcher
 	{
+		private readonly IAliasMatcher _aliasMatcher;
 		private readonly ITypeNameMatcher _typeNameMatcher;
 		private readonly IKernel _kernel;
 
-		public CommandDispatcher(ITypeNameMatcher typeNameMatcher, IKernel kernel)
+		public CommandDispatcher(IAliasMatcher aliasMatcher, ITypeNameMatcher typeNameMatcher, IKernel kernel)
 		{
+			_aliasMatcher = aliasMatcher;
 			_typeNameMatcher = typeNameMatcher;
 			_kernel = kernel;
 		}
