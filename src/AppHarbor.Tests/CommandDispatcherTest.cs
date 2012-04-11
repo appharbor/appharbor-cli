@@ -110,7 +110,7 @@ namespace AppHarbor.Tests
 			typeNameMatcher.Setup(x => x.IsSatisfiedBy(It.IsAny<string>())).Returns(false);
 			aliasMatcher.Setup(x => x.IsSatisfiedBy(It.IsAny<string>())).Returns(false);
 
-			Assert.Throws<ArgumentException>(() => commandDispatcher.Dispatch(new string[] { commandArgument }));
+			Assert.Throws<DispatchException>(() => commandDispatcher.Dispatch(new string[] { commandArgument }));
 		}
 	}
 }
