@@ -43,7 +43,7 @@ namespace AppHarbor
 		public Application GetApplication(string id)
 		{
 			var application = _api.GetApplication(id);
-			if (application == null)
+			if (string.IsNullOrEmpty(application.Slug))
 			{
 				throw new ApiException();
 			}
