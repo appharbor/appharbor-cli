@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using RestSharp;
 using RestSharp.Contrib;
 
@@ -8,10 +9,12 @@ namespace AppHarbor.Commands
 	public class LoginAuthCommand : ICommand
 	{
 		private readonly IAccessTokenConfiguration _accessTokenConfiguration;
+		private readonly TextWriter _writer;
 
-		public LoginAuthCommand(IAccessTokenConfiguration accessTokenConfiguration)
+		public LoginAuthCommand(IAccessTokenConfiguration accessTokenConfiguration, TextWriter writer)
 		{
 			_accessTokenConfiguration = accessTokenConfiguration;
+			_writer = writer;
 		}
 
 		public void Execute(string[] arguments)
@@ -21,15 +24,15 @@ namespace AppHarbor.Commands
 				throw new CommandException("You're already logged in");
 			}
 
-			Console.Write("Username: ");
+			_writer.Write("Username: ");
 			var username = Console.ReadLine();
 
-			Console.Write("Password: ");
+			_writer.Write("Password: ");
 			var password = Console.ReadLine();
 
 			var accessToken = GetAccessToken(username, password);
 			_accessTokenConfiguration.SetAccessToken(accessToken);
-			Console.WriteLine(string.Format("Successfully logged in as {0}", username));
+			_writer.WriteLine("Successfully logged in as {0}", username);
 		}
 
 		public virtual string GetAccessToken(string username, string password)
