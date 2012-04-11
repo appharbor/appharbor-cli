@@ -102,6 +102,7 @@
     <Compile Include="IFileSystem.cs" />
     <Compile Include="IGitCommand.cs" />
     <Compile Include="IGitRepositoryConfigurer.cs" />
+    <Compile Include="IMaskedInput.cs" />
     <Compile Include="ITypeNameMatcher.cs" />
     <Compile Include="MaskedConsoleInput.cs" />
     <Compile Include="PhysicalFileSystem.cs" />

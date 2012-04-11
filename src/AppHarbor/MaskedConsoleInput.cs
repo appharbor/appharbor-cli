@@ -2,7 +2,7 @@
 
 namespace AppHarbor
 {
-	public class MaskedConsoleInput
+	public class MaskedConsoleInput : IMaskedInput
 	{
 		public string Get()
 		{
