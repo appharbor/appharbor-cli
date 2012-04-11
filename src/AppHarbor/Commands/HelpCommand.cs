@@ -48,6 +48,11 @@ namespace AppHarbor.Commands
 
 				_writer.Write(usageStringBuilder.ToString().ToLower());
 				_writer.Write(string.Concat("#  ", helpAttribute.Description));
+
+				if (!string.IsNullOrEmpty(helpAttribute.Alias))
+				{
+					_writer.Write(" (alias: \"{0}\")", helpAttribute.Alias);
+				}
 				_writer.WriteLine();
 			}
 		}
