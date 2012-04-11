@@ -42,7 +42,7 @@ namespace AppHarbor
 			catch (GitCommandException)
 			{
 				_writer.Write("Git repository is not initialized in this folder. Do you want to initialize it (type \"y\")?");
-				if (Console.ReadLine() != "y")
+				if (_reader.ReadLine() != "y")
 				{
 					throw new RepositoryConfigurationException("Git repository was not initialized.");
 				}
