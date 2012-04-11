@@ -4,7 +4,7 @@ namespace AppHarbor
 {
 	public class MaskedConsoleInput : IMaskedInput
 	{
-		public string Get()
+		public virtual string Get()
 		{
 			string input = "";
 			ConsoleKeyInfo key;
