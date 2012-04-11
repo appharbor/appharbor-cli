@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using Castle.MicroKernel.Registration;
@@ -24,6 +25,13 @@ namespace AppHarbor
 				{
 					return Assembly.GetExecutingAssembly().GetExportedTypes()
 						.Where(y => typeof(ICommand).IsAssignableFrom(y) && y.IsClass);
+				}));
+
+			container.Register(Component
+				.For<TextWriter>()
+				.UsingFactoryMethod(x =>
+				{
+					return Console.Out;
 				}));
 
 			container.Register(Component
