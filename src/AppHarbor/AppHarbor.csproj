@@ -88,6 +88,7 @@
     <Compile Include="Commands\CreateAppCommand.cs" />
     <Compile Include="Commands\HelpCommand.cs" />
     <Compile Include="Commands\InfoAppCommand.cs" />
+    <Compile Include="Commands\LinkCommand.cs" />
     <Compile Include="Commands\LoginAuthCommand.cs" />
     <Compile Include="Commands\LogoutAuthCommand.cs" />
     <Compile Include="DispatchException.cs" />
