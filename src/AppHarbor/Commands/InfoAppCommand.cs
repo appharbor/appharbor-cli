@@ -1,5 +1,4 @@
-﻿using System;
-using System.IO;
+﻿using System.IO;
 
 namespace AppHarbor.Commands
 {
@@ -19,7 +18,12 @@ namespace AppHarbor.Commands
 
 		public void Execute(string[] arguments)
 		{
-			throw new NotImplementedException();
+			var id = _applicationConfiguration.GetApplicationId();
+			var application = _client.GetApplication(id);
+
+			_writer.WriteLine("Id: {0}", application.Slug);
+			_writer.WriteLine("Name: {0}", application.Name);
+			_writer.WriteLine("Region: {0}", application.RegionIdentitfier);
 		}
 	}
 }
