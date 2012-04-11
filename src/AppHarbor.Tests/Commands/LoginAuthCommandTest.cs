@@ -10,11 +10,13 @@ namespace AppHarbor.Tests.Commands
 	public class LoginAuthCommandTest
 	{
 		[Theory, AutoCommandData]
-		public void ShouldSetAppHarborTokenIfUserIsntLoggedIn([Frozen]Mock<TextWriter> writer, [Frozen]Mock<TextReader> reader, [Frozen]Mock<IAccessTokenConfiguration> accessTokenConfigurationMock, Mock<LoginAuthCommand> loginCommand, string username, string password, string token)
+		public void ShouldSetAppHarborTokenIfUserIsntLoggedIn([Frozen]Mock<TextWriter> writer, [Frozen]Mock<IMaskedInput> maskedConsoleInput, [Frozen]Mock<TextReader> reader, [Frozen]Mock<IAccessTokenConfiguration> accessTokenConfigurationMock, Mock<LoginAuthCommand> loginCommand, string username, string password, string token)
 		{
 			reader.SetupSequence(x => x.ReadLine()).Returns(username).Returns(password);
 			accessTokenConfigurationMock.Setup(x => x.GetAccessToken()).Returns((string)null);
 			loginCommand.Setup(x => x.GetAccessToken(username, password)).Returns(token);
+
+			maskedConsoleInput.Setup(x => x.Get()).Returns(password);
 
 			loginCommand.Object.Execute(new string[] { });
 
