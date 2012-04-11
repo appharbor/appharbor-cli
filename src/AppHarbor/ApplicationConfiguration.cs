@@ -87,7 +87,7 @@ namespace AppHarbor
 
 		public void DeleteApplication()
 		{
-			throw new NotImplementedException();
+			_repositoryConfigurer.Unconfigure();
 		}
 	}
 }

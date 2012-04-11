@@ -62,5 +62,13 @@ namespace AppHarbor.Tests
 
 			fileSystem.Verify(x => x.OpenWrite(ConfigurationFile), Times.Once());
 		}
+
+		[Theory, AutoCommandData]
+		public void ShouldUnconfigureRepository([Frozen]Mock<IGitRepositoryConfigurer> repositoryConfigurer, ApplicationConfiguration applicationConfiguration)
+		{
+			applicationConfiguration.DeleteApplication();
+
+			repositoryConfigurer.Verify(x => x.Unconfigure());
+		}
 	}
 }
