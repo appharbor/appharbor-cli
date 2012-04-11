@@ -83,6 +83,7 @@
     <Compile Include="AutoCommandDataAttribute.cs" />
     <Compile Include="CommandDispatcherTest.cs" />
     <Compile Include="Commands\AppCommandTest.cs" />
+    <Compile Include="Commands\AppDeleteCommandTest.cs" />
     <Compile Include="Commands\CreateAppCommandTest.cs" />
     <Compile Include="Commands\HelpCommandTest.cs" />
     <Compile Include="Commands\InfoAppCommandTest.cs" />
