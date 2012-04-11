@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 
 namespace AppHarbor.Commands
 {
@@ -7,11 +8,13 @@ namespace AppHarbor.Commands
 	{
 		private readonly IAppHarborClient _client;
 		private readonly IApplicationConfiguration _applicationConfiguration;
+		private readonly TextWriter _writer;
 
-		public InfoAppCommand(IAppHarborClient client, IApplicationConfiguration applicationConfiguration)
+		public InfoAppCommand(IAppHarborClient client, IApplicationConfiguration applicationConfiguration, TextWriter writer)
 		{
 			_client = client;
 			_applicationConfiguration = applicationConfiguration;
+			_writer = writer;
 		}
 
 		public void Execute(string[] arguments)
