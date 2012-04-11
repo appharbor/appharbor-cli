@@ -37,7 +37,7 @@ namespace AppHarbor.Commands
 
 				var splitted = SplitUpperCase(commandType.Name).Where(x => x != "Command");
 				usageStringBuilder.Append("  ");
-				usageStringBuilder.Append(string.Join(":", splitted.Reverse()));
+				usageStringBuilder.Append(string.Join(" ", splitted.Reverse()));
 				var helpAttribute = commandType.GetCustomAttributes(true).OfType<CommandHelpAttribute>().Single();
 					usageStringBuilder.Append(string.Format(" {0}", helpAttribute.Options));
 
