@@ -17,13 +17,18 @@ namespace AppHarbor
 
 		public void Dispatch(string[] args)
 		{
-			var matchingType = _typeNameMatcher.GetMatchedType(args.Any() ? args[0] : "help");
+			var commandArgument = args.Any() ? string.Concat(args.Skip(1).FirstOrDefault(), args[0]) : "help";
+			Type matchingType = null;
+			if (_typeNameMatcher.IsSatisfiedBy(commandArgument))
+			{
+				matchingType = _typeNameMatcher.GetMatchedType(commandArgument);
+			}
 
 			var command = (ICommand)_kernel.Resolve(matchingType);
 
 			try
 			{
-				command.Execute(args.Skip(1).ToArray());
+				command.Execute(args.Skip(2).ToArray());
 			}
 			catch (CommandException exception)
 			{

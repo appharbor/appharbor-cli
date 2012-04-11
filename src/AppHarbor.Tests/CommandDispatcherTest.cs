@@ -25,7 +25,9 @@ namespace AppHarbor.Tests
 			Mock<FooCommand> command,
 			CommandDispatcher commandDispatcher)
 		{
-			typeNameMatcher.Setup(x => x.GetMatchedType("help")).Returns(FooCommandType);
+			var helpArgument = "help";
+			typeNameMatcher.Setup(x => x.IsSatisfiedBy(helpArgument)).Returns(true);
+			typeNameMatcher.Setup(x => x.GetMatchedType(helpArgument)).Returns(FooCommandType);
 			kernel.Setup(x => x.Resolve(FooCommandType)).Returns(command.Object);
 
 			commandDispatcher.Dispatch(new string[0]);
@@ -34,40 +36,44 @@ namespace AppHarbor.Tests
 		}
 
 		[Theory]
-		[InlineAutoCommandData("foo")]
-		[InlineAutoCommandData("foo:bar")]
+		[InlineAutoCommandData("barfoo", "foo", "bar")]
 		public void ShouldDispatchCommandWithoutParameters(
-			string argument,
+			string commandArgument,
+			string scope,
+			string commandName,
 			[Frozen]Mock<ITypeNameMatcher> typeNameMatcher,
 			[Frozen]Mock<IKernel> kernel,
 			Mock<FooCommand> command,
 			CommandDispatcher commandDispatcher)
 		{
-			typeNameMatcher.Setup(x => x.GetMatchedType(argument)).Returns(FooCommandType);
+			typeNameMatcher.Setup(x => x.IsSatisfiedBy(commandArgument)).Returns(true);
+			typeNameMatcher.Setup(x => x.GetMatchedType(commandArgument)).Returns(FooCommandType);
 			kernel.Setup(x => x.Resolve(FooCommandType)).Returns(command.Object);
 
-			commandDispatcher.Dispatch(new string[] { argument });
+			commandDispatcher.Dispatch(new string[] { scope, commandName });
 
 			command.Verify(x => x.Execute(It.Is<string[]>(y => !y.Any())));
 		}
 
 		[Theory]
-		[InlineAutoCommandData("foo:bar baz", "baz")]
-		[InlineAutoCommandData("foo baz", "baz")]
+		[InlineAutoCommandData("barfoo", "foo", "bar", "baz")]
 		public void ShouldDispatchCommandWithParameter(
-			string argument,
 			string commandArgument,
+			string scope,
+			string commandName,
+			string commandParameter,
 			[Frozen]Mock<ITypeNameMatcher> typeNameMatcher,
 			[Frozen]Mock<IKernel> kernel,
 			Mock<FooCommand> command,
 			CommandDispatcher commandDispatcher)
 		{
-			typeNameMatcher.Setup(x => x.GetMatchedType(argument.Split().First())).Returns(FooCommandType);
+			typeNameMatcher.Setup(x => x.IsSatisfiedBy(commandArgument)).Returns(true);
+			typeNameMatcher.Setup(x => x.GetMatchedType(commandArgument)).Returns(FooCommandType);
 			kernel.Setup(x => x.Resolve(FooCommandType)).Returns(command.Object);
 
-			commandDispatcher.Dispatch(argument.Split());
+			commandDispatcher.Dispatch(new string[] { scope, commandName, commandParameter });
 
-			command.Verify(x => x.Execute(It.Is<string[]>(y => y.Length == 1 && y.Any(z => z == commandArgument))));
+			command.Verify(x => x.Execute(It.Is<string[]>(y => y.Length == 1 && y.Any(z => z == commandParameter))));
 		}
 	}
 }
