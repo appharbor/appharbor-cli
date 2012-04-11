@@ -58,6 +58,24 @@ namespace AppHarbor.Tests
 		}
 
 		[Theory]
+		[InlineAutoCommandData("foo")]
+		public void ShouldThrowDispatcherExceptionOnApiException(
+			string commandArgument,
+			[Frozen]Mock<ITypeNameMatcher> typeNameMatcher,
+			[Frozen]Mock<IKernel> kernel,
+			Mock<FooCommand> command,
+			CommandDispatcher commandDispatcher)
+		{
+			typeNameMatcher.Setup(x => x.IsSatisfiedBy(commandArgument)).Returns(true);
+			typeNameMatcher.Setup(x => x.GetMatchedType(It.IsAny<string>())).Returns(FooCommandType);
+			kernel.Setup(x => x.Resolve(FooCommandType)).Returns(command.Object);
+
+			command.Setup(x => x.Execute(new string[0])).Throws<ApiException>();
+
+			Assert.Throws<DispatchException>(() => commandDispatcher.Dispatch(new string[] { commandArgument }));
+		}
+
+		[Theory]
 		[InlineAutoCommandData("barfoo", "foo", "bar", "baz")]
 		public void ShouldDispatchCommandWithParameter(
 			string commandArgument,
