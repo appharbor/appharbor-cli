@@ -78,5 +78,15 @@ namespace AppHarbor.Tests
 
 			fileSystem.Verify(x => x.Delete(ConfigurationFile));
 		}
+
+		[Theory, AutoCommandData]
+		public void ShouldStillRemoveConfigurationFileIfGitRemoteIsNotRemoved([Frozen]Mock<IGitRepositoryConfigurer> repositoryConfigurer, [Frozen]Mock<IFileSystem> fileSystem, ApplicationConfiguration applicationConfiguration)
+		{
+			repositoryConfigurer.Setup(x => x.Unconfigure()).Throws<RepositoryConfigurationException>();
+
+			applicationConfiguration.DeleteApplication();
+
+			fileSystem.Verify(x => x.Delete(It.IsAny<string>()));
+		}
 	}
 }

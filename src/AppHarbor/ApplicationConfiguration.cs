@@ -87,7 +87,14 @@ namespace AppHarbor
 
 		public void DeleteApplication()
 		{
-			_repositoryConfigurer.Unconfigure();
+			try
+			{
+				_repositoryConfigurer.Unconfigure();
+			}
+			catch (RepositoryConfigurationException)
+			{
+			}
+
 			_fileSystem.Delete(ConfigurationFile.FullName);
 		}
 	}
