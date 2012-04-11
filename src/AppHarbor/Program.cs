@@ -23,6 +23,10 @@ namespace AppHarbor
 			{
 				Console.WriteLine("Error: {0}", exception.Message);
 			}
+			catch (ApiException exception)
+			{
+				Console.WriteLine("An error occured while connecting to AppHarbor.");
+			}
 		}
 	}
 }
