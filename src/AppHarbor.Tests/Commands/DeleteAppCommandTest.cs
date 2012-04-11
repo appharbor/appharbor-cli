@@ -5,12 +5,12 @@ using Xunit.Extensions;
 
 namespace AppHarbor.Tests.Commands
 {
-	public class AppDeleteCommandTest
+	public class DeleteAppCommandTest
 	{
 		[Theory, AutoCommandData]
 		public void ShouldDeleteFromApi([Frozen]Mock<IAppHarborClient> appharborClient,
 			[Frozen]Mock<IApplicationConfiguration> applicationConfiguration,
-			AppDeleteCommand command,
+			DeleteAppCommand command,
 			string id)
 		{
 			applicationConfiguration.Setup(x => x.GetApplicationId()).Returns(id);

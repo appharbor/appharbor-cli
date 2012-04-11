@@ -1,12 +1,12 @@
 ﻿namespace AppHarbor.Commands
 {
 	[CommandHelp("Delete application")]
-	public class AppDeleteCommand : ICommand
+	public class DeleteAppCommand : ICommand
 	{
 		private readonly IAppHarborClient _appharborClient;
 		private readonly IApplicationConfiguration _applicationConfiguration;
 
-		public AppDeleteCommand(IAppHarborClient appharborClient, IApplicationConfiguration applicationConfiguration)
+		public DeleteAppCommand(IAppHarborClient appharborClient, IApplicationConfiguration applicationConfiguration)
 		{
 			_appharborClient = appharborClient;
 			_applicationConfiguration = applicationConfiguration;
