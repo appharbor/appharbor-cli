@@ -32,6 +32,7 @@ namespace AppHarbor.Commands
 
 			_writer.Write("Password: ");
 			var password = _maskedInput.Get();
+			_writer.WriteLine();
 
 			var accessToken = GetAccessToken(username, password);
 			_accessTokenConfiguration.SetAccessToken(accessToken);
