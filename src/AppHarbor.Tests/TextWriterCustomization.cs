@@ -1,5 +1,5 @@
-﻿using System;
-using System.IO;
+﻿using System.IO;
+using Moq;
 using Ploeh.AutoFixture;
 
 namespace AppHarbor.Tests
@@ -8,7 +8,9 @@ namespace AppHarbor.Tests
 	{
 		public void Customize(IFixture fixture)
 		{
-			fixture.Customize<TextWriter>(x => x.FromFactory(() => { return Console.Out; }));
+			var textWriterMock = new Mock<TextWriter>();
+			fixture.Customize<TextWriter>(x => x.FromFactory(() => { return textWriterMock.Object; }));
+			fixture.Customize<Mock<TextWriter>>(x => x.FromFactory(() => { return textWriterMock; }));
 		}
 	}
 }
