@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace AppHarbor.Commands
+﻿namespace AppHarbor.Commands
 {
 	[CommandHelp("Delete application")]
 	public class AppDeleteCommand : ICommand
@@ -16,7 +14,8 @@ namespace AppHarbor.Commands
 
 		public void Execute(string[] arguments)
 		{
-			throw new NotImplementedException();
+			var id = _applicationConfiguration.GetApplicationId();
+			_appharborClient.DeleteApplication(id);
 		}
 	}
 }
