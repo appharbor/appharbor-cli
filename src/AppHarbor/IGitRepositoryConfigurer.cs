@@ -6,5 +6,6 @@ namespace AppHarbor
 	{
 		void Configure(string id, User user);
 		string GetApplicationId();
+		void Unconfigure();
 	}
 }

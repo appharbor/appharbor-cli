@@ -86,5 +86,15 @@ namespace AppHarbor.Tests
 		{
 			return string.Format("https://{0}@appharbor.com/{1}.git", user.Username, id);
 		}
+
+		[Theory, AutoCommandData]
+		public void ShouldThrowIfRemovingRemoteIsUnsuccessful([Frozen]Mock<IGitCommand> gitCommand, GitRepositoryConfigurer repositoryConfigurer)
+		{
+			gitCommand.Setup(x => x.Execute("remote rm appharbor")).Throws<GitCommandException>();
+
+			Assert.Throws<RepositoryConfigurationException>(() => repositoryConfigurer.Unconfigure());
+
+			gitCommand.VerifyAll();
+		}
 	}
 }

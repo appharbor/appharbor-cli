@@ -71,6 +71,18 @@ namespace AppHarbor
 			}
 		}
 
+		public void Unconfigure()
+		{
+			try
+			{
+				_gitCommand.Execute("remote rm appharbor");
+			}
+			catch (GitCommandException)
+			{
+				throw new RepositoryConfigurationException("Git remote could not be removed.");
+			}
+		}
+
 		public string GetApplicationId()
 		{
 			var url = _gitCommand.Execute("config remote.appharbor.url").FirstOrDefault();
