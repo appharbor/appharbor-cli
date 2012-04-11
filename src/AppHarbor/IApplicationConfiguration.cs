@@ -4,7 +4,7 @@ namespace AppHarbor
 {
 	public interface IApplicationConfiguration
 	{
-		void DeleteApplication();
+		void RemoveConfiguration();
 		string GetApplicationId();
 		void SetupApplication(string id, AppHarbor.Model.User user);
 	}

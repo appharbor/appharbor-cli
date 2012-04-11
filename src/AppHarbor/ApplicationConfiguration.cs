@@ -85,7 +85,7 @@ namespace AppHarbor
 			}
 		}
 
-		public void DeleteApplication()
+		public void RemoveConfiguration()
 		{
 			try
 			{

@@ -14,7 +14,7 @@ namespace AppHarbor.Commands
 
 		public void Execute(string[] arguments)
 		{
-			_applicationConfiguration.DeleteApplication();
+			_applicationConfiguration.RemoveConfiguration();
 		}
 	}
 }

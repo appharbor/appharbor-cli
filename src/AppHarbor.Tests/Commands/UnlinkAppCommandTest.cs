@@ -11,7 +11,7 @@ namespace AppHarbor.Tests.Commands
 		public void ShouldUnlinkApplication([Frozen]Mock<IApplicationConfiguration> applicationConfiguration, UnlinkAppCommand command)
 		{
 			command.Execute(new string[0]);
-			applicationConfiguration.Verify(x => x.DeleteApplication());
+			applicationConfiguration.Verify(x => x.RemoveConfiguration());
 		}
 	}
 }

@@ -66,7 +66,7 @@ namespace AppHarbor.Tests
 		[Theory, AutoCommandData]
 		public void ShouldUnconfigureRepository([Frozen]Mock<IGitRepositoryConfigurer> repositoryConfigurer, ApplicationConfiguration applicationConfiguration)
 		{
-			applicationConfiguration.DeleteApplication();
+			applicationConfiguration.RemoveConfiguration();
 
 			repositoryConfigurer.Verify(x => x.Unconfigure());
 		}
@@ -74,7 +74,7 @@ namespace AppHarbor.Tests
 		[Theory, AutoCommandData]
 		public void ShouldRemoveConfigurationFile([Frozen]Mock<IFileSystem> fileSystem, ApplicationConfiguration applicationConfiguration)
 		{
-			applicationConfiguration.DeleteApplication();
+			applicationConfiguration.RemoveConfiguration();
 
 			fileSystem.Verify(x => x.Delete(ConfigurationFile));
 		}
@@ -84,7 +84,7 @@ namespace AppHarbor.Tests
 		{
 			repositoryConfigurer.Setup(x => x.Unconfigure()).Throws<RepositoryConfigurationException>();
 
-			applicationConfiguration.DeleteApplication();
+			applicationConfiguration.RemoveConfiguration();
 
 			fileSystem.Verify(x => x.Delete(It.IsAny<string>()));
 		}
