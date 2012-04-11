@@ -8,11 +8,13 @@ namespace AppHarbor
 	{
 		private readonly IFileSystem _fileSystem;
 		private readonly IGitRepositoryConfigurer _repositoryConfigurer;
+		private readonly TextWriter _writer;
 
-		public ApplicationConfiguration(IFileSystem fileSystem, IGitRepositoryConfigurer repositoryConfigurer)
+		public ApplicationConfiguration(IFileSystem fileSystem, IGitRepositoryConfigurer repositoryConfigurer, TextWriter writer)
 		{
 			_fileSystem = fileSystem;
 			_repositoryConfigurer = repositoryConfigurer;
+			_writer = writer;
 		}
 
 		public string GetApplicationId()
@@ -51,7 +53,7 @@ namespace AppHarbor
 			}
 			catch (RepositoryConfigurationException exception)
 			{
-				Console.WriteLine(exception.Message);
+				_writer.WriteLine(exception.Message);
 			}
 
 			using (var stream = _fileSystem.OpenWrite(ConfigurationFile.FullName))
@@ -62,7 +64,7 @@ namespace AppHarbor
 				}
 			}
 
-			Console.WriteLine("Wrote application configuration to {0}", ConfigurationFile);
+			_writer.WriteLine("Wrote application configuration to {0}", ConfigurationFile.FullName);
 		}
 
 		private static DirectoryInfo CurrentDirectory

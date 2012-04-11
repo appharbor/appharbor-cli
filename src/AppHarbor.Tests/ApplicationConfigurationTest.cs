@@ -14,14 +14,14 @@ namespace AppHarbor.Tests
 		public static string ConfigurationFile = Path.GetFullPath(".appharbor");
 
 		[Theory, AutoCommandData]
-		public void ShouldReturnApplicationIdIfConfigurationFileExists(Mock<IFileSystem> fileSystem, IGitRepositoryConfigurer repositoryConfigurer, string applicationName)
+		public void ShouldReturnApplicationIdIfConfigurationFileExists(Mock<IFileSystem> fileSystem, TextWriter writer, IGitRepositoryConfigurer repositoryConfigurer, string applicationName)
 		{
 			var configurationFile = ConfigurationFile;
 			var stream = new MemoryStream(Encoding.Default.GetBytes(applicationName));
 
 			fileSystem.Setup(x => x.OpenRead(configurationFile)).Returns(stream);
 
-			var applicationConfiguration = new ApplicationConfiguration(fileSystem.Object, repositoryConfigurer);
+			var applicationConfiguration = new ApplicationConfiguration(fileSystem.Object, repositoryConfigurer, writer);
 			Assert.Equal(applicationName, applicationConfiguration.GetApplicationId());
 		}
 
@@ -36,22 +36,16 @@ namespace AppHarbor.Tests
 		}
 
 		[Theory, AutoCommandData]
-		public void ShouldOutputRepositoryExceptionIfRepositorySetupFailed([Frozen]Mock<IGitRepositoryConfigurer> repositoryConfigurer, [Frozen]Mock<IFileSystem> fileSystem, ApplicationConfiguration applicationConfiguration, string exceptionMessage)
+		public void ShouldOutputRepositoryExceptionIfRepositorySetupFailed([Frozen]Mock<IGitRepositoryConfigurer> repositoryConfigurer, [Frozen]Mock<IFileSystem> fileSystem, [Frozen]Mock<TextWriter> writer, ApplicationConfiguration applicationConfiguration, string exceptionMessage)
 		{
 			fileSystem.Setup(x => x.OpenWrite(ConfigurationFile)).Returns(new MemoryStream());
 			repositoryConfigurer.Setup(x => x.Configure(It.IsAny<string>(), It.IsAny<User>()))
 				.Throws(new RepositoryConfigurationException(exceptionMessage));
 
-			using (var writer = new StringWriter())
-			{
-				Console.SetOut(writer);
+			applicationConfiguration.SetupApplication(It.IsAny<string>(), It.IsAny<User>());
 
-				applicationConfiguration.SetupApplication(It.IsAny<string>(), It.IsAny<User>());
-
-				var output = writer.ToString();
-				Assert.Contains(exceptionMessage, output);
-				Assert.Contains(string.Format("Wrote application configuration to {0}", ConfigurationFile), output);
-			}
+			writer.Verify(x => x.WriteLine(exceptionMessage));
+			writer.Verify(x => x.WriteLine("Wrote application configuration to {0}", ConfigurationFile));
 		}
 
 		[Theory, AutoCommandData]
