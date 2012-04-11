@@ -6,10 +6,12 @@ namespace AppHarbor.Commands
 	public class AppDeleteCommand : ICommand
 	{
 		private readonly IAppHarborClient _appharborClient;
+		private readonly IApplicationConfiguration _applicationConfiguration;
 
-		public AppDeleteCommand(IAppHarborClient appharborClient)
+		public AppDeleteCommand(IAppHarborClient appharborClient, IApplicationConfiguration applicationConfiguration)
 		{
 			_appharborClient = appharborClient;
+			_applicationConfiguration = applicationConfiguration;
 		}
 
 		public void Execute(string[] arguments)
