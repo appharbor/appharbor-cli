@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 
 namespace AppHarbor.Commands
 {
@@ -6,10 +7,12 @@ namespace AppHarbor.Commands
 	public class UnlinkAppCommand : ICommand
 	{
 		private readonly IApplicationConfiguration _applicationConfiguration;
+		private readonly TextWriter _writer;
 
-		public UnlinkAppCommand(IApplicationConfiguration applicationConfiguration)
+		public UnlinkAppCommand(IApplicationConfiguration applicationConfiguration, TextWriter writer)
 		{
 			_applicationConfiguration = applicationConfiguration;
+			_writer = writer;
 		}
 
 		public void Execute(string[] arguments)
