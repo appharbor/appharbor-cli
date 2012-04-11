@@ -35,6 +35,13 @@ namespace AppHarbor
 				}));
 
 			container.Register(Component
+				.For<TextReader>()
+				.UsingFactoryMethod(x =>
+				{
+					return Console.In;
+				}));
+
+			container.Register(Component
 				.For<IAccessTokenConfiguration>()
 				.ImplementedBy<AccessTokenConfiguration>());
 
