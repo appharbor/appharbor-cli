@@ -18,6 +18,7 @@ namespace AppHarbor.Commands
 		public void Execute(string[] arguments)
 		{
 			_applicationConfiguration.RemoveConfiguration();
+			_writer.WriteLine("Successfully unlinked directory.");
 		}
 	}
 }
