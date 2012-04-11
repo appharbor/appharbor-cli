@@ -1,19 +1,16 @@
 ﻿using System.IO;
 using AppHarbor.Commands;
 using Moq;
-using Xunit;
+using Ploeh.AutoFixture.Xunit;
+using Xunit.Extensions;
 
 namespace AppHarbor.Tests.Commands
 {
 	public class LogoutAuthCommandTest
 	{
-		[Fact]
-		public void ShouldLogoutUser()
+		[Theory, AutoCommandData]
+		public void ShouldLogoutUser([Frozen]Mock<IAccessTokenConfiguration> accessTokenConfigurationMock, [Frozen]Mock<TextWriter> writer, LogoutAuthCommand logoutCommand)
 		{
-			var accessTokenConfigurationMock = new Mock<AccessTokenConfiguration>();
-			var writer = new Mock<TextWriter>();
-			var logoutCommand = new LogoutAuthCommand(accessTokenConfigurationMock.Object, writer.Object);
-
 			logoutCommand.Execute(new string[0]);
 
 			writer.Verify(x => x.WriteLine("Successfully logged out."));
