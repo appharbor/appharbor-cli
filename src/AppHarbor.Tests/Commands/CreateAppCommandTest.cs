@@ -1,5 +1,4 @@
-﻿using System;
-using System.IO;
+﻿using System.IO;
 using System.Linq;
 using AppHarbor.Commands;
 using AppHarbor.Model;
@@ -50,30 +49,23 @@ namespace AppHarbor.Tests.Commands
 		}
 
 		[Theory, AutoCommandData]
-		public void ShouldNotSetupApplicationIfAlreadyConfigured([Frozen]Mock<IApplicationConfiguration> applicationConfiguration, CreateAppCommand command, string[] arguments, string applicationName)
+		public void ShouldNotSetupApplicationIfAlreadyConfigured([Frozen]Mock<IApplicationConfiguration> applicationConfiguration, [Frozen]Mock<TextWriter> writer, CreateAppCommand command, string[] arguments, string applicationName)
 		{
 			applicationConfiguration.Setup(x => x.GetApplicationId()).Returns(applicationName);
-			using (var writer = new StringWriter())
-			{
-				Console.SetOut(writer);
 
-				command.Execute(arguments);
+			command.Execute(arguments);
 
-				Assert.Contains(string.Format("This directory is already configured to track application \"{0}\".", applicationName), writer.ToString());
-			}
+			writer.Verify(x => x.WriteLine("This directory is already configured to track application \"{0}\".", applicationName), Times.Once());
 		}
 
 		[Theory, AutoCommandData]
-		public void ShouldPrintSuccessMessageAfterCreatingApplication([Frozen]Mock<IAppHarborClient> client, Mock<CreateAppCommand> command, string[] arguments, string applicationSlug)
+		public void ShouldPrintSuccessMessageAfterCreatingApplication([Frozen]Mock<IAppHarborClient> client, [Frozen]Mock<TextWriter> writer, Mock<CreateAppCommand> command, string[] arguments, string applicationSlug)
 		{
 			client.Setup(x => x.CreateApplication(arguments[0], arguments[1])).Returns(new CreateResult<string> { ID = applicationSlug });
-			using (var writer = new StringWriter())
-			{
-				Console.SetOut(writer);
-				command.Object.Execute(arguments);
 
-				Assert.Contains(string.Format(string.Concat("Created application \"{0}\" | URL: https://{0}.apphb.com", Environment.NewLine), applicationSlug), writer.ToString());
-			}
+			command.Object.Execute(arguments);
+
+			writer.Verify(x => x.WriteLine("Created application \"{0}\" | URL: https://{0}.apphb.com", applicationSlug), Times.Once());
 		}
 	}
 }
