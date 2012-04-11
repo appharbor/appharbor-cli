@@ -9,13 +9,15 @@ namespace AppHarbor
 	{
 		private readonly IFileSystem _fileSystem;
 		private readonly IGitCommand _gitCommand;
+		private readonly TextWriter _writer;
 
 		public static string DefaultGitIgnore = "[Oo]bj\n[Bb]in\ndeploy\ndeploy/*\n*.csproj.user\n*.suo\n*.cache\npackages/\n";
 
-		public GitRepositoryConfigurer(IFileSystem fileSystem, IGitCommand gitCommand)
+		public GitRepositoryConfigurer(IFileSystem fileSystem, IGitCommand gitCommand, TextWriter writer)
 		{
 			_fileSystem = fileSystem;
 			_gitCommand = gitCommand;
+			_writer = writer;
 		}
 
 		public void Configure(string id, User user)
@@ -37,7 +39,7 @@ namespace AppHarbor
 			}
 			catch (GitCommandException)
 			{
-				Console.Write("Git repository is not initialized in this folder. Do you want to initialize it (type \"y\")?");
+				_writer.Write("Git repository is not initialized in this folder. Do you want to initialize it (type \"y\")?");
 				if (Console.ReadLine() != "y")
 				{
 					throw new RepositoryConfigurationException("Git repository was not initialized.");
@@ -51,14 +53,14 @@ namespace AppHarbor
 						writer.Write(DefaultGitIgnore);
 					}
 				}
-				Console.WriteLine("Git repository was initialized with default .gitignore file.");
+				_writer.WriteLine("Git repository was initialized with default .gitignore file.");
 			}
 
 			try
 			{
 				_gitCommand.Execute(string.Format("remote add appharbor {0}", repositoryUrl));
 
-				Console.WriteLine("Added \"appharbor\" as a remote repository. Push to AppHarbor with git push appharbor master.");
+				_writer.WriteLine("Added \"appharbor\" as a remote repository. Push to AppHarbor with git push appharbor master.");
 			}
 			catch (GitCommandException)
 			{

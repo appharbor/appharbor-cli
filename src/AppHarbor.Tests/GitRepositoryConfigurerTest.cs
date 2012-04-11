@@ -12,17 +12,11 @@ namespace AppHarbor.Tests
 	public class GitRepositoryConfigurerTest
 	{
 		[Theory, AutoCommandData]
-		public void ShouldTryAndSetUpGitRemoteIfPossible([Frozen]Mock<IGitCommand> gitCommand, GitRepositoryConfigurer repositoryConfigurer, User user, string id)
+		public void ShouldTryAndSetUpGitRemoteIfPossible([Frozen]Mock<IGitCommand> gitCommand, [Frozen]Mock<TextWriter> writer, GitRepositoryConfigurer repositoryConfigurer, User user, string id)
 		{
-			using (var writer = new StringWriter())
-			{
-				Console.SetOut(writer);
+			repositoryConfigurer.Configure(id, user);
 
-				repositoryConfigurer.Configure(id, user);
-
-				Assert.Contains("Added \"appharbor\" as a remote repository. Push to AppHarbor with git push appharbor master.", writer.ToString());
-			}
-
+			writer.Verify(x => x.WriteLine("Added \"appharbor\" as a remote repository. Push to AppHarbor with git push appharbor master."));
 			gitCommand.Verify(x => x.Execute(string.Format("remote add appharbor {0}", GetRepositoryUrl(id, user))), Times.Once());
 		}
 
@@ -47,50 +41,42 @@ namespace AppHarbor.Tests
 		}
 
 		[Theory, AutoCommandData]
-		public void ShouldAskForGitInitializationAndThrowIfNotWanted([Frozen]Mock<IGitCommand> gitCommand, GitRepositoryConfigurer repositoryConfigurer, string id, User user)
+		public void ShouldAskForGitInitializationAndThrowIfNotWanted([Frozen]Mock<IGitCommand> gitCommand, [Frozen]Mock<TextWriter> writer, GitRepositoryConfigurer repositoryConfigurer, string id, User user)
 		{
 			gitCommand.Setup(x => x.Execute("status")).Throws<GitCommandException>();
 
-			using (var writer = new StringWriter())
+			using (var reader = new StringReader(string.Format("n", Environment.NewLine)))
 			{
-				Console.SetOut(writer);
-				using (var reader = new StringReader(string.Format("n", Environment.NewLine)))
-				{
-					Console.SetIn(reader);
-					var exception = Assert.Throws<RepositoryConfigurationException>(() => repositoryConfigurer.Configure(id, user));
+				Console.SetIn(reader);
+				var exception = Assert.Throws<RepositoryConfigurationException>(() => repositoryConfigurer.Configure(id, user));
 
-					Assert.Equal("Git repository was not initialized.", exception.Message);
-					Assert.Equal("Git repository is not initialized in this folder. Do you want to initialize it (type \"y\")?", writer.ToString());
-				}
+				Assert.Equal("Git repository was not initialized.", exception.Message);
+				writer.Verify(x => x.Write("Git repository is not initialized in this folder. Do you want to initialize it (type \"y\")?"));
 			}
 		}
 
 		[Theory, AutoCommandData]
-		public void ShouldInitializeRepositoryIfUserWantIt([Frozen]Mock<IFileSystem> fileSystem, [Frozen]Mock<IGitCommand> gitCommand, GitRepositoryConfigurer repositoryConfigurer, string id, User user)
+		public void ShouldInitializeRepositoryIfUserWantIt([Frozen]Mock<IFileSystem> fileSystem, [Frozen]Mock<TextWriter> writer, [Frozen]Mock<IGitCommand> gitCommand, GitRepositoryConfigurer repositoryConfigurer, string id, User user)
 		{
 			gitCommand.Setup(x => x.Execute("status")).Throws<GitCommandException>();
 
-			using (var writer = new StringWriter())
+			using (var reader = new StringReader(string.Format("y", Environment.NewLine)))
 			{
-				Console.SetOut(writer);
-				using (var reader = new StringReader(string.Format("y", Environment.NewLine)))
+				Console.SetIn(reader);
+
+				var gitIgnoreFile = Path.Combine(Directory.GetCurrentDirectory(), ".gitignore");
+				Action<MemoryStream> VerifyGitIgnoreContent = stream =>
+					Assert.Equal(Encoding.Default.GetBytes(GitRepositoryConfigurer.DefaultGitIgnore), stream.ToArray());
+
+				using (var stream = new DelegateOutputStream(VerifyGitIgnoreContent))
 				{
-					Console.SetIn(reader);
-
-					var gitIgnoreFile = Path.Combine(Directory.GetCurrentDirectory(), ".gitignore");
-					Action<MemoryStream> VerifyGitIgnoreContent = stream =>
-						Assert.Equal(Encoding.Default.GetBytes(GitRepositoryConfigurer.DefaultGitIgnore), stream.ToArray());
-
-					using (var stream = new DelegateOutputStream(VerifyGitIgnoreContent))
-					{
-						fileSystem.Setup(x => x.OpenWrite(gitIgnoreFile)).Returns(stream);
-						repositoryConfigurer.Configure(id, user);
-					}
-
-					fileSystem.Verify(x => x.OpenWrite(gitIgnoreFile), Times.Once());
-					gitCommand.Verify(x => x.Execute("init"), Times.Once());
-					Assert.Contains("Git repository was initialized with default .gitignore file.", writer.ToString());
+					fileSystem.Setup(x => x.OpenWrite(gitIgnoreFile)).Returns(stream);
+					repositoryConfigurer.Configure(id, user);
 				}
+
+				fileSystem.Verify(x => x.OpenWrite(gitIgnoreFile), Times.Once());
+				gitCommand.Verify(x => x.Execute("init"), Times.Once());
+				writer.Verify(x => x.WriteLine("Git repository was initialized with default .gitignore file."));
 			}
 		}
 
