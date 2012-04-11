@@ -8,12 +8,14 @@ namespace AppHarbor.Commands
 	public class LoginAuthCommand : ICommand
 	{
 		private readonly IAccessTokenConfiguration _accessTokenConfiguration;
+		private readonly IMaskedInput _maskedConsoleInput;
 		private readonly TextReader _reader;
 		private readonly TextWriter _writer;
 
-		public LoginAuthCommand(IAccessTokenConfiguration accessTokenConfiguration, TextReader reader, TextWriter writer)
+		public LoginAuthCommand(IAccessTokenConfiguration accessTokenConfiguration, IMaskedInput maskedConsoleInput, TextReader reader, TextWriter writer)
 		{
 			_accessTokenConfiguration = accessTokenConfiguration;
+			_maskedConsoleInput = maskedConsoleInput;
 			_reader = reader;
 			_writer = writer;
 		}
