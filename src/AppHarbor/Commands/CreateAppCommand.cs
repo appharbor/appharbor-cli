@@ -3,7 +3,7 @@ using System.Linq;
 
 namespace AppHarbor.Commands
 {
-	[CommandHelp("Create an application", "[NAME]")]
+	[CommandHelp("Create an application", "[NAME]", "create")]
 	public class CreateAppCommand : ICommand
 	{
 		private readonly IAppHarborClient _appHarborClient;
