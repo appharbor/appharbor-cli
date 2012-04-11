@@ -8,10 +8,10 @@ using Xunit.Extensions;
 
 namespace AppHarbor.Tests.Commands
 {
-	public class LinkCommandTest
+	public class LinkAppCommandTest
 	{
 		[Theory, AutoCommandData]
-		public void ShouldThrowIfNoArguments(LinkCommand command)
+		public void ShouldThrowIfNoArguments(LinkAppCommand command)
 		{
 			Assert.Throws<CommandException>(() => command.Execute(new string[0]));
 		}
@@ -19,7 +19,7 @@ namespace AppHarbor.Tests.Commands
 		[Theory, AutoCommandData]
 		public void ShouldSetupApplication([Frozen]Mock<IApplicationConfiguration> applicationConfiguration,
 			[Frozen]Mock<IAppHarborClient> appharborClient,
-			LinkCommand command,
+			LinkAppCommand command,
 			Application application,
 			User user)
 		{
@@ -35,7 +35,7 @@ namespace AppHarbor.Tests.Commands
 		[Theory, AutoCommandData]
 		public void ShouldThrowIfApplicationCouldntBeFound([Frozen]Mock<IApplicationConfiguration> applicationConfiguration,
 			[Frozen]Mock<IAppHarborClient> appharborClient,
-			LinkCommand command)
+			LinkAppCommand command)
 		{
 			appharborClient.Setup(x => x.GetApplication(It.IsAny<string>())).Throws<ApiException>();
 

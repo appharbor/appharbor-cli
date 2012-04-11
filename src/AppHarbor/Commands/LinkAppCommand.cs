@@ -2,13 +2,13 @@
 
 namespace AppHarbor.Commands
 {
-	[CommandHelp("Link this directory to an existing application", "[SLUG]", alias: "link")]
-	public class LinkCommand : ICommand
+	[CommandHelp("Link directory to an application", "[SLUG]", alias: "link")]
+	public class LinkAppCommand : ICommand
 	{
 		private readonly IApplicationConfiguration _applicationConfiguration;
 		private readonly IAppHarborClient _appharborClient;
 
-		public LinkCommand(IApplicationConfiguration applicationConfiguration, IAppHarborClient appharborClient)
+		public LinkAppCommand(IApplicationConfiguration applicationConfiguration, IAppHarborClient appharborClient)
 		{
 			_applicationConfiguration = applicationConfiguration;
 			_appharborClient = appharborClient;
