@@ -1,6 +1,8 @@
-﻿namespace AppHarbor.Tests
+﻿using Ploeh.AutoFixture;
+
+namespace AppHarbor.Tests
 {
-	public class DomainCustomization
+	public class DomainCustomization : CompositeCustomization
 	{
 	}
 }
