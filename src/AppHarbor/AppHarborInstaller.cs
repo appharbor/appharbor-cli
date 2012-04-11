@@ -50,6 +50,10 @@ namespace AppHarbor
 				.ImplementedBy<TypeNameMatcher<ICommand>>());
 
 			container.Register(Component
+				.For<IAliasMatcher>()
+				.ImplementedBy<AliasMatcher>());
+
+			container.Register(Component
 				.For<IGitCommand>()
 				.ImplementedBy<GitCommand>());
 
