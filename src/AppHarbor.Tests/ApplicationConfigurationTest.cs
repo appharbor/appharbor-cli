@@ -70,5 +70,13 @@ namespace AppHarbor.Tests
 
 			repositoryConfigurer.Verify(x => x.Unconfigure());
 		}
+
+		[Theory, AutoCommandData]
+		public void ShouldRemoveConfigurationFile([Frozen]Mock<IFileSystem> fileSystem, ApplicationConfiguration applicationConfiguration)
+		{
+			applicationConfiguration.DeleteApplication();
+
+			fileSystem.Verify(x => x.Delete(ConfigurationFile));
+		}
 	}
 }
