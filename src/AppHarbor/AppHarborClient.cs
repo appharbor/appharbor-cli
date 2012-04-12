@@ -71,5 +71,11 @@ namespace AppHarbor
 			}
 			return user;
 		}
+
+
+		public CreateResult<long> CreateConfigurationVariable(string key, string value)
+		{
+			throw new NotImplementedException();
+		}
 	}
 }
