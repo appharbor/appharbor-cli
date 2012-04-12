@@ -19,7 +19,9 @@ namespace AppHarbor.Commands
 			{
 				throw new CommandException("No hostname was specified");
 			}
-			throw new NotImplementedException();
+
+			var applicationId = _applicationConfiguration.GetApplicationId();
+			_appharborClient.CreateHostname(applicationId, arguments[0]);
 		}
 	}
 }
