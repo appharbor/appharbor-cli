@@ -17,6 +17,13 @@
 			{
 				throw new CommandException("No configuration variable key was specified");
 			}
+
+			var applicationId = _applicationConfiguration.GetApplicationId();
+
+			foreach (var key in arguments)
+			{
+				_appharborClient.RemoveConfigurationVariable(applicationId, key);
+			}
 		}
 	}
 }
