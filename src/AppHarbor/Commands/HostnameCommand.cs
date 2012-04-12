@@ -1,4 +1,5 @@
 ﻿using System.IO;
+using System.Linq;
 
 namespace AppHarbor.Commands
 {
@@ -19,6 +20,11 @@ namespace AppHarbor.Commands
 		{
 			var applicationId = _applicationConfiguration.GetApplicationId();
 			var hostnames = _appharborClient.GetHostnames(applicationId);
+
+			if (!hostnames.Any())
+			{
+				_writer.WriteLine("No hostnames are associated with the application.");
+			}
 
 			foreach (var hostname in hostnames)
 			{

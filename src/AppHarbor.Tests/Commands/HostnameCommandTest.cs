@@ -35,5 +35,14 @@ namespace AppHarbor.Tests.Commands
 				writer.Verify(x => x.WriteLine(output));
 			}
 		}
+
+		[Theory, AutoCommandData]
+		public void ShouldWriteIfNoHostnamesAreAssociated(HostnameCommand command,
+			[Frozen]Mock<TextWriter> writer, string applicationId)
+		{
+			command.Execute(new string[0]);
+
+			writer.Verify(x => x.WriteLine("No hostnames are associated with the application."));
+		}
 	}
 }
