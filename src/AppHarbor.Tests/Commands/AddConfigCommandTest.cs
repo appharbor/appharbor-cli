@@ -1,12 +1,19 @@
 ﻿using AppHarbor.Commands;
 using Moq;
 using Ploeh.AutoFixture.Xunit;
+using Xunit;
 using Xunit.Extensions;
 
 namespace AppHarbor.Tests.Commands
 {
 	public class AddConfigCommandTest
 	{
+		[Theory, AutoCommandData]
+		public void ShouldThrowIfNoArguments(AddConfigCommand command)
+		{
+			Assert.Throws<CommandException>(() => command.Execute(new string[0]));
+		}
+
 		[Theory, AutoCommandData]
 		public void ShouldAddConfigurationVariable([Frozen]Mock<IApplicationConfiguration> applicationConfiguration,
 			[Frozen]Mock<IAppHarborClient> client,
