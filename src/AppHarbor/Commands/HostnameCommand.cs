@@ -3,6 +3,7 @@ using System.Linq;
 
 namespace AppHarbor.Commands
 {
+	[CommandHelp("List all associated hostnames")]
 	public class HostnameCommand : ICommand
 	{
 		private readonly IApplicationConfiguration _applicationConfiguration;
