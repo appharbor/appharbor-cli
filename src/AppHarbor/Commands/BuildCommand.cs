@@ -26,6 +26,12 @@ namespace AppHarbor.Commands
 			var builds = _appharborClient.GetBuilds(applicationId);
 
 			_writer.WriteLine(string.Format(OutputFormat, "Commit", "Status", "Deployed"));
+
+			if (!builds.Any())
+			{
+				_writer.WriteLine("No builds are associated with this application.");
+			}
+
 			foreach (var build in builds)
 			{
 				var commitId = GetShortened(build.Commit.ID, 7);
