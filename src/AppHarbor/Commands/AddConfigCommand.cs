@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace AppHarbor.Commands
+﻿namespace AppHarbor.Commands
 {
 	public class AddConfigCommand : ICommand
 	{
@@ -15,7 +13,10 @@ namespace AppHarbor.Commands
 
 		public void Execute(string[] arguments)
 		{
-			throw new NotImplementedException();
+			var applicationId = _applicationConfiguration.GetApplicationId();
+
+			var splitted = arguments[0].Split('=');
+			_appharborClient.CreateConfigurationVariable(applicationId, splitted[0], splitted[1]);
 		}
 	}
 }
