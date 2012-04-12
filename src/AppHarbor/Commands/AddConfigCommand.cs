@@ -4,8 +4,11 @@ namespace AppHarbor.Commands
 {
 	public class AddConfigCommand : ICommand
 	{
-		public AddConfigCommand()
+		private readonly IApplicationConfiguration _applicationConfiguration;
+
+		public AddConfigCommand(IApplicationConfiguration applicationConfiguration)
 		{
+			_applicationConfiguration = applicationConfiguration;
 		}
 
 		public void Execute(string[] arguments)
