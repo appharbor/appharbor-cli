@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Collections.Generic;
 using AppHarbor.Model;
 
@@ -76,6 +77,7 @@ namespace AppHarbor
 		public void CreateConfigurationVariable(string applicationId, string key, string value)
 		{
 			var result = _api.CreateConfigurationVariable(applicationId, key, value);
+
 			switch (result.Status)
 			{
 				case CreateStatus.Created:
@@ -84,6 +86,26 @@ namespace AppHarbor
 					throw new CommandException(string.Format("The configuration variable key \"{0}\" already exists"));
 				default:
 					throw new ApiException();
+			}
+		}
+
+
+		public void RemoveConfigurationVariable(string applicationId, string key)
+		{
+			ConfigurationVariable configurationVariable;
+			try
+			{
+				configurationVariable = _api.GetConfigurationVariables(applicationId)
+					.Single(x => x.Key.ToLower() == key.ToLower());
+			}
+			catch (InvalidOperationException)
+			{
+				throw new CommandException("The configuration variable key \"{0}\" could not be found.");
+			}
+
+			if (!_api.DeleteConfigurationVariable(applicationId, configurationVariable.ID))
+			{
+				throw new ApiException();
 			}
 		}
 	}
