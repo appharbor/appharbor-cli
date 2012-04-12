@@ -2,7 +2,7 @@
 
 namespace AppHarbor.Commands
 {
-	class RemoveConfigCommand : ICommand
+	public class RemoveConfigCommand : ICommand
 	{
 		private readonly IApplicationConfiguration _applicationConfiguration;
 		private readonly IAppHarborClient _appharborClient;
