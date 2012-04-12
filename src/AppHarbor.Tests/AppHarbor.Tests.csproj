@@ -85,6 +85,7 @@
     <Compile Include="Commands\AddConfigCommandTest.cs" />
     <Compile Include="Commands\AddHostnameCommandTest.cs" />
     <Compile Include="Commands\AppCommandTest.cs" />
+    <Compile Include="Commands\BuildCommandTest.cs" />
     <Compile Include="Commands\ConfigCommandTest.cs" />
     <Compile Include="Commands\DeleteAppCommandTest.cs" />
     <Compile Include="Commands\CreateAppCommandTest.cs" />
