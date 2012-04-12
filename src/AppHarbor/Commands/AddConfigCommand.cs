@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace AppHarbor.Tests.Commands
+namespace AppHarbor.Commands
 {
 	public class AddConfigCommand : ICommand
 	{
