@@ -1,5 +1,6 @@
 ﻿namespace AppHarbor.Commands
 {
+	[CommandHelp("Add configuration variable to application", options: "[KEY=VALUE]")]
 	public class AddConfigCommand : ICommand
 	{
 		private readonly IApplicationConfiguration _applicationConfiguration;
