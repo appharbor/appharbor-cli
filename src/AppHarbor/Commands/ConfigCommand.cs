@@ -3,6 +3,7 @@ using System.Linq;
 
 namespace AppHarbor.Commands
 {
+	[CommandHelp("List all configuration variables")]
 	public class ConfigCommand : ICommand
 	{
 		private readonly IApplicationConfiguration _applicationConfiguration;
