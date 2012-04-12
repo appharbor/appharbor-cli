@@ -7,12 +7,12 @@ using Xunit.Extensions;
 
 namespace AppHarbor.Tests.Commands
 {
-	public class AuthCommandTest
+	public class UserCommandTest
 	{
 		[Theory, AutoCommandData]
 		public void ShouldAddConfigurationVariables([Frozen]Mock<IAppHarborClient> client,
 			[Frozen]Mock<TextWriter> writer,
-			AuthCommand command, User user, string applicationId)
+			UserCommand command, User user, string applicationId)
 		{
 			client.Setup(x => x.GetUser()).Returns(user);
 

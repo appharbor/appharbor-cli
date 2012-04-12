@@ -7,10 +7,10 @@ using Xunit.Extensions;
 
 namespace AppHarbor.Tests.Commands
 {
-	public class LoginAuthCommandTest
+	public class LoginUserCommandTest
 	{
 		[Theory, AutoCommandData]
-		public void ShouldSetAppHarborTokenIfUserIsntLoggedIn([Frozen]Mock<TextWriter> writer, [Frozen]Mock<IMaskedInput> maskedConsoleInput, [Frozen]Mock<TextReader> reader, [Frozen]Mock<IAccessTokenConfiguration> accessTokenConfigurationMock, Mock<LoginAuthCommand> loginCommand, string username, string password, string token)
+		public void ShouldSetAppHarborTokenIfUserIsntLoggedIn([Frozen]Mock<TextWriter> writer, [Frozen]Mock<IMaskedInput> maskedConsoleInput, [Frozen]Mock<TextReader> reader, [Frozen]Mock<IAccessTokenConfiguration> accessTokenConfigurationMock, Mock<LoginUserCommand> loginCommand, string username, string password, string token)
 		{
 			reader.SetupSequence(x => x.ReadLine()).Returns(username).Returns(password);
 			accessTokenConfigurationMock.Setup(x => x.GetAccessToken()).Returns((string)null);
@@ -27,7 +27,7 @@ namespace AppHarbor.Tests.Commands
 		}
 
 		[Theory, AutoCommandData]
-		public void ShouldThrowIfUserIsAlreadyLoggedIn([Frozen]Mock<IAccessTokenConfiguration> accessTokenConfigurationMock, LoginAuthCommand loginCommand)
+		public void ShouldThrowIfUserIsAlreadyLoggedIn([Frozen]Mock<IAccessTokenConfiguration> accessTokenConfigurationMock, LoginUserCommand loginCommand)
 		{
 			accessTokenConfigurationMock.Setup(x => x.GetAccessToken()).Returns("foo");
 			var exception = Assert.Throws<CommandException>(() => loginCommand.Execute(new string[] { }));

@@ -3,12 +3,12 @@
 namespace AppHarbor.Commands
 {
 	[CommandHelp("Show currently logged in user")]
-	public class AuthCommand : ICommand
+	public class UserCommand : ICommand
 	{
 		private readonly IAppHarborClient _appharborClient;
 		private readonly TextWriter _writer;
 
-		public AuthCommand(IAppHarborClient appharborClient, TextWriter writer)
+		public UserCommand(IAppHarborClient appharborClient, TextWriter writer)
 		{
 			_appharborClient = appharborClient;
 			_writer = writer;

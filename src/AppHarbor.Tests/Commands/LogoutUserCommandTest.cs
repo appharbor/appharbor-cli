@@ -6,10 +6,10 @@ using Xunit.Extensions;
 
 namespace AppHarbor.Tests.Commands
 {
-	public class LogoutAuthCommandTest
+	public class LogoutUserCommandTest
 	{
 		[Theory, AutoCommandData]
-		public void ShouldLogoutUser([Frozen]Mock<IAccessTokenConfiguration> accessTokenConfigurationMock, [Frozen]Mock<TextWriter> writer, LogoutAuthCommand logoutCommand)
+		public void ShouldLogoutUser([Frozen]Mock<IAccessTokenConfiguration> accessTokenConfigurationMock, [Frozen]Mock<TextWriter> writer, LogoutUserCommand logoutCommand)
 		{
 			logoutCommand.Execute(new string[0]);
 

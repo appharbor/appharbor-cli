@@ -3,12 +3,12 @@
 namespace AppHarbor.Commands
 {
 	[CommandHelp("Logout of AppHarbor", alias: "logout")]
-	public class LogoutAuthCommand : ICommand
+	public class LogoutUserCommand : ICommand
 	{
 		private readonly IAccessTokenConfiguration _accessTokenConfiguration;
 		private readonly TextWriter _writer;
 
-		public LogoutAuthCommand(IAccessTokenConfiguration accessTokenConfiguration, TextWriter writer)
+		public LogoutUserCommand(IAccessTokenConfiguration accessTokenConfiguration, TextWriter writer)
 		{
 			_accessTokenConfiguration = accessTokenConfiguration;
 			_writer = writer;

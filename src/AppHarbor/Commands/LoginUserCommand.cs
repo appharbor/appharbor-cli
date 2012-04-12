@@ -5,14 +5,14 @@ using RestSharp.Contrib;
 namespace AppHarbor.Commands
 {
 	[CommandHelp("Login to AppHarbor", alias: "login")]
-	public class LoginAuthCommand : ICommand
+	public class LoginUserCommand : ICommand
 	{
 		private readonly IAccessTokenConfiguration _accessTokenConfiguration;
 		private readonly IMaskedInput _maskedInput;
 		private readonly TextReader _reader;
 		private readonly TextWriter _writer;
 
-		public LoginAuthCommand(IAccessTokenConfiguration accessTokenConfiguration, IMaskedInput maskedInput, TextReader reader, TextWriter writer)
+		public LoginUserCommand(IAccessTokenConfiguration accessTokenConfiguration, IMaskedInput maskedInput, TextReader reader, TextWriter writer)
 		{
 			_accessTokenConfiguration = accessTokenConfiguration;
 			_maskedInput = maskedInput;
