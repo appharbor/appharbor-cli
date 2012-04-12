@@ -11,8 +11,7 @@ namespace AppHarbor.Tests.Commands
 	public class ConfigCommandTest
 	{
 		[Theory, AutoCommandData]
-		public void ShouldAddConfigurationVariables(string arguments,
-			[Frozen]Mock<IApplicationConfiguration> applicationConfiguration,
+		public void ShouldAddConfigurationVariables([Frozen]Mock<IApplicationConfiguration> applicationConfiguration,
 			[Frozen]Mock<IAppHarborClient> client,
 			[Frozen]Mock<TextWriter> writer,
 			ConfigCommand command, string applicationId)
@@ -32,6 +31,14 @@ namespace AppHarbor.Tests.Commands
 			{
 				writer.Verify(x => x.WriteLine("{0} => {1}", configurationVariable.Key, configurationVariable.Value));
 			}
+		}
+
+		[Theory, AutoCommandData]
+		public void ShouldWriteIfThereAreNoConfigurationVariables([Frozen]Mock<TextWriter> writer, ConfigCommand command)
+		{
+			command.Execute(new string[0]);
+
+			writer.Verify(x => x.WriteLine("No configuration variables are associated with this application"));
 		}
 	}
 }

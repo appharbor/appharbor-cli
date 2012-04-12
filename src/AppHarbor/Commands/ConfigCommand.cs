@@ -1,4 +1,5 @@
 ﻿using System.IO;
+using System.Linq;
 
 namespace AppHarbor.Commands
 {
@@ -18,8 +19,14 @@ namespace AppHarbor.Commands
 		public void Execute(string[] arguments)
 		{
 			var applicationId = _applicationConfiguration.GetApplicationId();
+			var configurationVariables = _appharborClient.GetConfigurationVariables(applicationId);
 
-			foreach (var configurationVariable in _appharborClient.GetConfigurationVariables(applicationId))
+			if (!configurationVariables.Any())
+			{
+				_writer.WriteLine("No configuration variables are associated with this application");
+			}
+
+			foreach (var configurationVariable in configurationVariables)
 			{
 				_writer.WriteLine("{0} => {1}", configurationVariable.Key, configurationVariable.Value);
 			}
