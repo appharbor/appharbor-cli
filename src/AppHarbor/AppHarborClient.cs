@@ -137,5 +137,22 @@ namespace AppHarbor
 				throw new ApiException();
 			}
 		}
+
+
+		public void RemoveHostname(string applicationId, string value)
+		{
+			Hostname hostname;
+			try
+			{
+				hostname = _api.GetHostnames(applicationId)
+					.Single(x => x.Value.ToLower() == value.ToLower());
+			}
+			catch (InvalidOperationException)
+			{
+				throw new CommandException(string.Format("The hostname \"{0}\" could not be found.", value));
+			}
+
+			_api.DeleteHostname(applicationId, hostname.ID);
+		}
 	}
 }

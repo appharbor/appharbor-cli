@@ -15,5 +15,6 @@ namespace AppHarbor
 		IEnumerable<Application> GetApplications();
 		User GetUser();
 		void RemoveConfigurationVariable(string applicationId, string key);
+		void RemoveHostname(string applicationId, string hostname);
 	}
 }
