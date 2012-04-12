@@ -17,7 +17,7 @@ namespace AppHarbor.Tests.Commands
 		[Theory]
 		[InlineAutoCommandData("foo")]
 		[InlineAutoCommandData("foo bar baz")]
-		public void ShouldAddConfigurationVariables(string arguments,
+		public void ShouldRemoveConfigurationVariables(string arguments,
 			[Frozen]Mock<IApplicationConfiguration> applicationConfiguration,
 			[Frozen]Mock<IAppHarborClient> client,
 			RemoveConfigCommand command, string applicationId)
