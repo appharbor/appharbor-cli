@@ -1,4 +1,5 @@
 ﻿using System.IO;
+using System.Linq;
 
 namespace AppHarbor.Commands
 {
@@ -17,7 +18,7 @@ namespace AppHarbor.Commands
 		public void Execute(string[] arguments)
 		{
 			var applications = _client.GetApplications();
-			foreach (var application in applications)
+			foreach (var application in applications.OrderBy(x => x.Slug))
 			{
 				_writer.WriteLine(application.Slug);
 			}
