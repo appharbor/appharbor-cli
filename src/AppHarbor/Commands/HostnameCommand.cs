@@ -1,5 +1,4 @@
-﻿using System;
-using System.IO;
+﻿using System.IO;
 
 namespace AppHarbor.Commands
 {
@@ -18,7 +17,16 @@ namespace AppHarbor.Commands
 
 		public void Execute(string[] arguments)
 		{
-			throw new NotImplementedException();
+			var applicationId = _applicationConfiguration.GetApplicationId();
+			var hostnames = _appharborClient.GetHostnames(applicationId);
+
+			foreach (var hostname in hostnames)
+			{
+				var output = hostname.Value;
+				output += hostname.Canonical ? " (canonical)" : "";
+
+				_writer.WriteLine(output);
+			}
 		}
 	}
 }
