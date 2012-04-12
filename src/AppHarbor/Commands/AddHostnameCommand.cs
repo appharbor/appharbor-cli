@@ -2,6 +2,7 @@
 
 namespace AppHarbor.Commands
 {
+	[CommandHelp("Add a hostname", "[HOSTNAME]")]
 	public class AddHostnameCommand : ICommand
 	{
 		private readonly IApplicationConfiguration _applicationConfiguration;
