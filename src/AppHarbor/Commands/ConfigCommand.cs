@@ -1,5 +1,4 @@
-﻿using System;
-using System.IO;
+﻿using System.IO;
 
 namespace AppHarbor.Commands
 {
@@ -13,12 +12,17 @@ namespace AppHarbor.Commands
 		{
 			_applicationConfiguration = applicationConfiguration;
 			_appharborClient = appharborClient;
-			_writer = writer
+			_writer = writer;
 		}
 
 		public void Execute(string[] arguments)
 		{
-			throw new NotImplementedException();
+			var applicationId = _applicationConfiguration.GetApplicationId();
+
+			foreach (var configurationVariable in _appharborClient.GetConfigurationVariables(applicationId))
+			{
+				_writer.WriteLine("{0} => {1}", configurationVariable.Key, configurationVariable.Value);
+			}
 		}
 	}
 }
