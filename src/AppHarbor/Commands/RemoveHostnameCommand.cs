@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace AppHarbor.Commands
+﻿namespace AppHarbor.Commands
 {
 	public class RemoveHostnameCommand : ICommand
 	{
@@ -19,7 +17,10 @@ namespace AppHarbor.Commands
 			{
 				throw new CommandException("No hostname was specified");
 			}
-			throw new NotImplementedException();
+
+			var applicationId = _applicationConfiguration.GetApplicationId();
+
+			_appharborClient.RemoveHostname(applicationId, arguments[0]);
 		}
 	}
 }
