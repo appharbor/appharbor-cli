@@ -108,5 +108,17 @@ namespace AppHarbor
 				throw new ApiException();
 			}
 		}
+
+
+		public IList<ConfigurationVariable> GetConfigurationVariables(string applicationId)
+		{
+			var configurationVariables = _api.GetConfigurationVariables(applicationId);
+			if (configurationVariables == null)
+			{
+				throw new ApiException();
+			}
+
+			return configurationVariables;
+		}
 	}
 }

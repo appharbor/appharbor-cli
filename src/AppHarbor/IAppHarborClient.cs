@@ -8,6 +8,7 @@ namespace AppHarbor
 		CreateResult<string> CreateApplication(string name, string regionIdentifier = null);
 		void CreateConfigurationVariable(string applicationId, string key, string value);
 		Application GetApplication(string id);
+		IList<ConfigurationVariable> GetConfigurationVariables(string applicationId);
 		void DeleteApplication(string id);
 		IEnumerable<Application> GetApplications();
 		User GetUser();
