@@ -49,7 +49,7 @@ namespace AppHarbor.Commands
 
 				if (!string.IsNullOrEmpty(helpAttribute.Alias))
 				{
-					_writer.Write(" (alias: \"{0}\")", helpAttribute.Alias);
+					_writer.Write(" (\"{0}\")", helpAttribute.Alias);
 				}
 				_writer.WriteLine();
 			}
