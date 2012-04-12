@@ -73,9 +73,13 @@ namespace AppHarbor
 		}
 
 
-		public CreateResult<long> CreateConfigurationVariable(string applicationId, string key, string value)
+		public void CreateConfigurationVariable(string applicationId, string key, string value)
 		{
-			throw new NotImplementedException();
+			var result = _api.CreateConfigurationVariable(applicationId, key, value);
+			if (result.Status != CreateStatus.Created)
+			{
+				throw new ApiException();
+			}
 		}
 	}
 }
