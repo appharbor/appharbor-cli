@@ -91,6 +91,7 @@
     <Compile Include="Commands\LinkAppCommandTest.cs" />
     <Compile Include="Commands\LoginAuthCommandTest.cs" />
     <Compile Include="Commands\LogoutAuthCommandTest.cs" />
+    <Compile Include="Commands\RemoveConfigCommandTest.cs" />
     <Compile Include="Commands\UnlinkAppCommandTest.cs" />
     <Compile Include="DelegateOutputStream.cs" />
     <Compile Include="DomainCustomization.cs" />
