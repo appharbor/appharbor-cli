@@ -30,7 +30,7 @@ namespace AppHarbor.Tests.Commands
 
 			helpCommand.Execute(new string[0]);
 
-			Assert.Equal("Usage: appharbor COMMAND [command-options]\r\n\r\nAvailable commands:\r\n\r\n  bar foo [bar]          #  Lorem Ipsum motherfucker\r\n  foo [bar]              #  Lorem Ipsum motherfucker\r\n  qux baz [quz]          #  Ipsum lol (alias: \"quux\")\r\n", writer.ToString());
+			Assert.Equal("Usage: appharbor COMMAND [command-options]\r\n\r\nAvailable commands:\r\n\r\n  bar foo [bar]               #  Lorem Ipsum motherfucker\r\n  foo [bar]                   #  Lorem Ipsum motherfucker\r\n  qux baz [quz]               #  Ipsum lol (alias: \"quux\")\r\n", writer.ToString());
 		}
 	}
 }

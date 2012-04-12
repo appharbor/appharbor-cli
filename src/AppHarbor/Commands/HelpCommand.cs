@@ -39,7 +39,7 @@ namespace AppHarbor.Commands
 				var helpAttribute = commandType.GetCustomAttributes(true).OfType<CommandHelpAttribute>().Single();
 					usageStringBuilder.Append(string.Format(" {0}", helpAttribute.Options));
 
-				while (usageStringBuilder.Length < 25)
+				while (usageStringBuilder.Length < 30)
 				{
 					usageStringBuilder.Append(" ");
 				}
