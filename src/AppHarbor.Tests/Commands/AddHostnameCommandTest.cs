@@ -16,7 +16,7 @@ namespace AppHarbor.Tests.Commands
 
 		[Theory]
 		[InlineAutoCommandData("example.com")]
-		public void ShouldAddConfigurationVariables(string hostname,
+		public void ShouldAddHostname(string hostname,
 			[Frozen]Mock<IApplicationConfiguration> applicationConfiguration,
 			[Frozen]Mock<IAppHarborClient> client,
 			AddHostnameCommand command, string applicationId)
