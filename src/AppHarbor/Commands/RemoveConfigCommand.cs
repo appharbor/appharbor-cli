@@ -1,5 +1,6 @@
 ﻿namespace AppHarbor.Commands
 {
+	[CommandHelp("Remove configuration variable", "[KEY1 KEY2..]")]
 	public class RemoveConfigCommand : ICommand
 	{
 		private readonly IApplicationConfiguration _applicationConfiguration;
