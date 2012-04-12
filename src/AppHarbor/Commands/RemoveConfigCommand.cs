@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace AppHarbor.Commands
+﻿namespace AppHarbor.Commands
 {
 	public class RemoveConfigCommand : ICommand
 	{
@@ -15,7 +13,10 @@ namespace AppHarbor.Commands
 
 		public void Execute(string[] arguments)
 		{
-			throw new NotImplementedException();
+			if (arguments.Length == 0)
+			{
+				throw new CommandException("No configuration variable key was specified");
+			}
 		}
 	}
 }
