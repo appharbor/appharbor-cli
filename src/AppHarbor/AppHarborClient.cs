@@ -98,7 +98,7 @@ namespace AppHarbor
 			}
 			catch (InvalidOperationException)
 			{
-				throw new CommandException("The configuration variable key \"{0}\" could not be found.");
+				throw new CommandException(string.Format("The configuration variable key \"{0}\" could not be found.", key));
 			}
 
 			if (!_api.DeleteConfigurationVariable(applicationId, configurationVariable.ID))
