@@ -9,6 +9,7 @@ namespace AppHarbor
 		void CreateConfigurationVariable(string applicationId, string key, string value);
 		Application GetApplication(string id);
 		IList<ConfigurationVariable> GetConfigurationVariables(string applicationId);
+		IList<Hostname> GetHostnames(string applicationId);
 		void DeleteApplication(string id);
 		IEnumerable<Application> GetApplications();
 		User GetUser();

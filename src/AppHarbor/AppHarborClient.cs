@@ -73,7 +73,6 @@ namespace AppHarbor
 			return user;
 		}
 
-
 		public void CreateConfigurationVariable(string applicationId, string key, string value)
 		{
 			var result = _api.CreateConfigurationVariable(applicationId, key, value);
@@ -88,7 +87,6 @@ namespace AppHarbor
 					throw new ApiException();
 			}
 		}
-
 
 		public void RemoveConfigurationVariable(string applicationId, string key)
 		{
@@ -109,7 +107,6 @@ namespace AppHarbor
 			}
 		}
 
-
 		public IList<ConfigurationVariable> GetConfigurationVariables(string applicationId)
 		{
 			var configurationVariables = _api.GetConfigurationVariables(applicationId);
@@ -119,6 +116,17 @@ namespace AppHarbor
 			}
 
 			return configurationVariables;
+		}
+
+		public IList<Hostname> GetHostnames(string applicationId)
+		{
+			var hostnames = _api.GetHostnames(applicationId);
+			if (hostnames == null)
+			{
+				throw new ApiException();
+			}
+
+			return hostnames;
 		}
 	}
 }
