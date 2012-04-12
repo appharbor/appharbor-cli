@@ -88,6 +88,7 @@
     <Compile Include="Commands\DeleteAppCommandTest.cs" />
     <Compile Include="Commands\CreateAppCommandTest.cs" />
     <Compile Include="Commands\HelpCommandTest.cs" />
+    <Compile Include="Commands\HostnameCommandTest.cs" />
     <Compile Include="Commands\InfoAppCommandTest.cs" />
     <Compile Include="Commands\LinkAppCommandTest.cs" />
     <Compile Include="Commands\LoginUserCommandTest.cs" />
