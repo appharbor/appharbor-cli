@@ -154,5 +154,16 @@ namespace AppHarbor
 
 			_api.DeleteHostname(applicationId, hostname.ID);
 		}
+
+		public IList<Build> GetBuilds(string applicationId)
+		{
+			var builds = _api.GetBuilds(applicationId);
+			if (builds == null)
+			{
+				throw new ApiException();
+			}
+
+			return builds;
+		}
 	}
 }
