@@ -1,4 +1,4 @@
-﻿using System;
+﻿using AppHarbor.Model;
 
 namespace AppHarbor
 {
@@ -6,6 +6,6 @@ namespace AppHarbor
 	{
 		void RemoveConfiguration();
 		string GetApplicationId();
-		void SetupApplication(string id, AppHarbor.Model.User user);
+		void SetupApplication(string id, User user);
 	}
 }
