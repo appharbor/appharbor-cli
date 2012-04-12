@@ -19,8 +19,11 @@
 			}
 			var applicationId = _applicationConfiguration.GetApplicationId();
 
-			var splitted = arguments[0].Split('=');
-			_appharborClient.CreateConfigurationVariable(applicationId, splitted[0], splitted[1]);
+			foreach (var argument in arguments)
+			{
+				var splitted = argument.Split('=');
+				_appharborClient.CreateConfigurationVariable(applicationId, splitted[0], splitted[1]);
+			}
 		}
 	}
 }
