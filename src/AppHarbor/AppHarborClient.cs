@@ -73,7 +73,7 @@ namespace AppHarbor
 		}
 
 
-		public CreateResult<long> CreateConfigurationVariable(string key, string value)
+		public CreateResult<long> CreateConfigurationVariable(string applicationId, string key, string value)
 		{
 			throw new NotImplementedException();
 		}
