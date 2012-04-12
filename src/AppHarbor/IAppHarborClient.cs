@@ -7,6 +7,7 @@ namespace AppHarbor
 	{
 		CreateResult<string> CreateApplication(string name, string regionIdentifier = null);
 		void CreateConfigurationVariable(string applicationId, string key, string value);
+		void CreateHostname(string applicationId, string hostname);
 		Application GetApplication(string id);
 		IList<ConfigurationVariable> GetConfigurationVariables(string applicationId);
 		IList<Hostname> GetHostnames(string applicationId);

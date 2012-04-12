@@ -128,5 +128,14 @@ namespace AppHarbor
 
 			return hostnames;
 		}
+
+		public void CreateHostname(string applicationId, string hostname)
+		{
+			var result = _api.CreateHostname(applicationId, hostname);
+			if (result.Status != CreateStatus.Created)
+			{
+				throw new ApiException();
+			}
+		}
 	}
 }
