@@ -96,6 +96,7 @@
     <Compile Include="Commands\LoginUserCommand.cs" />
     <Compile Include="Commands\LogoutUserCommand.cs" />
     <Compile Include="Commands\RemoveConfigCommand.cs" />
+    <Compile Include="Commands\RemoveHostnameCommand.cs" />
     <Compile Include="Commands\UnlinkAppCommand.cs" />
     <Compile Include="Commands\UserCommand.cs" />
     <Compile Include="DispatchException.cs" />

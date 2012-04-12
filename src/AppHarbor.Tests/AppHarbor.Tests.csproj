@@ -95,6 +95,7 @@
     <Compile Include="Commands\LoginUserCommandTest.cs" />
     <Compile Include="Commands\LogoutUserCommandTest.cs" />
     <Compile Include="Commands\RemoveConfigCommandTest.cs" />
+    <Compile Include="Commands\RemoveHostnameCommandTest.cs" />
     <Compile Include="Commands\UnlinkAppCommandTest.cs" />
     <Compile Include="Commands\UserCommandTest.cs" />
     <Compile Include="DelegateOutputStream.cs" />
