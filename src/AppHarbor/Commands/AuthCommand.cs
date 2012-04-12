@@ -2,6 +2,7 @@
 
 namespace AppHarbor.Commands
 {
+	[CommandHelp("Show currently logged in user")]
 	public class AuthCommand : ICommand
 	{
 		private readonly IAppHarborClient _appharborClient;
