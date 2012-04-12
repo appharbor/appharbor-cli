@@ -85,6 +85,7 @@
     <Compile Include="CommandHelpAttribute.cs" />
     <Compile Include="Commands\AddConfigCommand.cs" />
     <Compile Include="Commands\AppCommand.cs" />
+    <Compile Include="Commands\ConfigCommand.cs" />
     <Compile Include="Commands\DeleteAppCommand.cs" />
     <Compile Include="Commands\CreateAppCommand.cs" />
     <Compile Include="Commands\HelpCommand.cs" />
