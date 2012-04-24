@@ -76,7 +76,6 @@ namespace AppHarbor
 		public void CreateConfigurationVariable(string applicationId, string key, string value)
 		{
 			var result = _api.CreateConfigurationVariable(applicationId, key, value);
-
 			HandleCreateResult("configuration variable", key, result.Status);
 		}
 
