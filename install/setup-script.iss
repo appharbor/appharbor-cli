@@ -11,10 +11,10 @@ AppSupportURL=http://support.appharbor.com
 AppUpdatesURL=https://github.com/appharbor/appharbor-cli/downloads
 AppVersion=0.1
 ChangesEnvironment=yes
-DefaultDirName={pf}\AppHarbor
 Compression=lzma2
-SolidCompression=yes
+DefaultDirName={pf}\AppHarbor
 OutputDir=userdocs:AppHarbor CLI setup output
+SolidCompression=yes
 
 [Files]
 Source: "..\src\AppHarbor\bin\Release\*"; DestDir: "{app}"; Flags: ignoreversion; Excludes: "*.xml,*.pdb"
