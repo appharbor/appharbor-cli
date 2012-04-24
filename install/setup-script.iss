@@ -8,6 +8,7 @@ AppName=AppHarbor CLI
 AppPublisher=AppHarbor, Inc.
 AppPublisherURL=https://appharbor.com
 AppSupportURL=http://support.appharbor.com
+AppUpdatesURL=https://github.com/appharbor/appharbor-cli/downloads
 AppVersion=0.1
 ChangesEnvironment=yes
 DefaultDirName={pf}\AppHarbor
