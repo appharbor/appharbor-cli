@@ -46,18 +46,6 @@
     <Reference Include="Castle.Windsor">
       <HintPath>..\packages\Castle.Windsor.3.0.0.4001\lib\net40-client\Castle.Windsor.dll</HintPath>
     </Reference>
-    <Reference Include="Moq">
-      <HintPath>..\packages\Moq.3.1.416.3\lib\Moq.dll</HintPath>
-    </Reference>
-    <Reference Include="Ploeh.AutoFixture">
-      <HintPath>..\packages\AutoFixture.2.9.2\lib\Ploeh.AutoFixture.dll</HintPath>
-    </Reference>
-    <Reference Include="Ploeh.AutoFixture.AutoMoq">
-      <HintPath>..\packages\AutoFixture.AutoMoq.2.9.2\lib\Ploeh.AutoFixture.AutoMoq.dll</HintPath>
-    </Reference>
-    <Reference Include="Ploeh.SemanticComparison">
-      <HintPath>..\packages\AutoFixture.2.9.2\lib\Ploeh.SemanticComparison.dll</HintPath>
-    </Reference>
     <Reference Include="RestSharp, Version=102.7.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\RestSharp.103.0.0\lib\net35-client\RestSharp.dll</HintPath>
     </Reference>
