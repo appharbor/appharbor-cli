@@ -120,7 +120,16 @@ namespace AppHarbor
 		public void CreateHostname(string applicationId, string hostname)
 		{
 			var result = _api.CreateHostname(applicationId, hostname);
-			HandleCreateResult("hostname", hostname, result.Status);
+
+			try
+			{
+				HandleCreateResult("hostname", hostname, result.Status);
+			}
+			catch (ApiException)
+			{
+				//We currently have no way of determining if the ApiException was caused by missing credit card or another API error.
+				throw new ApiException("The problem may be that we do not have a credit card on file for the application owner");
+			}
 		}
 
 
