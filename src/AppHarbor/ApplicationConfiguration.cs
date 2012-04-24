@@ -41,7 +41,7 @@ namespace AppHarbor
 			{
 			}
 
-			throw new ApplicationConfigurationException("Application is not configured");
+			throw new ApplicationConfigurationException("Application is not configured in this directory. Configure it by creating (\"create\") an application or by linking (\"link\") an existing application.");
 		}
 
 		public virtual void SetupApplication(string id, User user)

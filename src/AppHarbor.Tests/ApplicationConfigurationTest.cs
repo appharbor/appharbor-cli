@@ -32,7 +32,7 @@ namespace AppHarbor.Tests
 			repositoryConfigurer.Setup(x => x.GetApplicationId()).Throws<RepositoryConfigurationException>();
 
 			var exception = Assert.Throws<ApplicationConfigurationException>(() => applicationConfiguration.GetApplicationId());
-			Assert.Equal("Application is not configured", exception.Message);
+			Assert.Equal("Application is not configured in this directory. Configure it by creating (\"create\") an application or by linking (\"link\") an existing application.", exception.Message);
 		}
 
 		[Theory, AutoCommandData]
