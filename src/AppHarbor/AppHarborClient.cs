@@ -77,7 +77,12 @@ namespace AppHarbor
 		{
 			var result = _api.CreateConfigurationVariable(applicationId, key, value);
 
-			switch (result.Status)
+			HandleCreateResult(key, result.Status);
+		}
+
+		private static void HandleCreateResult(string key, CreateStatus status)
+		{
+			switch (status)
 			{
 				case CreateStatus.Created:
 					break;
