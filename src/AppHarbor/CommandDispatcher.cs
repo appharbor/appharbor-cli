@@ -43,9 +43,9 @@ namespace AppHarbor
 				var command = (ICommand)_kernel.Resolve(matchingType);
 				command.Execute(args.Skip(argsToSkip).ToArray());
 			}
-			catch (ApiException)
+			catch (ApiException exception)
 			{
-				throw new DispatchException("An error occured while connecting to the API.");
+				throw new DispatchException(string.Format("An error occured while connecting to the API. {0}", exception.Message));
 			}
 			catch (CommandException exception)
 			{
