@@ -31,7 +31,7 @@ namespace AppHarbor.Tests.Commands
 		{
 			accessTokenConfigurationMock.Setup(x => x.GetAccessToken()).Returns("foo");
 			var exception = Assert.Throws<CommandException>(() => loginCommand.Execute(new string[] { }));
-			Assert.Equal("You're already logged in", exception.Message);
+			Assert.Equal("You're already logged in. You need to log out (\"logout\") before you can log in again.", exception.Message);
 		}
 	}
 }

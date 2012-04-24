@@ -24,7 +24,7 @@ namespace AppHarbor.Commands
 		{
 			if (_accessTokenConfiguration.GetAccessToken() != null)
 			{
-				throw new CommandException("You're already logged in");
+				throw new CommandException("You're already logged in. You need to log out (\"logout\") before you can log in again.");
 			}
 
 			_writer.Write("Username: ");
