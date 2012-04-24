@@ -76,19 +76,6 @@ namespace AppHarbor
 			HandleCreateResult("configuration variable", key, result.Status);
 		}
 
-		private static void HandleCreateResult(string resourceType, string key, CreateStatus status)
-		{
-			switch (status)
-			{
-				case CreateStatus.Created:
-					break;
-				case CreateStatus.AlreadyExists:
-					throw new CommandException(string.Format("The {0} \"{1}\" already exists", resourceType, key));
-				default:
-					throw new ApiException();
-			}
-		}
-
 		public void RemoveConfigurationVariable(string applicationId, string key)
 		{
 			ConfigurationVariable configurationVariable;
@@ -162,6 +149,19 @@ namespace AppHarbor
 			}
 
 			return builds;
+		}
+
+		private static void HandleCreateResult(string resourceType, string key, CreateStatus status)
+		{
+			switch (status)
+			{
+				case CreateStatus.Created:
+					break;
+				case CreateStatus.AlreadyExists:
+					throw new CommandException(string.Format("The {0} \"{1}\" already exists", resourceType, key));
+				default:
+					throw new ApiException();
+			}
 		}
 	}
 }
