@@ -82,7 +82,7 @@ namespace AppHarbor
 				case CreateStatus.Created:
 					break;
 				case CreateStatus.AlreadyExists:
-					throw new CommandException(string.Format("The configuration variable key \"{0}\" already exists"));
+					throw new CommandException(string.Format("The configuration variable key \"{0}\" already exists", key));
 				default:
 					throw new ApiException();
 			}
