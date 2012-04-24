@@ -64,7 +64,7 @@ namespace AppHarbor
 				}
 			}
 
-			_writer.WriteLine("Wrote application configuration to {0}", ConfigurationFile.FullName);
+			_writer.WriteLine("Wrote application configuration to {0}. Make sure not to delete this file", ConfigurationFile.FullName);
 		}
 
 		private static DirectoryInfo CurrentDirectory

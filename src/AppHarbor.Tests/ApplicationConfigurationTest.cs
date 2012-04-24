@@ -45,7 +45,7 @@ namespace AppHarbor.Tests
 			applicationConfiguration.SetupApplication(It.IsAny<string>(), It.IsAny<User>());
 
 			writer.Verify(x => x.WriteLine(exceptionMessage));
-			writer.Verify(x => x.WriteLine("Wrote application configuration to {0}", ConfigurationFile));
+			writer.Verify(x => x.WriteLine("Wrote application configuration to {0}. Make sure not to delete this file", ConfigurationFile));
 		}
 
 		[Theory, AutoCommandData]
