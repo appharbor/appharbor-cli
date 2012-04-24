@@ -77,17 +77,17 @@ namespace AppHarbor
 		{
 			var result = _api.CreateConfigurationVariable(applicationId, key, value);
 
-			HandleCreateResult(key, result.Status);
+			HandleCreateResult("configuration variable", key, result.Status);
 		}
 
-		private static void HandleCreateResult(string key, CreateStatus status)
+		private static void HandleCreateResult(string resourceType, string key, CreateStatus status)
 		{
 			switch (status)
 			{
 				case CreateStatus.Created:
 					break;
 				case CreateStatus.AlreadyExists:
-					throw new CommandException(string.Format("The configuration variable key \"{0}\" already exists", key));
+					throw new CommandException(string.Format("The {0} \"{1}\" already exists", resourceType, key));
 				default:
 					throw new ApiException();
 			}
