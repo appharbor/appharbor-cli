@@ -7,5 +7,10 @@ namespace AppHarbor
 		public ApiException()
 		{
 		}
+
+		public ApiException(string message)
+			: base(message)
+		{
+		}
 	}
 }
