@@ -25,10 +25,7 @@ namespace AppHarbor
 		public CreateResult<string> CreateApplication(string name, string regionIdentifier = null)
 		{
 			var result = _api.CreateApplication(name, regionIdentifier);
-			if (result.Status != CreateStatus.Created)
-			{
-				throw new ApiException();
-			}
+			HandleCreateResult("application", name, result.Status);
 
 			return result;
 		}
@@ -136,10 +133,7 @@ namespace AppHarbor
 		public void CreateHostname(string applicationId, string hostname)
 		{
 			var result = _api.CreateHostname(applicationId, hostname);
-			if (result.Status != CreateStatus.Created)
-			{
-				throw new ApiException();
-			}
+			HandleCreateResult("hostname", hostname, result.Status);
 		}
 
 
