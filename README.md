@@ -6,7 +6,7 @@ For more about AppHarbor see [https://appharbor.com/](https://appharbor.com/).
 
 ## Setup
 
-The CLI is known to work on Windows. [Download](https://github.com/downloads/appharbor/appharbor-cli/appharbor-cli.exe) and run the installer to get started.
+The CLI is known to work on Windows. [Download](https://github.com/appharbor/appharbor-cli/downloads) and run the installer to get started.
 
 Once installed, you can log in to create and administer AppHarbor applications:
 
