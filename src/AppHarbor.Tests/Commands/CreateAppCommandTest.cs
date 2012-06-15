@@ -38,14 +38,14 @@ namespace AppHarbor.Tests.Commands
 		}
 
 		[Theory, AutoCommandData]
-		public void ShouldSetupApplicationLocallyAfterCreationIfNotConfigured([Frozen]Mock<IApplicationConfiguration> applicationConfiguration, [Frozen]Mock<IAppHarborClient> client, CreateAppCommand command, CreateResult<string> result, User user, string[] arguments)
+		public void ShouldSetupApplicationLocallyAfterCreationIfNotConfigured([Frozen]Mock<IApplicationConfiguration> applicationConfiguration, [Frozen]Mock<IAppHarborClient> client, CreateAppCommand command, CreateResult result, User user, string[] arguments)
 		{
 			client.Setup(x => x.CreateApplication(It.IsAny<string>(), It.IsAny<string>())).Returns(result);
 			client.Setup(x => x.GetUser()).Returns(user);
 			applicationConfiguration.Setup(x => x.GetApplicationId()).Throws<ApplicationConfigurationException>();
 
 			command.Execute(arguments);
-			applicationConfiguration.Verify(x => x.SetupApplication(result.ID, user), Times.Once());
+			applicationConfiguration.Verify(x => x.SetupApplication(result.Id, user), Times.Once());
 		}
 
 		[Theory, AutoCommandData]
@@ -61,7 +61,7 @@ namespace AppHarbor.Tests.Commands
 		[Theory, AutoCommandData]
 		public void ShouldPrintSuccessMessageAfterCreatingApplication([Frozen]Mock<IAppHarborClient> client, [Frozen]Mock<TextWriter> writer, Mock<CreateAppCommand> command, string[] arguments, string applicationSlug)
 		{
-			client.Setup(x => x.CreateApplication(arguments[0], arguments[1])).Returns(new CreateResult<string> { ID = applicationSlug });
+			client.Setup(x => x.CreateApplication(arguments[0], arguments[1])).Returns(new CreateResult { Id = applicationSlug });
 
 			command.Object.Execute(arguments);
 

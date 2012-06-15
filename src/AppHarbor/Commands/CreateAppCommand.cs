@@ -26,7 +26,7 @@ namespace AppHarbor.Commands
 
 			var result = _appHarborClient.CreateApplication(arguments.First(), arguments.Skip(1).FirstOrDefault());
 
-			_textWriter.WriteLine("Created application \"{0}\" | URL: https://{0}.apphb.com", result.ID);
+			_textWriter.WriteLine("Created application \"{0}\" | URL: https://{0}.apphb.com", result.Id);
 			_textWriter.WriteLine("");
 
 			try
@@ -36,7 +36,7 @@ namespace AppHarbor.Commands
 			}
 			catch (ApplicationConfigurationException)
 			{
-				_applicationConfiguration.SetupApplication(result.ID, _appHarborClient.GetUser());
+				_applicationConfiguration.SetupApplication(result.Id, _appHarborClient.GetUser());
 			}
 		}
 	}
