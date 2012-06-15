@@ -7,14 +7,14 @@ namespace AppHarbor
 {
 	public class AppHarborCliClient : IAppHarborClient
 	{
-		private readonly AppHarborApi _api;
+		private readonly AppHarborClient _api;
 
 		public AppHarborCliClient(string accessToken)
 		{
-			var authInfo = new AuthInfo { AccessToken = accessToken };
+			var authInfo = new AuthInfo(accessToken);
 			try
 			{
-				_api =  new AppHarborApi(authInfo);
+				_api = new AppHarborClient(authInfo);
 			}
 			catch (ArgumentNullException)
 			{
@@ -22,7 +22,7 @@ namespace AppHarbor
 			}
 		}
 
-		public CreateResult<string> CreateApplication(string name, string regionIdentifier = null)
+		public CreateResult CreateApplication(string name, string regionIdentifier = null)
 		{
 			var result = _api.CreateApplication(name, regionIdentifier);
 			HandleCreateResult("application", name, result.Status);
@@ -89,13 +89,13 @@ namespace AppHarbor
 				throw new CommandException(string.Format("The configuration variable key \"{0}\" could not be found.", key));
 			}
 
-			if (!_api.DeleteConfigurationVariable(applicationId, configurationVariable.ID))
+			if (!_api.DeleteConfigurationVariable(applicationId, configurationVariable.Id))
 			{
 				throw new ApiException();
 			}
 		}
 
-		public IList<ConfigurationVariable> GetConfigurationVariables(string applicationId)
+		public IEnumerable<ConfigurationVariable> GetConfigurationVariables(string applicationId)
 		{
 			var configurationVariables = _api.GetConfigurationVariables(applicationId);
 			if (configurationVariables == null)
@@ -106,7 +106,7 @@ namespace AppHarbor
 			return configurationVariables;
 		}
 
-		public IList<Hostname> GetHostnames(string applicationId)
+		public IEnumerable<Hostname> GetHostnames(string applicationId)
 		{
 			var hostnames = _api.GetHostnames(applicationId);
 			if (hostnames == null)
@@ -146,10 +146,10 @@ namespace AppHarbor
 				throw new CommandException(string.Format("The hostname \"{0}\" could not be found.", value));
 			}
 
-			_api.DeleteHostname(applicationId, hostname.ID);
+			_api.DeleteHostname(applicationId, hostname.Id);
 		}
 
-		public IList<Build> GetBuilds(string applicationId)
+		public IEnumerable<Build> GetBuilds(string applicationId)
 		{
 			var builds = _api.GetBuilds(applicationId);
 			if (builds == null)
