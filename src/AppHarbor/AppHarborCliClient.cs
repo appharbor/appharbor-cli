@@ -5,11 +5,11 @@ using AppHarbor.Model;
 
 namespace AppHarbor
 {
-	public class AppHarborClient : IAppHarborClient
+	public class AppHarborCliClient : IAppHarborClient
 	{
 		private readonly AppHarborApi _api;
 
-		public AppHarborClient(string AccessToken)
+		public AppHarborCliClient(string AccessToken)
 		{
 			var authInfo = new AuthInfo { AccessToken = AccessToken };
 			try
