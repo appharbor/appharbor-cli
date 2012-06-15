@@ -21,7 +21,7 @@ namespace AppHarbor.Tests.Commands
 			applicationConfiguration.Setup(x => x.GetApplicationId()).Returns(applicationId);
 			var builds = new List<Build>
 			{
-				new Build { Commit = new Build.CommitClass { Message = "foo bar", ID = "baz" }, Status = "Failed", Deployed = DateTime.Now },
+				new Build { Commit = new Commit { Message = "foo bar", Id = "baz" }, Status = "Failed", Deployed = DateTime.Now },
 			};
 
 			client.Setup(x => x.GetBuilds(applicationId)).Returns(builds);

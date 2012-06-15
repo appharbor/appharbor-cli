@@ -23,7 +23,7 @@ namespace AppHarbor.Commands
 
 			_writer.WriteLine("Id: {0}", application.Slug);
 			_writer.WriteLine("Name: {0}", application.Name);
-			_writer.WriteLine("Region: {0}", application.RegionIdentitfier);
+			_writer.WriteLine("Region: {0}", application.RegionIdentifier);
 		}
 	}
 }

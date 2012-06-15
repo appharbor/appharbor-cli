@@ -17,7 +17,7 @@ namespace AppHarbor.Tests.Commands
 
 			writer.Verify(x => x.WriteLine("Name: {0}", application.Name));
 			writer.Verify(x => x.WriteLine("Id: {0}", application.Slug));
-			writer.Verify(x => x.WriteLine("Region: {0}", application.RegionIdentitfier));
+			writer.Verify(x => x.WriteLine("Region: {0}", application.RegionIdentifier));
 		}
 	}
 }

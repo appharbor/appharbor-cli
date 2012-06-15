@@ -50,7 +50,7 @@ namespace AppHarbor
 				.UsingFactoryMethod(x =>
 				{
 					var accessTokenConfiguration = container.Resolve<IAccessTokenConfiguration>();
-					return new AppHarborClient(accessTokenConfiguration.GetAccessToken());
+					return new AppHarborCliClient(accessTokenConfiguration.GetAccessToken());
 				}));
 
 			container.Register(Component

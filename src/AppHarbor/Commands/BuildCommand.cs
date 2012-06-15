@@ -34,7 +34,7 @@ namespace AppHarbor.Commands
 
 			foreach (var build in builds)
 			{
-				var commitId = GetShortened(build.Commit.ID, 7);
+				var commitId = GetShortened(build.Commit.Id, 7);
 
 				var message = GetShortened(string.Concat(commitId, " | ", build.Commit.Message.Trim('\n')), 40, "...");
 				var buildOutput = String.Format(OutputFormat, message, build.Status, build.Deployed);
