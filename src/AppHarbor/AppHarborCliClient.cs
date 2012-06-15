@@ -9,9 +9,9 @@ namespace AppHarbor
 	{
 		private readonly AppHarborApi _api;
 
-		public AppHarborCliClient(string AccessToken)
+		public AppHarborCliClient(string accessToken)
 		{
-			var authInfo = new AuthInfo { AccessToken = AccessToken };
+			var authInfo = new AuthInfo { AccessToken = accessToken };
 			try
 			{
 				_api =  new AppHarborApi(authInfo);
