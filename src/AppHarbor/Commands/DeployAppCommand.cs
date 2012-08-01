@@ -120,30 +120,38 @@ namespace AppHarbor.Commands
 
 		private static void RenderConsoleProgress(int percentage, char progressBarCharacter, ConsoleColor color, string message)
 		{
-			Console.CursorVisible = false;
 			ConsoleColor originalColor = Console.ForegroundColor;
-			Console.ForegroundColor = color;
 			Console.CursorLeft = 0;
-			int width = Console.WindowWidth - 1;
-			int newWidth = (int)((width * percentage) / 100d);
-			string progressBar = new string(progressBarCharacter, newWidth) +
-				  new string(' ', width - newWidth);
-
-			Console.Write(progressBar);
-			if (string.IsNullOrEmpty(message)) message = "";
 
 			try
 			{
-				Console.CursorTop++;
-			}
-			catch (ArgumentOutOfRangeException)
-			{
-			}
+				Console.CursorVisible = false;
+				Console.ForegroundColor = color;
 
-			OverwriteConsoleMessage(message);
-			Console.CursorTop--;
-			Console.ForegroundColor = originalColor;
-			Console.CursorVisible = true;
+				int width = Console.WindowWidth - 1;
+				int newWidth = (int)((width * percentage) / 100d);
+				string progressBar = new string(progressBarCharacter, newWidth) +
+					  new string(' ', width - newWidth);
+
+				Console.Write(progressBar);
+				if (string.IsNullOrEmpty(message)) message = "";
+
+				try
+				{
+					Console.CursorTop++;
+				}
+				catch (ArgumentOutOfRangeException)
+				{
+				}
+
+				OverwriteConsoleMessage(message);
+				Console.CursorTop--;
+			}
+			finally
+			{
+				Console.ForegroundColor = originalColor;
+				Console.CursorVisible = true;
+			}
 		}
 
 		private static void OverwriteConsoleMessage(string message)
