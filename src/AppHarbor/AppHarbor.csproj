@@ -78,6 +78,7 @@
     <Compile Include="Commands\ConfigCommand.cs" />
     <Compile Include="Commands\DeleteAppCommand.cs" />
     <Compile Include="Commands\CreateAppCommand.cs" />
+    <Compile Include="Commands\DeployAppCommand.cs" />
     <Compile Include="Commands\HelpCommand.cs" />
     <Compile Include="Commands\HostnameCommand.cs" />
     <Compile Include="Commands\InfoAppCommand.cs" />
