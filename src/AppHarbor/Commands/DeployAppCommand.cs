@@ -28,7 +28,7 @@ namespace AppHarbor.Commands
 			var urlRequest = new RestRequest("applications/{slug}/authenticatedurls", Method.POST);
 			urlRequest.AddUrlSegment("slug", _applicationConfiguration.GetApplicationId());
 
-			_writer.Write("Getting authorized upload URL... ");
+			_writer.WriteLine("Getting package upload URL... ");
 
 			var presignedUrl = client.Execute(urlRequest).Content;
 
