@@ -56,6 +56,7 @@ namespace AppHarbor.Commands
 						memoryStream.Position = 0;
 
 						_writer.WriteLine("Uploading package (total size is {0} MB)",  Math.Round((decimal)memoryStream.Length / 1048576, 2));
+						_writer.WriteLine();
 
 						while (true)
 						{
