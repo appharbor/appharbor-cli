@@ -20,7 +20,7 @@ SolidCompression=yes
 Source: "..\src\AppHarbor\bin\Release\*"; DestDir: "{app}"; Flags: ignoreversion; Excludes: "*.xml,*.pdb"
 
 [Registry]
-root: HKLM; Subkey: "SYSTEM\CurrentControlSet\Control\Session Manager\Environment"; ValueType: expandsz; ValueName: "Path"; ValueData: "{olddata};{app}"; Check: NeedsAddPath('{app}')
+root: HKLM; Subkey: "SYSTEM\CurrentControlSet\Control\Session Manager\Environment"; ValueType: expandsz; ValueName: "Path"; ValueData: "{olddata};{app}"; Check: NeedsAddPath(ExpandConstant('{app}'))
 
 [Code]
 function NeedsAddPath(Param: string): boolean;
