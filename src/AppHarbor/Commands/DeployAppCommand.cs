@@ -88,7 +88,7 @@ namespace AppHarbor.Commands
 			TriggerAppHarborBuild(_applicationConfiguration.GetApplicationId(), presignedUrl);
 		}
 
-		private bool TriggerAppHarborBuild(string application_slug, string download_url)
+		private bool TriggerAppHarborBuild(string applicationSlug, string downloadUrl)
 		{
 			var client = new RestClient("https://packageclient.apphb.com/");
 
@@ -99,11 +99,11 @@ namespace AppHarbor.Commands
 			{
 				RequestFormat = DataFormat.Json
 			}
-				.AddUrlSegment("slug", application_slug)
+				.AddUrlSegment("slug", applicationSlug)
 				.AddHeader("Authorization", "BEARER " + _accessToken)
 				.AddBody(new
 				{
-					UploadUrl = download_url,
+					UploadUrl = downloadUrl,
 					CommitMessage = commitMessage,
 				});
 
