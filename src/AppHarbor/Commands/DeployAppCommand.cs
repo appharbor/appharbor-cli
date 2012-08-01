@@ -46,7 +46,7 @@ namespace AppHarbor.Commands
 			{
 				using (var gzipStream = new GZipStream(memoryStream, CompressionMode.Compress, true))
 				{
-					_writer.WriteLine("Preparing tarball for upload");
+					_writer.WriteLine("Preparing deployment package for upload");
 					sourceDirectory.ToTar(gzipStream);
 
 					httpRequest.ContentLength = memoryStream.Length;
@@ -55,7 +55,7 @@ namespace AppHarbor.Commands
 						var buffer = new byte[4096];
 						memoryStream.Position = 0;
 
-						_writer.WriteLine("Uploading package (total size is {0} MB",  Math.Round((decimal)memoryStream.Length / 1048576, 2));
+						_writer.WriteLine("Uploading package (total size is {0} MB)",  Math.Round((decimal)memoryStream.Length / 1048576, 2));
 
 						while (true)
 						{
@@ -84,7 +84,7 @@ namespace AppHarbor.Commands
 				return;
 			}
 
-			_writer.WriteLine("Deployment package successfully uploaded.");
+			_writer.WriteLine("Package successfully uploaded.");
 			TriggerAppHarborBuild(_applicationConfiguration.GetApplicationId(), presignedUrl);
 		}
 
@@ -113,7 +113,7 @@ namespace AppHarbor.Commands
 
 			if (response.StatusCode == HttpStatusCode.OK)
 			{
-				_writer.WriteLine("AppHarbor notified, deploying...");
+				_writer.WriteLine("AppHarbor notified, deploying... Open overview in browser with `appharbor open`.");
 			}
 			return true;
 		}
