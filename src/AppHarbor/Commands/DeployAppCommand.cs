@@ -135,10 +135,7 @@ namespace AppHarbor.Commands
 					  new string(' ', width - newWidth);
 
 				_writer.Write(progressBar);
-				if (string.IsNullOrEmpty(message))
-				{
-					message = "";
-				}
+				message = message ?? string.Empty;
 
 				try
 				{
