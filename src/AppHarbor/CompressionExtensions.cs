@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using ICSharpCode.SharpZipLib.Tar;
 
@@ -12,9 +13,7 @@ namespace AppHarbor
 
 			archive.RootPath = sourceDirectory.FullName.Replace(Path.DirectorySeparatorChar, '/').TrimEnd('/');
 
-			var entries =
-				from x in sourceDirectory.GetFiles("*", SearchOption.AllDirectories)
-				select TarEntry.CreateEntryFromFile(x.FullName);
+			var entries = GetFiles(sourceDirectory).Select(x => TarEntry.CreateEntryFromFile(x.FullName));
 
 			foreach (var entry in entries)
 			{
@@ -22,6 +21,17 @@ namespace AppHarbor
 			}
 
 			archive.Close();
+		}
+
+		private static FileInfo[] GetFiles(DirectoryInfo directory)
+		{
+			var files = directory.GetFiles("*", SearchOption.TopDirectoryOnly);
+			foreach (var nestedDirectory in directory.GetDirectories())
+			{
+				files.Concat(GetFiles(nestedDirectory));
+			}
+
+			return files;
 		}
 	}
 }
