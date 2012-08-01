@@ -119,7 +119,7 @@ namespace AppHarbor.Commands
 			return true;
 		}
 
-		private static void RenderConsoleProgress(int percentage, char progressBarCharacter, ConsoleColor color, string message)
+		private void RenderConsoleProgress(int percentage, char progressBarCharacter, ConsoleColor color, string message)
 		{
 			ConsoleColor originalColor = Console.ForegroundColor;
 			Console.CursorLeft = 0;
@@ -134,7 +134,7 @@ namespace AppHarbor.Commands
 				string progressBar = new string(progressBarCharacter, newWidth) +
 					  new string(' ', width - newWidth);
 
-				Console.Write(progressBar);
+				_writer.Write(progressBar);
 				if (string.IsNullOrEmpty(message))
 				{
 					message = "";
@@ -158,7 +158,7 @@ namespace AppHarbor.Commands
 			}
 		}
 
-		private static void OverwriteConsoleMessage(string message)
+		private void OverwriteConsoleMessage(string message)
 		{
 			Console.CursorLeft = 0;
 			int maxCharacterWidth = Console.WindowWidth - 1;
@@ -167,7 +167,7 @@ namespace AppHarbor.Commands
 				message = message.Substring(0, maxCharacterWidth - 3) + "...";
 			}
 			message = message + new string(' ', maxCharacterWidth - message.Length);
-			Console.Write(message);
+			_writer.Write(message);
 		}
 	}
 }
