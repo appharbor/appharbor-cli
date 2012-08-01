@@ -134,7 +134,10 @@ namespace AppHarbor.Commands
 					  new string(' ', width - newWidth);
 
 				Console.Write(progressBar);
-				if (string.IsNullOrEmpty(message)) message = "";
+				if (string.IsNullOrEmpty(message))
+				{
+					message = "";
+				}
 
 				try
 				{
