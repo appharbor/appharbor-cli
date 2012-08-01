@@ -37,8 +37,9 @@
     <UseVSHostingProcess>false</UseVSHostingProcess>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="AppHarbor.Sdk">
-      <HintPath>..\packages\AppHarbor.NET.2.0.0\lib\net35\AppHarbor.Sdk.dll</HintPath>
+    <Reference Include="AppHarbor.Sdk, Version=2.1.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\AppHarbor.NET.2.1.0\lib\net35\AppHarbor.Sdk.dll</HintPath>
     </Reference>
     <Reference Include="Castle.Core">
       <HintPath>..\packages\Castle.Core.3.0.0.4001\lib\net40-client\Castle.Core.dll</HintPath>
