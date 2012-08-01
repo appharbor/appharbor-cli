@@ -32,8 +32,6 @@ namespace AppHarbor.Commands
 
 			var presignedUrl = client.Execute(urlRequest).Content;
 
-			_writer.WriteLine("Success");
-
 			var sourceDirectory = new DirectoryInfo(Directory.GetCurrentDirectory());
 
 			HttpWebRequest httpRequest = WebRequest.Create(presignedUrl) as HttpWebRequest;
