@@ -73,13 +73,15 @@ namespace AppHarbor.Commands
 				var buffer = new byte[4096];
 				inputStream.Position = 0;
 
-				_writer.WriteLine("Uploading package (total size is {0} MB)", Math.Round((decimal)inputStream.Length / 1048576, 2));
+				_writer.WriteLine("Uploading package (total size is {0} MB)",
+					Math.Round((decimal)inputStream.Length / 1048576, 2));
 				_writer.WriteLine();
 
 				while (true)
 				{
 					var progressPercentage = (int)((inputStream.Position * 100) / inputStream.Length);
-					RenderConsoleProgress(progressPercentage, '\u2592', ConsoleColor.Green, string.Format("Uploading ({0}%)", progressPercentage));
+					RenderConsoleProgress(progressPercentage, '\u2592', ConsoleColor.Green,
+						string.Format("Uploading ({0}%)", progressPercentage));
 
 					var bytesRead = inputStream.Read(buffer, 0, buffer.Length);
 					if (bytesRead > 0)
