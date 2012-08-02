@@ -33,7 +33,7 @@ namespace AppHarbor
 				{
 					continue;
 				}
-				files.Concat(GetFiles(nestedDirectory, excludedDirectories));
+				files = files.Concat(GetFiles(nestedDirectory, excludedDirectories));
 			}
 
 			return files;
