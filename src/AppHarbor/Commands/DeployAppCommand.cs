@@ -42,39 +42,14 @@ namespace AppHarbor.Commands
 			httpRequest.Timeout = timeout;
 			httpRequest.ReadWriteTimeout = timeout;
 
-			using (var memoryStream = new MemoryStream())
+			using (var packageStream = new MemoryStream())
 			{
-				using (var gzipStream = new GZipStream(memoryStream, CompressionMode.Compress, true))
+				using (var gzipStream = new GZipStream(packageStream, CompressionMode.Compress, true))
 				{
 					_writer.WriteLine("Preparing deployment package for upload");
 					sourceDirectory.ToTar(gzipStream, excludedDirectoryNames: new[] { ".git", ".hg" });
 
-					httpRequest.ContentLength = memoryStream.Length;
-					using (var uploadStream = httpRequest.GetRequestStream())
-					{
-						var buffer = new byte[4096];
-						memoryStream.Position = 0;
-
-						_writer.WriteLine("Uploading package (total size is {0} MB)",  Math.Round((decimal)memoryStream.Length / 1048576, 2));
-						_writer.WriteLine();
-
-						while (true)
-						{
-							var progressPercentage = (int)((memoryStream.Position * 100) / memoryStream.Length);
-							RenderConsoleProgress(progressPercentage, '\u2592', ConsoleColor.Green, string.Format("Uploading ({0}%)", progressPercentage));
-
-							var bytesRead = memoryStream.Read(buffer, 0, buffer.Length);
-							if (bytesRead > 0)
-							{
-								uploadStream.Write(buffer, 0, bytesRead);
-							}
-							else
-							{
-								break;
-							}
-						}
-						_writer.Write(" ");
-					}
+					PerformUpload(httpRequest, packageStream);
 				}
 			}
 			var response = (HttpWebResponse)httpRequest.GetResponse();
@@ -87,6 +62,37 @@ namespace AppHarbor.Commands
 
 			_writer.WriteLine("Package successfully uploaded.");
 			TriggerAppHarborBuild(_applicationConfiguration.GetApplicationId(), presignedUrl);
+		}
+
+		private void PerformUpload(HttpWebRequest httpRequest, MemoryStream inputStream)
+		{
+			httpRequest.ContentLength = packageStream.Length;
+
+			using (var uploadStream = httpRequest.GetRequestStream())
+			{
+				var buffer = new byte[4096];
+				inputStream.Position = 0;
+
+				_writer.WriteLine("Uploading package (total size is {0} MB)", Math.Round((decimal)inputStream.Length / 1048576, 2));
+				_writer.WriteLine();
+
+				while (true)
+				{
+					var progressPercentage = (int)((inputStream.Position * 100) / inputStream.Length);
+					RenderConsoleProgress(progressPercentage, '\u2592', ConsoleColor.Green, string.Format("Uploading ({0}%)", progressPercentage));
+
+					var bytesRead = inputStream.Read(buffer, 0, buffer.Length);
+					if (bytesRead > 0)
+					{
+						uploadStream.Write(buffer, 0, bytesRead);
+					}
+					else
+					{
+						break;
+					}
+				}
+				_writer.Write(" ");
+			}
 		}
 
 		private bool TriggerAppHarborBuild(string applicationSlug, string downloadUrl)
