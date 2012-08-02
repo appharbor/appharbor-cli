@@ -93,7 +93,7 @@ namespace AppHarbor.Commands
 						break;
 					}
 				}
-				_writer.Write(" ");
+				_writer.WriteLine();
 			}
 		}
 
