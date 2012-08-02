@@ -66,7 +66,7 @@ namespace AppHarbor.Commands
 
 		private void PerformUpload(HttpWebRequest httpRequest, MemoryStream inputStream)
 		{
-			httpRequest.ContentLength = packageStream.Length;
+			httpRequest.ContentLength = inputStream.Length;
 
 			using (var uploadStream = httpRequest.GetRequestStream())
 			{
