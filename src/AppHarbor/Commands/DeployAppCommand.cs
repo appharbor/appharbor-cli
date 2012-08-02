@@ -47,7 +47,7 @@ namespace AppHarbor.Commands
 				using (var gzipStream = new GZipStream(memoryStream, CompressionMode.Compress, true))
 				{
 					_writer.WriteLine("Preparing deployment package for upload");
-					sourceDirectory.ToTar(gzipStream);
+					sourceDirectory.ToTar(gzipStream, excludedDirectoryNames: new[] { ".git", ".hg" });
 
 					httpRequest.ContentLength = memoryStream.Length;
 					using (var uploadStream = httpRequest.GetRequestStream())

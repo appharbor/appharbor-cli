@@ -7,13 +7,13 @@ namespace AppHarbor
 {
 	public static class CompressionExtensions
 	{
-		public static void ToTar(this DirectoryInfo sourceDirectory, Stream output)
+		public static void ToTar(this DirectoryInfo sourceDirectory, Stream output, string[] excludedDirectoryNames)
 		{
 			var archive = TarArchive.CreateOutputTarArchive(output);
 
 			archive.RootPath = sourceDirectory.FullName.Replace(Path.DirectorySeparatorChar, '/').TrimEnd('/');
 
-			var entries = GetFiles(sourceDirectory, new string[] { ".git", ".hg" })
+			var entries = GetFiles(sourceDirectory, excludedDirectoryNames)
 				.Select(x => TarEntry.CreateEntryFromFile(x.FullName));
 
 			foreach (var entry in entries)
@@ -24,9 +24,9 @@ namespace AppHarbor
 			archive.Close();
 		}
 
-		private static FileInfo[] GetFiles(DirectoryInfo directory, string[] excludedDirectories)
+		private static IEnumerable<FileInfo> GetFiles(DirectoryInfo directory, string[] excludedDirectories)
 		{
-			var files = directory.GetFiles("*", SearchOption.TopDirectoryOnly);
+			IEnumerable<FileInfo> files = directory.GetFiles("*", SearchOption.TopDirectoryOnly);
 			foreach (var nestedDirectory in directory.GetDirectories())
 			{
 				if (excludedDirectories.Contains(nestedDirectory.Name))
