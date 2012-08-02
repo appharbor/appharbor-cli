@@ -101,7 +101,8 @@ namespace AppHarbor.Commands
 		{
 			var client = new RestClient("https://packageclient.apphb.com/");
 
-			_writer.Write("Write a deployment message: ");
+			_writer.WriteLine("The package will be deployed to application \"{0}\".", _applicationConfiguration.GetApplicationId());
+			_writer.Write("Enter a deployment message:");
 			var commitMessage = _reader.ReadLine();
 
 			var request = new RestRequest("applications/{slug}/buildnotifications", Method.POST)
