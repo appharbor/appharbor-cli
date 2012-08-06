@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using ICSharpCode.SharpZipLib.Tar;
@@ -14,12 +15,20 @@ namespace AppHarbor
 			archive.RootPath = sourceDirectory.FullName.Replace(Path.DirectorySeparatorChar, '/').TrimEnd('/');
 
 			var entries = GetFiles(sourceDirectory, excludedDirectoryNames)
-				.Select(x => TarEntry.CreateEntryFromFile(x.FullName));
+				.Select(x => TarEntry.CreateEntryFromFile(x.FullName))
+				.ToList();
 
-			foreach (var entry in entries)
+			var entriesCount = entries.Count();
+			for (var i = 0; i < entriesCount; i++)
 			{
-				archive.WriteEntry(entry, true);
+				archive.WriteEntry(entries[i], true);
+
+				ConsoleProgressBar.Render(i * 100 / (double)entriesCount, ConsoleColor.Green,
+					string.Format("Packing files ({0} of {1})", i, entriesCount));
 			}
+
+			Console.CursorTop++;
+			Console.WriteLine();
 
 			archive.Close();
 		}
