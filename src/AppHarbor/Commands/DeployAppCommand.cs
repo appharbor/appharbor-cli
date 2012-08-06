@@ -79,9 +79,9 @@ namespace AppHarbor.Commands
 
 				while (true)
 				{
-					var progressPercentage = (int)((inputStream.Position * 100) / inputStream.Length);
+					var progressPercentage = (double)(inputStream.Position * 100) / inputStream.Length;
 					RenderConsoleProgress(progressPercentage, '\u2592', ConsoleColor.Green,
-						string.Format("Uploading ({0}%)", progressPercentage));
+						string.Format("Uploading ({0}%)", Math.Round(progressPercentage, 2)));
 
 					var bytesRead = inputStream.Read(buffer, 0, buffer.Length);
 					if (bytesRead > 0)
@@ -128,7 +128,7 @@ namespace AppHarbor.Commands
 			return true;
 		}
 
-		private void RenderConsoleProgress(int percentage, char progressBarCharacter, ConsoleColor color, string message)
+		private void RenderConsoleProgress(double percentage, char progressBarCharacter, ConsoleColor color, string message)
 		{
 			ConsoleColor originalColor = Console.ForegroundColor;
 			Console.CursorLeft = 0;
