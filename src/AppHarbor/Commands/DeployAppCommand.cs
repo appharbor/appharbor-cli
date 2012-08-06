@@ -80,7 +80,7 @@ namespace AppHarbor.Commands
 				while (true)
 				{
 					var progressPercentage = (double)(inputStream.Position * 100) / inputStream.Length;
-					ConsoleProgressBar.Render(progressPercentage, '\u2592', ConsoleColor.Green,
+					ConsoleProgressBar.Render(progressPercentage, ConsoleColor.Green,
 						string.Format("Uploading ({0}%)", Math.Round(progressPercentage, 2)));
 
 					var bytesRead = inputStream.Read(buffer, 0, buffer.Length);

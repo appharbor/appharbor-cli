@@ -5,7 +5,9 @@ namespace AppHarbor
 {
 	public class ConsoleProgressBar
 	{
-		public static void Render(double percentage, char progressBarCharacter, ConsoleColor color, string message)
+		private const char ProgressBarCharacter = '\u2592';
+
+		public static void Render(double percentage, ConsoleColor color, string message)
 		{
 			ConsoleColor originalColor = Console.ForegroundColor;
 			Console.CursorLeft = 0;
@@ -18,7 +20,7 @@ namespace AppHarbor
 				int width = Console.WindowWidth - 1;
 				int newWidth = (int)((width * percentage) / 100d);
 				string progressBar = string.Empty
-					.PadRight(newWidth, progressBarCharacter)
+					.PadRight(newWidth, ProgressBarCharacter)
 					.PadRight(width - newWidth, ' ');
 
 				Console.Write(progressBar);
