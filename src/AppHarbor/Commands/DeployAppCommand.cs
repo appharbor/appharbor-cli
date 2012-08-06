@@ -110,7 +110,7 @@ namespace AppHarbor.Commands
 				RequestFormat = DataFormat.Json
 			}
 				.AddUrlSegment("slug", applicationSlug)
-				.AddHeader("Authorization", "BEARER " + _accessToken)
+				.AddHeader("Authorization", string.Format("BEARER {0}", _accessToken))
 				.AddBody(new
 				{
 					UploadUrl = downloadUrl,
