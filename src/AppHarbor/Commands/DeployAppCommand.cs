@@ -75,7 +75,6 @@ namespace AppHarbor.Commands
 
 				_writer.WriteLine("Uploading package (total size is {0} MB)",
 					Math.Round((decimal)inputStream.Length / 1048576, 2));
-				_writer.WriteLine();
 
 				while (true)
 				{
