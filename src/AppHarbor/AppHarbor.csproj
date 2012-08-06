@@ -92,6 +92,7 @@
     <Compile Include="Commands\UnlinkAppCommand.cs" />
     <Compile Include="Commands\UserCommand.cs" />
     <Compile Include="CompressionExtensions.cs" />
+    <Compile Include="ConsoleProgressBar.cs" />
     <Compile Include="DispatchException.cs" />
     <Compile Include="GitCommand.cs" />
     <Compile Include="GitCommandException.cs" />
