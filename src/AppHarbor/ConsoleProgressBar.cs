@@ -26,13 +26,7 @@ namespace AppHarbor
 				Console.Write(progressBar);
 				message = message ?? string.Empty;
 
-				try
-				{
-					Console.CursorTop++;
-				}
-				catch (ArgumentOutOfRangeException)
-				{
-				}
+				Console.CursorTop++;
 
 				OverwriteConsoleMessage(message);
 				Console.CursorTop--;
