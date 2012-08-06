@@ -26,17 +26,10 @@ namespace AppHarbor
 
 		private static IEnumerable<FileInfo> GetFiles(DirectoryInfo directory, string[] excludedDirectories)
 		{
-			IEnumerable<FileInfo> files = directory.GetFiles("*", SearchOption.TopDirectoryOnly);
-			foreach (var nestedDirectory in directory.GetDirectories())
-			{
-				if (excludedDirectories.Contains(nestedDirectory.Name))
-				{
-					continue;
-				}
-				files = files.Concat(GetFiles(nestedDirectory, excludedDirectories));
-			}
-
-			return files;
+			return directory.GetFiles("*", SearchOption.TopDirectoryOnly)
+				.Concat(directory.GetDirectories()
+				.Where(x => excludedDirectories.Contains(x.Name))
+				.SelectMany(x => GetFiles(x, excludedDirectories)));
 		}
 	}
 }
