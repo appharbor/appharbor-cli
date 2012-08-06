@@ -24,7 +24,7 @@ namespace AppHarbor
 				archive.WriteEntry(entries[i], true);
 
 				ConsoleProgressBar.Render(i * 100 / (double)entriesCount, ConsoleColor.Green,
-					string.Format("Packing files ({0} of {1})", i, entriesCount));
+					string.Format("Packing files ({0} of {1})", i + 1, entriesCount));
 			}
 
 			Console.CursorTop++;
