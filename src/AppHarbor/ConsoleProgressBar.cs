@@ -5,14 +5,7 @@ namespace AppHarbor
 {
 	public class ConsoleProgressBar
 	{
-		private readonly TextWriter _writer;
-
-		public ConsoleProgressBar(TextWriter writer)
-		{
-			_writer = writer;
-		}
-
-		public void Render(double percentage, char progressBarCharacter, ConsoleColor color, string message)
+		public static void Render(double percentage, char progressBarCharacter, ConsoleColor color, string message)
 		{
 			ConsoleColor originalColor = Console.ForegroundColor;
 			Console.CursorLeft = 0;
@@ -28,7 +21,7 @@ namespace AppHarbor
 					.PadRight(newWidth, progressBarCharacter)
 					.PadRight(width - newWidth, ' ');
 
-				_writer.Write(progressBar);
+				Console.Write(progressBar);
 				message = message ?? string.Empty;
 
 				try
@@ -49,7 +42,7 @@ namespace AppHarbor
 			}
 		}
 
-		private void OverwriteConsoleMessage(string message)
+		private static void OverwriteConsoleMessage(string message)
 		{
 			Console.CursorLeft = 0;
 			int maxCharacterWidth = Console.WindowWidth - 1;
@@ -58,7 +51,7 @@ namespace AppHarbor
 				message = message.Substring(0, maxCharacterWidth - 3) + "...";
 			}
 			message = message + new string(' ', maxCharacterWidth - message.Length);
-			_writer.Write(message);
+			Console.Write(message);
 		}
 	}
 }
