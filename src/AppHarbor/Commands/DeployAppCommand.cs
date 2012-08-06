@@ -140,8 +140,9 @@ namespace AppHarbor.Commands
 
 				int width = Console.WindowWidth - 1;
 				int newWidth = (int)((width * percentage) / 100d);
-				string progressBar = new string(progressBarCharacter, newWidth) +
-					  new string(' ', width - newWidth);
+				string progressBar = string.Empty
+					.PadRight(newWidth, progressBarCharacter)
+					.PadRight(width - newWidth, ' ');
 
 				_writer.Write(progressBar);
 				message = message ?? string.Empty;
