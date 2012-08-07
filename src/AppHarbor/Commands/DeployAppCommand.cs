@@ -38,9 +38,7 @@ namespace AppHarbor.Commands
 			httpRequest.Method = "PUT";
 			httpRequest.AllowWriteStreamBuffering = false;
 
-			var timeout = (int)TimeSpan.FromHours(2).TotalMilliseconds;
-			httpRequest.Timeout = timeout;
-			httpRequest.ReadWriteTimeout = timeout;
+			httpRequest.ReadWriteTimeout = (int)TimeSpan.FromHours(2).TotalMilliseconds;
 
 			using (var packageStream = new MemoryStream())
 			{
