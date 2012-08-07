@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.IO.Compression;
+using System.Linq;
 using System.Net;
 using RestSharp;
 
@@ -70,17 +72,40 @@ namespace AppHarbor.Commands
 
 			using (var uploadStream = httpRequest.GetRequestStream())
 			{
-				var buffer = new byte[4096];
+				var buffer = new byte[65536];
 				inputStream.Position = 0;
 
-				_writer.WriteLine("Uploading package (total size is {0} MB)",
-					Math.Round((decimal)inputStream.Length / 1048576, 2));
+				DateTime time = DateTime.Now;
+				int i = 0;
+				double bytesPerSecond = 0;
+				double timeleft = 0;
+				var averages = new List<double>();
 
 				while (true)
 				{
+					var timedifference = (DateTime.Now - time).TotalSeconds;
+					if (timedifference > 2)
+					{
+						bytesPerSecond = ((buffer.Length * i) / timedifference);
+						averages.Add(bytesPerSecond);
+						time = DateTime.Now;
+						i = 0;
+					}
+
+					if (averages.Count > 0)
+					{
+						timeleft = (inputStream.Length - inputStream.Position) / WeightedAverage(averages) / 60;
+					}
+
+					if (averages.Count > 20)
+					{
+						averages.RemoveAt(0);
+					}
+
 					var progressPercentage = (double)(inputStream.Position * 100) / inputStream.Length;
 					ConsoleProgressBar.Render(progressPercentage, ConsoleColor.Green,
-						string.Format("Uploading ({0:0.00}%)", progressPercentage, 2));
+						string.Format("Uploading page ({0:0.0}% of {1:0.0} MB). Time left: {2:0.0} minutes",
+						progressPercentage, (decimal)inputStream.Length / 1048576, timeleft));
 
 					var bytesRead = inputStream.Read(buffer, 0, buffer.Length);
 					if (bytesRead > 0)
@@ -91,9 +116,25 @@ namespace AppHarbor.Commands
 					{
 						break;
 					}
+					i++;
 				}
 				_writer.WriteLine();
 			}
+		}
+
+		private static double WeightedAverage(IList<double> input, int spread = 40)
+		{
+			if (input.Count < 2)
+			{
+				return input.Average();
+			}
+
+			var weightdifference = spread / (input.Count() - 1);
+			var averageWeight = 50;
+			var startWeight = averageWeight - spread / 2;
+
+			return input.Select((x, i) => x * (startWeight + (i * weightdifference)))
+				.Sum() / (averageWeight * input.Count());
 		}
 
 		private bool TriggerAppHarborBuild(string applicationSlug, string downloadUrl)
