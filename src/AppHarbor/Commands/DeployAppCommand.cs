@@ -34,8 +34,6 @@ namespace AppHarbor.Commands
 
 			var presignedUrl = client.Execute(urlRequest).Content;
 
-			var sourceDirectory = new DirectoryInfo(Directory.GetCurrentDirectory());
-
 			HttpWebRequest httpRequest = WebRequest.Create(presignedUrl) as HttpWebRequest;
 			httpRequest.Method = "PUT";
 			httpRequest.AllowWriteStreamBuffering = false;
@@ -49,6 +47,8 @@ namespace AppHarbor.Commands
 				using (var gzipStream = new GZipStream(packageStream, CompressionMode.Compress, true))
 				{
 					_writer.WriteLine("Preparing deployment package for upload");
+
+					var sourceDirectory = new DirectoryInfo(Directory.GetCurrentDirectory());
 					sourceDirectory.ToTar(gzipStream, excludedDirectoryNames: new[] { ".git", ".hg" });
 
 					PerformUpload(httpRequest, packageStream);
