@@ -70,7 +70,7 @@ namespace AppHarbor.Commands
 
 			using (var uploadStream = httpRequest.GetRequestStream())
 			{
-				var buffer = new byte[65536];
+				var buffer = new byte[4096];
 				inputStream.Position = 0;
 
 				DateTime time = DateTime.Now;
