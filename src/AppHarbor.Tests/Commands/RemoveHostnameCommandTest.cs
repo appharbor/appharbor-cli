@@ -11,7 +11,7 @@ namespace AppHarbor.Tests.Commands
 		[Theory, AutoCommandData]
 		public void ShouldThrowIfNoArguments(RemoveHostnameCommand command)
 		{
-			Assert.Throws<CommandException>(() => command.Execute(new string[0]));
+			Assert.Throws<CommandException>(() => command.Run(new string[0]));
 		}
 
 		[Theory]
@@ -23,7 +23,7 @@ namespace AppHarbor.Tests.Commands
 		{
 			applicationConfiguration.Setup(x => x.GetApplicationId()).Returns(applicationId);
 
-			command.Execute(new string[] { hostname });
+			command.Run(new string[] { hostname });
 
 			client.Verify(x => x.RemoveHostname(applicationId, hostname));
 		}

@@ -16,7 +16,7 @@ namespace AppHarbor.Tests.Commands
 			applicationConfiguration.Setup(x => x.GetApplicationId()).Returns(id);
 			appharborClient.Setup(x => x.DeleteApplication(id));
 
-			command.Execute(new string[0]);
+			command.Run(new string[0]);
 
 			appharborClient.VerifyAll();
 			applicationConfiguration.VerifyAll();

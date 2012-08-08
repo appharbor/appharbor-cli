@@ -11,7 +11,7 @@ namespace AppHarbor.Tests.Commands
 		[Theory, AutoCommandData]
 		public void ShouldLogoutUser([Frozen]Mock<IAccessTokenConfiguration> accessTokenConfigurationMock, [Frozen]Mock<TextWriter> writer, LogoutUserCommand logoutCommand)
 		{
-			logoutCommand.Execute(new string[0]);
+			logoutCommand.Run(new string[0]);
 
 			writer.Verify(x => x.WriteLine("Successfully logged out."));
 			accessTokenConfigurationMock.Verify(x => x.DeleteAccessToken(), Times.Once());

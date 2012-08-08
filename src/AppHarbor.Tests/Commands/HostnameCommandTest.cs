@@ -25,7 +25,7 @@ namespace AppHarbor.Tests.Commands
 
 			client.Setup(x => x.GetHostnames(applicationId)).Returns(hostnames);
 
-			command.Execute(new string[0]);
+			command.Run(new string[0]);
 
 			foreach (var hostname in hostnames)
 			{
@@ -40,7 +40,7 @@ namespace AppHarbor.Tests.Commands
 		public void ShouldWriteIfNoHostnamesAreAssociated(HostnameCommand command,
 			[Frozen]Mock<TextWriter> writer, string applicationId)
 		{
-			command.Execute(new string[0]);
+			command.Run(new string[0]);
 
 			writer.Verify(x => x.WriteLine("No hostnames are associated with the application."));
 		}

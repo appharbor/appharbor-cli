@@ -28,7 +28,7 @@ namespace AppHarbor.Tests.Commands
 			var writer = new StringWriter();
 			var helpCommand = new HelpCommand(types, writer);
 
-			helpCommand.Execute(new string[0]);
+			helpCommand.Run(new string[0]);
 
 			Assert.Equal("Usage: appharbor COMMAND [command-options]\r\n\r\nAvailable commands:\r\n\r\n  bar foo [bar]               #  Lorem Ipsum motherfucker\r\n  foo [bar]                   #  Lorem Ipsum motherfucker\r\n  qux baz [quz]               #  Ipsum lol (\"quux\")\r\n", writer.ToString());
 		}

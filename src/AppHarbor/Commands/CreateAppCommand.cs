@@ -17,7 +17,7 @@ namespace AppHarbor.Commands
 			_textWriter = textWriter;
 		}
 
-		public void Execute(string[] arguments)
+		public void Run(string[] arguments)
 		{
 			if (arguments.Length == 0)
 			{

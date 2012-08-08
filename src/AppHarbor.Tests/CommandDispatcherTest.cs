@@ -15,7 +15,7 @@ namespace AppHarbor.Tests
 		[CommandHelp("foo description", options: "", alias: "qux")]
 		public class FooCommand : ICommand
 		{
-			public virtual void Execute(string[] arguments)
+			public virtual void Run(string[] arguments)
 			{
 			}
 		}
@@ -54,7 +54,7 @@ namespace AppHarbor.Tests
 
 			commandDispatcher.Dispatch(new string[] { scope, commandName });
 
-			command.Verify(x => x.Execute(It.Is<string[]>(y => !y.Any())));
+			command.Verify(x => x.Run(It.Is<string[]>(y => !y.Any())));
 		}
 
 		[Theory]
@@ -70,7 +70,7 @@ namespace AppHarbor.Tests
 			typeNameMatcher.Setup(x => x.GetMatchedType(It.IsAny<string>())).Returns(FooCommandType);
 			kernel.Setup(x => x.Resolve(FooCommandType)).Returns(command.Object);
 
-			command.Setup(x => x.Execute(new string[0])).Throws<ApiException>();
+			command.Setup(x => x.Run(new string[0])).Throws<ApiException>();
 
 			Assert.Throws<DispatchException>(() => commandDispatcher.Dispatch(new string[] { commandArgument }));
 		}
@@ -93,7 +93,7 @@ namespace AppHarbor.Tests
 
 			commandDispatcher.Dispatch(new string[] { scope, commandName, commandParameter });
 
-			command.Verify(x => x.Execute(It.Is<string[]>(y => y.Length == 1 && y.Any(z => z == commandParameter))));
+			command.Verify(x => x.Run(It.Is<string[]>(y => y.Length == 1 && y.Any(z => z == commandParameter))));
 		}
 
 		[Theory]
@@ -116,7 +116,7 @@ namespace AppHarbor.Tests
 
 			commandDispatcher.Dispatch(new string[] { alias, commandParameter });
 
-			command.Verify(x => x.Execute(It.Is<string[]>(y => y.Length == 1 && y.Any(z => z == commandParameter))));
+			command.Verify(x => x.Run(It.Is<string[]>(y => y.Length == 1 && y.Any(z => z == commandParameter))));
 		}
 
 		[Theory, AutoCommandData]

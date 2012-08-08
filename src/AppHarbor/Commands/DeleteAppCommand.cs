@@ -12,7 +12,7 @@
 			_applicationConfiguration = applicationConfiguration;
 		}
 
-		public void Execute(string[] arguments)
+		public void Run(string[] arguments)
 		{
 			var id = _applicationConfiguration.GetApplicationId();
 			_appharborClient.DeleteApplication(id);

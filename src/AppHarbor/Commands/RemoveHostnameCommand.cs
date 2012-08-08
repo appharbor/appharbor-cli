@@ -12,7 +12,7 @@
 			_appharborClient = appharborClient;
 		}
 
-		public void Execute(string[] arguments)
+		public void Run(string[] arguments)
 		{
 			if (arguments.Length == 0)
 			{

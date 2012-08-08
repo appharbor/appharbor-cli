@@ -14,7 +14,7 @@ namespace AppHarbor.Tests.Commands
 		[Theory, AutoCommandData]
 		public void ShouldThrowWhenNoArguments(CreateAppCommand command)
 		{
-			var exception = Assert.Throws<CommandException>(() => command.Execute(new string[0]));
+			var exception = Assert.Throws<CommandException>(() => command.Run(new string[0]));
 			Assert.Equal("An application name must be provided to create an application", exception.Message);
 		}
 
@@ -33,7 +33,7 @@ namespace AppHarbor.Tests.Commands
 
 		private static void VerifyArguments(Mock<IAppHarborClient> client, CreateAppCommand command, string[] arguments)
 		{
-			command.Execute(arguments);
+			command.Run(arguments);
 			client.Verify(x => x.CreateApplication(arguments.First(), arguments.Skip(1).FirstOrDefault()), Times.Once());
 		}
 
@@ -44,7 +44,7 @@ namespace AppHarbor.Tests.Commands
 			client.Setup(x => x.GetUser()).Returns(user);
 			applicationConfiguration.Setup(x => x.GetApplicationId()).Throws<ApplicationConfigurationException>();
 
-			command.Execute(arguments);
+			command.Run(arguments);
 			applicationConfiguration.Verify(x => x.SetupApplication(result.Id, user), Times.Once());
 		}
 
@@ -53,7 +53,7 @@ namespace AppHarbor.Tests.Commands
 		{
 			applicationConfiguration.Setup(x => x.GetApplicationId()).Returns(applicationName);
 
-			command.Execute(arguments);
+			command.Run(arguments);
 
 			writer.Verify(x => x.WriteLine("This directory is already configured to track application \"{0}\".", applicationName), Times.Once());
 		}
@@ -63,7 +63,7 @@ namespace AppHarbor.Tests.Commands
 		{
 			client.Setup(x => x.CreateApplication(arguments[0], arguments[1])).Returns(new CreateResult { Id = applicationSlug });
 
-			command.Object.Execute(arguments);
+			command.Object.Run(arguments);
 
 			writer.Verify(x => x.WriteLine("Created application \"{0}\" | URL: https://{0}.apphb.com", applicationSlug), Times.Once());
 		}

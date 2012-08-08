@@ -16,7 +16,7 @@ namespace AppHarbor.Tests.Commands
 		{
 			client.Setup(x => x.GetUser()).Returns(user);
 
-			command.Execute(new string[0]);
+			command.Run(new string[0]);
 
 			writer.Verify(x => x.WriteLine("Username: {0}", user.Username));
 			writer.Verify(x => x.WriteLine("Email addresses: [{0}]", string.Join(" ", user.Email_Addresses)));

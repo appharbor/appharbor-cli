@@ -26,14 +26,14 @@ namespace AppHarbor.Tests.Commands
 
 			client.Setup(x => x.GetBuilds(applicationId)).Returns(builds);
 
-			Assert.DoesNotThrow(() => command.Execute(new string[0]));
+			Assert.DoesNotThrow(() => command.Run(new string[0]));
 		}
 
 		[Theory, AutoCommandData]
 		public void ShouldWriteIfNoBuildsExists(BuildCommand command,
 			[Frozen]Mock<TextWriter> writer, string applicationId)
 		{
-			command.Execute(new string[0]);
+			command.Run(new string[0]);
 
 			writer.Verify(x => x.WriteLine("No builds are associated with this application."));
 		}

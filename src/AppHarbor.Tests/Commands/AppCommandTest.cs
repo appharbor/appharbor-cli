@@ -18,7 +18,7 @@ namespace AppHarbor.Tests.Commands
 
 			client.Setup(x => x.GetApplications()).Returns(applications);
 
-			command.Execute(new string[0]);
+			command.Run(new string[0]);
 
 			foreach (var application in applications)
 			{

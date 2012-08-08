@@ -18,7 +18,7 @@ namespace AppHarbor.Tests.Commands
 
 			maskedConsoleInput.Setup(x => x.Get()).Returns(password);
 
-			loginCommand.Object.Execute(new string[] { });
+			loginCommand.Object.Run(new string[] { });
 
 			writer.Verify(x => x.Write("Username: "), Times.Once());
 			writer.Verify(x => x.Write("Password: "), Times.Once());
@@ -30,7 +30,7 @@ namespace AppHarbor.Tests.Commands
 		public void ShouldThrowIfUserIsAlreadyLoggedIn([Frozen]Mock<IAccessTokenConfiguration> accessTokenConfigurationMock, LoginUserCommand loginCommand)
 		{
 			accessTokenConfigurationMock.Setup(x => x.GetAccessToken()).Returns("foo");
-			var exception = Assert.Throws<CommandException>(() => loginCommand.Execute(new string[] { }));
+			var exception = Assert.Throws<CommandException>(() => loginCommand.Run(new string[] { }));
 			Assert.Equal("You're already logged in. You need to log out (\"logout\") before you can log in again.", exception.Message);
 		}
 	}

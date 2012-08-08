@@ -15,7 +15,7 @@ namespace AppHarbor.Commands
 			_writer = writer;
 		}
 
-		public void Execute(string[] arguments)
+		public void Run(string[] arguments)
 		{
 			var applications = _client.GetApplications();
 			foreach (var application in applications.OrderBy(x => x.Slug))

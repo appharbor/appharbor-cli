@@ -11,7 +11,7 @@ namespace AppHarbor.Tests.Commands
 		[Theory, AutoCommandData]
 		public void ShouldThrowIfNoArguments(AddConfigCommand command)
 		{
-			Assert.Throws<CommandException>(() => command.Execute(new string[0]));
+			Assert.Throws<CommandException>(() => command.Run(new string[0]));
 		}
 
 		[Theory]
@@ -25,7 +25,7 @@ namespace AppHarbor.Tests.Commands
 			applicationConfiguration.Setup(x => x.GetApplicationId()).Returns(applicationId);
 			var configPairs = arguments.Split();
 
-			command.Execute(configPairs);
+			command.Run(configPairs);
 
 			foreach (var configPair in configPairs)
 			{

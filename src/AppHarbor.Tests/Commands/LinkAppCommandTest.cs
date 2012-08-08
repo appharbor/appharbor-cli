@@ -13,7 +13,7 @@ namespace AppHarbor.Tests.Commands
 		[Theory, AutoCommandData]
 		public void ShouldThrowIfNoArguments(LinkAppCommand command)
 		{
-			Assert.Throws<CommandException>(() => command.Execute(new string[0]));
+			Assert.Throws<CommandException>(() => command.Run(new string[0]));
 		}
 
 		[Theory, AutoCommandData]
@@ -27,7 +27,7 @@ namespace AppHarbor.Tests.Commands
 			appharborClient.Setup(x => x.GetUser()).Returns(user);
 			applicationConfiguration.Setup(x => x.SetupApplication(application.Slug, user));
 
-			command.Execute(new List<string> { application.Slug }.ToArray());
+			command.Run(new List<string> { application.Slug }.ToArray());
 
 			applicationConfiguration.Verify(x => x.SetupApplication(application.Slug, user));
 		}
@@ -39,7 +39,7 @@ namespace AppHarbor.Tests.Commands
 		{
 			appharborClient.Setup(x => x.GetApplication(It.IsAny<string>())).Throws<ApiException>();
 
-			Assert.Throws<CommandException>(() => command.Execute(new List<string> { "foo" }.ToArray()));
+			Assert.Throws<CommandException>(() => command.Run(new List<string> { "foo" }.ToArray()));
 		}
 	}
 }

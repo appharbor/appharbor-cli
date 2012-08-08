@@ -41,7 +41,7 @@ namespace AppHarbor
 			try
 			{
 				var command = (ICommand)_kernel.Resolve(matchingType);
-				command.Execute(args.Skip(argsToSkip).ToArray());
+				command.Run(args.Skip(argsToSkip).ToArray());
 			}
 			catch (ApiException exception)
 			{

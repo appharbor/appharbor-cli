@@ -12,7 +12,7 @@ namespace AppHarbor.Tests.Commands
 		public void ShouldUnlinkApplication([Frozen]Mock<IApplicationConfiguration> applicationConfiguration,
 			[Frozen]Mock<TextWriter> writer, UnlinkAppCommand command)
 		{
-			command.Execute(new string[0]);
+			command.Run(new string[0]);
 
 			applicationConfiguration.Verify(x => x.RemoveConfiguration());
 			writer.Verify(x => x.WriteLine("Successfully unlinked directory."));

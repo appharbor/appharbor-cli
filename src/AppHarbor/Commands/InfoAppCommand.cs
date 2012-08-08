@@ -16,7 +16,7 @@ namespace AppHarbor.Commands
 			_writer = writer;
 		}
 
-		public void Execute(string[] arguments)
+		public void Run(string[] arguments)
 		{
 			var id = _applicationConfiguration.GetApplicationId();
 			var application = _client.GetApplication(id);

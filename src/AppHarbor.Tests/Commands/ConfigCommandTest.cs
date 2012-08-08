@@ -25,7 +25,7 @@ namespace AppHarbor.Tests.Commands
 
 			client.Setup(x => x.GetConfigurationVariables(applicationId)).Returns(configurationVariables);
 
-			command.Execute(new string[0]);
+			command.Run(new string[0]);
 
 			foreach (var configurationVariable in configurationVariables)
 			{
@@ -36,7 +36,7 @@ namespace AppHarbor.Tests.Commands
 		[Theory, AutoCommandData]
 		public void ShouldWriteIfThereAreNoConfigurationVariables([Frozen]Mock<TextWriter> writer, ConfigCommand command)
 		{
-			command.Execute(new string[0]);
+			command.Run(new string[0]);
 
 			writer.Verify(x => x.WriteLine("No configuration variables are associated with this application"));
 		}

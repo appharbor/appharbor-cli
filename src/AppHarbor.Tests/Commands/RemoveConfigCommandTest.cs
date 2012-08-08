@@ -11,7 +11,7 @@ namespace AppHarbor.Tests.Commands
 		[Theory, AutoCommandData]
 		public void ShouldThrowIfNoArguments(RemoveConfigCommand command)
 		{
-			Assert.Throws<CommandException>(() => command.Execute(new string[0]));
+			Assert.Throws<CommandException>(() => command.Run(new string[0]));
 		}
 
 		[Theory]
@@ -25,7 +25,7 @@ namespace AppHarbor.Tests.Commands
 			applicationConfiguration.Setup(x => x.GetApplicationId()).Returns(applicationId);
 			var keysToDelete = arguments.Split();
 
-			command.Execute(keysToDelete);
+			command.Run(keysToDelete);
 
 			foreach (var key in keysToDelete)
 			{
