@@ -62,7 +62,9 @@ namespace ManyConsole
 						haveError = true;
 
 						if (isInputRedirected)
-							return result;
+						{
+							throw new Exception("An error occurred");
+						}
 					}
 				}
 
@@ -74,8 +76,6 @@ namespace ManyConsole
 
 				input = _inputStream.ReadLine();
 			}
-
-			return haveError ? -1 : 0;
 		}
 
 		public void SetConsoleRedirectionDetection(IConsoleRedirectionDetection consoleRedirectionDetection)
