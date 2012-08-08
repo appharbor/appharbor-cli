@@ -145,7 +145,8 @@ namespace AppHarbor.Commands
 			Console.WriteLine();
 			var originalColor = Console.ForegroundColor;
 			Console.ForegroundColor = ConsoleColor.Yellow;
-			_writer.Write("Enter a deployment message:");
+			_writer.WriteLine();
+			_writer.Write("Enter a deployment message: ");
 			Console.ForegroundColor = originalColor;
 
 			var commitMessage = _reader.ReadLine();
