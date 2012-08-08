@@ -162,7 +162,7 @@ namespace AppHarbor.Commands
 
 			if (response.StatusCode == HttpStatusCode.OK)
 			{
-				_writer.WriteLine("AppHarbor notified, deploying... Open application overview with `appharbor open`.");
+				_writer.WriteLine("Deploying... Open application overview with `appharbor open`.");
 			}
 			return true;
 		}
