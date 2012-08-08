@@ -175,7 +175,12 @@ namespace AppHarbor.Commands
 		private bool TriggerAppHarborBuild(string applicationSlug, FederatedUploadCredentials credentials)
 		{
 			_writer.WriteLine("The package will be deployed to application \"{0}\".", _applicationConfiguration.GetApplicationId());
+
+			Console.WriteLine();
+			var originalColor = Console.ForegroundColor;
+			Console.ForegroundColor = ConsoleColor.Yellow;
 			_writer.Write("Enter a deployment message:");
+			Console.ForegroundColor = originalColor;
 
 			var commitMessage = _reader.ReadLine();
 
