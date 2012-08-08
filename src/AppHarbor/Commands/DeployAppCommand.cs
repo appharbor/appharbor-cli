@@ -1,9 +1,13 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
 using System.IO.Compression;
 using System.Linq;
 using System.Net;
+using System.Threading;
+using Amazon.S3;
+using Amazon.S3.Model;
 using RestSharp;
 
 namespace AppHarbor.Commands
@@ -14,6 +18,7 @@ namespace AppHarbor.Commands
 		private readonly string _accessToken;
 		private readonly IApplicationConfiguration _applicationConfiguration;
 		private readonly TextReader _reader;
+		private readonly ConcurrentDictionary<object, long> _uploadPartRequestProgress = new ConcurrentDictionary<object, long>();
 		private readonly TextWriter _writer;
 
 		public DeployAppCommand(IApplicationConfiguration applicationConfiguration, IAccessTokenConfiguration accessTokenConfiguration, TextReader reader, TextWriter writer)
@@ -26,20 +31,7 @@ namespace AppHarbor.Commands
 
 		public void Execute(string[] arguments)
 		{
-			var client = new RestClient("https://packageclient.apphb.com/");
-			var urlRequest = new RestRequest("applications/{slug}/authenticatedurls", Method.POST);
-			urlRequest.AddUrlSegment("slug", _applicationConfiguration.GetApplicationId());
-
-			_writer.WriteLine("Getting package upload URL... ");
-
-			var presignedUrl = client.Execute(urlRequest).Content;
-
-			HttpWebRequest httpRequest = WebRequest.Create(presignedUrl) as HttpWebRequest;
-			httpRequest.Method = "PUT";
-			httpRequest.AllowWriteStreamBuffering = false;
-
-			httpRequest.Timeout = (int)TimeSpan.FromHours(2).TotalMilliseconds;
-
+			var uploadCredentials = GetCredentials();
 			using (var packageStream = new MemoryStream())
 			{
 				using (var gzipStream = new GZipStream(packageStream, CompressionMode.Compress, true))
@@ -49,75 +41,109 @@ namespace AppHarbor.Commands
 					var sourceDirectory = new DirectoryInfo(Directory.GetCurrentDirectory());
 					sourceDirectory.ToTar(gzipStream, excludedDirectoryNames: new[] { ".git", ".hg" });
 
-					PerformUpload(httpRequest, packageStream);
+					UploadMultipart(packageStream, uploadCredentials);
 				}
-			}
-			var response = (HttpWebResponse)httpRequest.GetResponse();
-
-			if (response.StatusCode != HttpStatusCode.OK)
-			{
-				_writer.WriteLine("Package upload failed. Please try again.");
-				return;
 			}
 
 			_writer.WriteLine("Package successfully uploaded.");
-			TriggerAppHarborBuild(_applicationConfiguration.GetApplicationId(), presignedUrl);
+			TriggerAppHarborBuild(_applicationConfiguration.GetApplicationId(), uploadCredentials);
 		}
 
-		private void PerformUpload(HttpWebRequest httpRequest, MemoryStream inputStream)
+		private void UploadMultipart(Stream inputStream, FederatedUploadCredentials uploadCredentials)
 		{
-			httpRequest.ContentLength = inputStream.Length;
-
-			using (var uploadStream = httpRequest.GetRequestStream())
+			using (var s3Client = new AmazonS3Client(uploadCredentials.GetSessionCredentials()))
 			{
-				var buffer = new byte[4096];
-				inputStream.Position = 0;
-
-				DateTime time = DateTime.Now;
-				int i = 0;
-				double bytesPerSecond = 0;
-				double timeleft = 0;
-				var averages = new List<double>();
-
-				while (true)
+				var initiateMultipartUploadRequest = new InitiateMultipartUploadRequest
 				{
-					var timedifference = (DateTime.Now - time).TotalSeconds;
-					if (timedifference > 2)
+					BucketName = uploadCredentials.Bucket,
+					Key = uploadCredentials.ObjectKey,
+				};
+
+				var initMultipartUploadResponse = s3Client.InitiateMultipartUpload(initiateMultipartUploadRequest);
+
+				var uploadResponses = new ConcurrentBag<UploadPartResponse>();
+				var waitHandlers = new List<WaitHandle>();
+
+				inputStream.Position = 0;
+				var partSize = inputStream.Length / 5;
+
+				for (int i = 1; inputStream.Position < inputStream.Length; i++)
+				{
+					var uploadStream = new MemoryStream();
+
+					while (inputStream.Position < partSize * i)
 					{
-						bytesPerSecond = ((buffer.Length * i) / timedifference);
-						averages.Add(bytesPerSecond);
-						time = DateTime.Now;
-						i = 0;
+						var buffer = new byte[4096];
+						var bytesRead = inputStream.Read(buffer, 0, buffer.Length);
+						if (bytesRead > 0)
+						{
+							uploadStream.Write(buffer, 0, bytesRead);
+						}
+						else
+						{
+							break;
+						}
 					}
 
-					if (averages.Count > 0)
+					uploadStream.Position = 0;
+					UploadPartRequest uploadRequest = new UploadPartRequest
 					{
-						timeleft = (inputStream.Length - inputStream.Position) / WeightedAverage(averages) / 60;
-					}
+						BucketName = uploadCredentials.Bucket,
+						InputStream = uploadStream,
+						Key = uploadCredentials.ObjectKey,
+						PartNumber = i,
+						PartSize = partSize,
+						UploadId = initMultipartUploadResponse.UploadId,
+					};
 
-					if (averages.Count > 20)
+					uploadRequest.WithSubscriber(UploadProgressHandler);
+					var asyncResult = s3Client.BeginUploadPart(uploadRequest, x =>
 					{
-						averages.RemoveAt(0);
-					}
+						var response = s3Client.EndUploadPart(x);
+						uploadResponses.Add(response);
 
-					var progressPercentage = (double)(inputStream.Position * 100) / inputStream.Length;
-					ConsoleProgressBar.Render(progressPercentage, ConsoleColor.Green,
-						string.Format("Uploading page ({0:0.0}% of {1:0.0} MB). Time left: {2:0.0} minutes",
-						progressPercentage, (decimal)inputStream.Length / 1048576, timeleft));
+						uploadStream.Dispose();
+					}, uploadRequest);
 
-					var bytesRead = inputStream.Read(buffer, 0, buffer.Length);
-					if (bytesRead > 0)
-					{
-						uploadStream.Write(buffer, 0, bytesRead);
-					}
-					else
-					{
-						break;
-					}
-					i++;
+					waitHandlers.Add(asyncResult.AsyncWaitHandle);
 				}
-				_writer.WriteLine();
+
+				while (!WaitHandle.WaitAll(waitHandlers.ToArray(), 500))
+				{
+					var progressPercentage = 100 * _uploadPartRequestProgress.Sum(x => x.Value) / (double)inputStream.Length;
+					ConsoleProgressBar.Render(progressPercentage, ConsoleColor.Green,
+						string.Format("Uploading page ({0:0.0}% of {1:0.0} MB).",
+						progressPercentage, inputStream.Length / 1048576));
+				}
+
+				var completeMultipartUploadRequest = new CompleteMultipartUploadRequest
+				{
+					BucketName = uploadCredentials.Bucket,
+					Key = uploadCredentials.ObjectKey,
+					PartETags = uploadResponses.Select(x => new PartETag(x.PartNumber, x.ETag)).ToList(),
+					UploadId = initMultipartUploadResponse.UploadId,
+				};
+
+				s3Client.CompleteMultipartUpload(completeMultipartUploadRequest);
 			}
+		}
+
+		public void UploadProgressHandler(object request, UploadPartProgressArgs foobar)
+		{
+			_uploadPartRequestProgress.AddOrUpdate(request, foobar.TransferredBytes,
+				(x, i) => foobar.TransferredBytes);
+		}
+
+		private FederatedUploadCredentials GetCredentials()
+		{
+			var client = new RestClient("https://packageclient.apphb.com/");
+			var urlRequest = new RestRequest("applications/{slug}/uploadCredentials", Method.POST);
+			urlRequest.AddUrlSegment("slug", _applicationConfiguration.GetApplicationId());
+
+			_writer.WriteLine("Getting upload credentials... ");
+
+			var federatedCredentials = client.Execute<FederatedUploadCredentials>(urlRequest);
+			return federatedCredentials.Data;
 		}
 
 		private static double WeightedAverage(IList<double> input, int spread = 40)
@@ -135,7 +161,7 @@ namespace AppHarbor.Commands
 				.Sum() / (averageWeight * input.Count());
 		}
 
-		private bool TriggerAppHarborBuild(string applicationSlug, string downloadUrl)
+		private bool TriggerAppHarborBuild(string applicationSlug, FederatedUploadCredentials credentials)
 		{
 			var client = new RestClient("https://packageclient.apphb.com/");
 
@@ -151,7 +177,8 @@ namespace AppHarbor.Commands
 				.AddHeader("Authorization", string.Format("BEARER {0}", _accessToken))
 				.AddBody(new
 				{
-					UploadUrl = downloadUrl,
+					Bucket = credentials.Bucket,
+					ObjectKey = credentials.ObjectKey,
 					CommitMessage = commitMessage,
 				});
 
