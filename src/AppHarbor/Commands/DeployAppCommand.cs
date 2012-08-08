@@ -15,6 +15,7 @@ namespace AppHarbor.Commands
 	{
 		private readonly string _accessToken;
 		private readonly IApplicationConfiguration _applicationConfiguration;
+		private readonly IRestClient _restClient;
 		private readonly TextReader _reader;
 		private readonly TextWriter _writer;
 
@@ -22,6 +23,7 @@ namespace AppHarbor.Commands
 		{
 			_accessToken = accessTokenConfiguration.GetAccessToken();
 			_applicationConfiguration = applicationConfiguration;
+			_restClient = new RestClient("https://packageclient.apphb.com/");
 			_reader = reader;
 			_writer = writer;
 		}
@@ -79,13 +81,12 @@ namespace AppHarbor.Commands
 
 		private FederatedUploadCredentials GetCredentials()
 		{
-			var client = new RestClient("https://packageclient.apphb.com/");
 			var urlRequest = new RestRequest("applications/{slug}/uploadCredentials", Method.POST);
 			urlRequest.AddUrlSegment("slug", _applicationConfiguration.GetApplicationId());
 
 			_writer.WriteLine("Getting upload credentials... ");
 
-			var federatedCredentials = client.Execute<FederatedUploadCredentials>(urlRequest);
+			var federatedCredentials = _restClient.Execute<FederatedUploadCredentials>(urlRequest);
 			return federatedCredentials.Data;
 		}
 
@@ -140,10 +141,9 @@ namespace AppHarbor.Commands
 
 		private bool TriggerAppHarborBuild(string applicationSlug, FederatedUploadCredentials credentials)
 		{
-			var client = new RestClient("https://packageclient.apphb.com/");
-
 			_writer.WriteLine("The package will be deployed to application \"{0}\".", _applicationConfiguration.GetApplicationId());
 			_writer.Write("Enter a deployment message:");
+
 			var commitMessage = _reader.ReadLine();
 
 			var request = new RestRequest("applications/{slug}/buildnotifications", Method.POST)
@@ -161,7 +161,7 @@ namespace AppHarbor.Commands
 
 			_writer.WriteLine("Notifying AppHarbor.");
 
-			var response = client.Execute(request);
+			var response = _restClient.Execute(request);
 
 			if (response.StatusCode == HttpStatusCode.OK)
 			{
