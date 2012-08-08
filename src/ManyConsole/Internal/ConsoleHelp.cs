@@ -8,53 +8,53 @@ using System.Xml.Linq;
 
 namespace ManyConsole.Internal
 {
-    public class ConsoleHelp
-    {
-        public static void ShowSummaryOfCommands(IEnumerable<ConsoleCommand> commands, TextWriter console)
-        {
-            console.WriteLine("Available commands are:");
-            console.WriteLine();
+	public class ConsoleHelp
+	{
+		public static void ShowSummaryOfCommands(IEnumerable<ConsoleCommand> commands, TextWriter console)
+		{
+			console.WriteLine("Available commands are:");
+			console.WriteLine();
 
-            var commandList = commands.ToList();
-            var n = commandList.Max(c => c.Command.Length) + 1;
-            var commandFormatString = "    {0,-" + n + "}- {1}";
+			var commandList = commands.ToList();
+			var n = commandList.Max(c => c.Command.Length) + 1;
+			var commandFormatString = "    {0,-" + n + "}- {1}";
 
-            foreach (var command in commandList)
-            {
-                console.WriteLine(commandFormatString, command.Command, command.OneLineDescription);
-            }
-            console.WriteLine();
-        }
+			foreach (var command in commandList)
+			{
+				console.WriteLine(commandFormatString, command.Command, command.OneLineDescription);
+			}
+			console.WriteLine();
+		}
 
-        public static void ShowCommandHelp(ConsoleCommand selectedCommand, TextWriter console)
-        {
-            var haveOptions = selectedCommand.Options.Count > 0;
+		public static void ShowCommandHelp(ConsoleCommand selectedCommand, TextWriter console)
+		{
+			var haveOptions = selectedCommand.Options.Count > 0;
 
-            console.WriteLine("'" + selectedCommand.Command + "' - " + selectedCommand.OneLineDescription);
-            console.WriteLine();
-            console.Write("Expected usage: {0} {1} ", AppDomain.CurrentDomain.FriendlyName, selectedCommand.Command);
+			console.WriteLine("'" + selectedCommand.Command + "' - " + selectedCommand.OneLineDescription);
+			console.WriteLine();
+			console.Write("Expected usage: {0} {1} ", AppDomain.CurrentDomain.FriendlyName, selectedCommand.Command);
 
-            if (haveOptions)
-                console.Write("<options> ");
+			if (haveOptions)
+				console.Write("<options> ");
 
-            console.WriteLine(selectedCommand.RemainingArgumentsHelpText);
+			console.WriteLine(selectedCommand.RemainingArgumentsHelpText);
 
-            if (haveOptions)
-            {
-                console.WriteLine("<options> available:");
-                selectedCommand.Options.WriteOptionDescriptions(console);
-            }
-            console.WriteLine();
-        }
+			if (haveOptions)
+			{
+				console.WriteLine("<options> available:");
+				selectedCommand.Options.WriteOptionDescriptions(console);
+			}
+			console.WriteLine();
+		}
 
-        public static void ShowParsedCommand(ConsoleCommand consoleCommand, TextWriter consoleOut)
-        {
-            if (!consoleCommand.TraceCommandAfterParse)
-            {
-                return;
-            }
+		public static void ShowParsedCommand(ConsoleCommand consoleCommand, TextWriter consoleOut)
+		{
+			if (!consoleCommand.TraceCommandAfterParse)
+			{
+				return;
+			}
 
-            string[] skippedProperties = new []{
+			string[] skippedProperties = new[]{
                 "Command",
                 "OneLineDescription",
                 "Options",
@@ -64,64 +64,64 @@ namespace ManyConsole.Internal
                 "RequiredOptions"
             };
 
-            var properties = consoleCommand.GetType().GetProperties(BindingFlags.Public | BindingFlags.Instance)
-                .Where(p => !skippedProperties.Contains(p.Name));
+			var properties = consoleCommand.GetType().GetProperties(BindingFlags.Public | BindingFlags.Instance)
+				.Where(p => !skippedProperties.Contains(p.Name));
 
-            var fields = consoleCommand.GetType().GetFields(BindingFlags.Public | BindingFlags.Instance)
-                .Where(p => !skippedProperties.Contains(p.Name));
+			var fields = consoleCommand.GetType().GetFields(BindingFlags.Public | BindingFlags.Instance)
+				.Where(p => !skippedProperties.Contains(p.Name));
 
-            Dictionary<string,string> allValuesToTrace = new Dictionary<string, string>();
+			Dictionary<string, string> allValuesToTrace = new Dictionary<string, string>();
 
-            foreach (var property in properties)
-            {
-                object value = property.GetValue(consoleCommand, new object[0]);
-                allValuesToTrace[property.Name] = value != null ? value.ToString() : "null";
-            }
+			foreach (var property in properties)
+			{
+				object value = property.GetValue(consoleCommand, new object[0]);
+				allValuesToTrace[property.Name] = value != null ? value.ToString() : "null";
+			}
 
-            foreach (var field in fields)
-            {
-                allValuesToTrace[field.Name] = MakeObjectReadable(field.GetValue(consoleCommand));
-            }
+			foreach (var field in fields)
+			{
+				allValuesToTrace[field.Name] = MakeObjectReadable(field.GetValue(consoleCommand));
+			}
 
-            consoleOut.WriteLine();
+			consoleOut.WriteLine();
 
-            string introLine = String.Format("Executing {0}", consoleCommand.Command);
+			string introLine = String.Format("Executing {0}", consoleCommand.Command);
 
-            if (string.IsNullOrEmpty(consoleCommand.OneLineDescription))
-                introLine = introLine + ":";
-            else
-                introLine = introLine + " (" + consoleCommand.OneLineDescription + "):";
+			if (string.IsNullOrEmpty(consoleCommand.OneLineDescription))
+				introLine = introLine + ":";
+			else
+				introLine = introLine + " (" + consoleCommand.OneLineDescription + "):";
 
-            consoleOut.WriteLine(introLine);
-            
-            foreach(var value in allValuesToTrace.OrderBy(k => k.Key))
-                consoleOut.WriteLine("    " + value.Key + " : " + value.Value);
+			consoleOut.WriteLine(introLine);
 
-            consoleOut.WriteLine();
-        }
+			foreach (var value in allValuesToTrace.OrderBy(k => k.Key))
+				consoleOut.WriteLine("    " + value.Key + " : " + value.Value);
 
-        static string MakeObjectReadable(object value)
-        {
-            string readable;
+			consoleOut.WriteLine();
+		}
 
-            if (value is System.Collections.IEnumerable && !(value is string))
-            {
-                readable = "";
-                var separator = "";
+		static string MakeObjectReadable(object value)
+		{
+			string readable;
 
-                foreach (var member in (IEnumerable) value)
-                {
-                    readable += separator + MakeObjectReadable(member);
-                    separator = ", ";
-                }
+			if (value is System.Collections.IEnumerable && !(value is string))
+			{
+				readable = "";
+				var separator = "";
 
-                readable = readable;
-            }
-            else if (value != null)
-                readable = value.ToString();
-            else
-                readable = "null";
-            return readable;
-        }
-    }
+				foreach (var member in (IEnumerable)value)
+				{
+					readable += separator + MakeObjectReadable(member);
+					separator = ", ";
+				}
+
+				readable = readable;
+			}
+			else if (value != null)
+				readable = value.ToString();
+			else
+				readable = "null";
+			return readable;
+		}
+	}
 }

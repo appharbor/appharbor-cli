@@ -6,135 +6,136 @@ using ManyConsole.Internal;
 
 namespace ManyConsole
 {
-    public class ConsoleCommandDispatcher
-    {
-        public static int DispatchCommand(IEnumerable<ConsoleCommand> commands, string[] arguments, TextWriter consoleOut)
-        {
-            ConsoleCommand selectedCommand = null;
+	public class ConsoleCommandDispatcher
+	{
+		public static int DispatchCommand(IEnumerable<ConsoleCommand> commands, string[] arguments, TextWriter consoleOut)
+		{
+			ConsoleCommand selectedCommand = null;
 
-            TextWriter console = consoleOut;
+			TextWriter console = consoleOut;
 
-            try
-            {
-                List<string> remainingArguments;
+			try
+			{
+				List<string> remainingArguments;
 
-                if (commands.Count() == 1)
-                {
-                    selectedCommand = commands.First();
+				if (commands.Count() == 1)
+				{
+					selectedCommand = commands.First();
 
-                    CheckCommandProperty(selectedCommand);
+					CheckCommandProperty(selectedCommand);
 
-                    if (arguments.Count() > 0 && arguments.First().ToLower() == selectedCommand.Command.ToLower())
-                    {
-                        remainingArguments = selectedCommand.Options.Parse(arguments.Skip(1));
-                    }
-                    else
-                    {
-                        remainingArguments = selectedCommand.Options.Parse(arguments);
-                    }
-                }
-                else
-                {
-                    if (arguments.Count() < 1)
-                        throw new ConsoleHelpAsException("No arguments specified.");
+					if (arguments.Count() > 0 && arguments.First().ToLower() == selectedCommand.Command.ToLower())
+					{
+						remainingArguments = selectedCommand.Options.Parse(arguments.Skip(1));
+					}
+					else
+					{
+						remainingArguments = selectedCommand.Options.Parse(arguments);
+					}
+				}
+				else
+				{
+					if (arguments.Count() < 1)
+						throw new ConsoleHelpAsException("No arguments specified.");
 
-                    foreach (var possibleCommand in commands)
-                    {
-                        CheckCommandProperty(possibleCommand);
+					foreach (var possibleCommand in commands)
+					{
+						CheckCommandProperty(possibleCommand);
 
-                        if (arguments.First().ToLower() == possibleCommand.Command.ToLower())
-                        {
-                            selectedCommand = possibleCommand;
+						if (arguments.First().ToLower() == possibleCommand.Command.ToLower())
+						{
+							selectedCommand = possibleCommand;
 
-                            break;
-                        }
-                    }
+							break;
+						}
+					}
 
-                    if (selectedCommand == null)
-                        throw new ConsoleHelpAsException("Command name not recognized.");
+					if (selectedCommand == null)
+						throw new ConsoleHelpAsException("Command name not recognized.");
 
-                    remainingArguments = selectedCommand.Options.Parse(arguments.Skip(1));
-                }
+					remainingArguments = selectedCommand.Options.Parse(arguments.Skip(1));
+				}
 
-                CheckRequiredArguments(selectedCommand);
+				CheckRequiredArguments(selectedCommand);
 
-                CheckRemainingArguments(remainingArguments, selectedCommand.RemainingArgumentsCount);
+				CheckRemainingArguments(remainingArguments, selectedCommand.RemainingArgumentsCount);
 
-                ConsoleHelp.ShowParsedCommand(selectedCommand, console);
+				ConsoleHelp.ShowParsedCommand(selectedCommand, console);
 
-                return selectedCommand.Run(remainingArguments.ToArray());
-            }
-            catch (Exception e)
-            {
-                if (!ConsoleHelpAsException.WriterErrorMessage(e, console))
-                    throw;
+				selectedCommand.Run(remainingArguments.ToArray());
+				return 0;
+			}
+			catch (Exception e)
+			{
+				if (!ConsoleHelpAsException.WriterErrorMessage(e, console))
+					throw;
 
-                console.WriteLine();
+				console.WriteLine();
 
-                if (selectedCommand != null)
-                {
-                    if (e is ConsoleHelpAsException || e is NDesk.Options.OptionException)
-                        ConsoleHelp.ShowCommandHelp(selectedCommand, console);
-                }
-                else
-                {
-                    ConsoleHelp.ShowSummaryOfCommands(commands, console);
-                }
+				if (selectedCommand != null)
+				{
+					if (e is ConsoleHelpAsException || e is NDesk.Options.OptionException)
+						ConsoleHelp.ShowCommandHelp(selectedCommand, console);
+				}
+				else
+				{
+					ConsoleHelp.ShowSummaryOfCommands(commands, console);
+				}
 
-                return -1;
-            }
-        }
-  
-        private static void CheckCommandProperty(ConsoleCommand command)
-        {
-            if (string.IsNullOrEmpty(command.Command))
-            {
-                throw new InvalidOperationException(String.Format(
-                    "Command {0} did not define property Command, which must specify its command text.",
-                    command.GetType().Name));
-            }
-        }
+				return -1;
+			}
+		}
 
-        private static void CheckRequiredArguments(ConsoleCommand command)
-        {
-            var missingOptions = command.RequiredOptions
-                .Where(o => !o.WasIncluded).Select(o => o.Name).OrderBy(n => n).ToArray();
-            
-            if (missingOptions.Any())
-            {
-                throw new ConsoleHelpAsException("Missing option: " + string.Join(", ", missingOptions));
-            }
-        }
+		private static void CheckCommandProperty(ConsoleCommand command)
+		{
+			if (string.IsNullOrEmpty(command.Command))
+			{
+				throw new InvalidOperationException(String.Format(
+					"Command {0} did not define property Command, which must specify its command text.",
+					command.GetType().Name));
+			}
+		}
 
-        private static void CheckRemainingArguments(List<string> remainingArguments, int? parametersRequiredAfterOptions)
-        {
-            if (parametersRequiredAfterOptions.HasValue)
-                ConsoleUtil.VerifyNumberOfArguments(remainingArguments.ToArray(),
-                    parametersRequiredAfterOptions.Value);
-        }
+		private static void CheckRequiredArguments(ConsoleCommand command)
+		{
+			var missingOptions = command.RequiredOptions
+				.Where(o => !o.WasIncluded).Select(o => o.Name).OrderBy(n => n).ToArray();
 
-        public static IEnumerable<ConsoleCommand> FindCommandsInSameAssemblyAs(Type typeInSameAssembly)
-        {
-            var assembly = typeInSameAssembly.Assembly;
+			if (missingOptions.Any())
+			{
+				throw new ConsoleHelpAsException("Missing option: " + string.Join(", ", missingOptions));
+			}
+		}
 
-            var commandTypes = assembly.GetTypes()
-                .Where(t => t.IsSubclassOf(typeof(ConsoleCommand)))
-                .Where(t => !t.IsAbstract)
-                .OrderBy(t => t.FullName);
+		private static void CheckRemainingArguments(List<string> remainingArguments, int? parametersRequiredAfterOptions)
+		{
+			if (parametersRequiredAfterOptions.HasValue)
+				ConsoleUtil.VerifyNumberOfArguments(remainingArguments.ToArray(),
+					parametersRequiredAfterOptions.Value);
+		}
 
-            List<ConsoleCommand> result = new List<ConsoleCommand>();
+		public static IEnumerable<ConsoleCommand> FindCommandsInSameAssemblyAs(Type typeInSameAssembly)
+		{
+			var assembly = typeInSameAssembly.Assembly;
 
-            foreach(var commandType in commandTypes)
-            {
-                var constructor = commandType.GetConstructor(new Type[] { });
+			var commandTypes = assembly.GetTypes()
+				.Where(t => t.IsSubclassOf(typeof(ConsoleCommand)))
+				.Where(t => !t.IsAbstract)
+				.OrderBy(t => t.FullName);
 
-                if (constructor == null)
-                    continue;
+			List<ConsoleCommand> result = new List<ConsoleCommand>();
 
-                result.Add((ConsoleCommand)constructor.Invoke(new object[] { }));
-            }
+			foreach (var commandType in commandTypes)
+			{
+				var constructor = commandType.GetConstructor(new Type[] { });
 
-            return result;
-        }
-    }
+				if (constructor == null)
+					continue;
+
+				result.Add((ConsoleCommand)constructor.Invoke(new object[] { }));
+			}
+
+			return result;
+		}
+	}
 }
