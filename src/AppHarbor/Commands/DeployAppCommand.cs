@@ -117,21 +117,6 @@ namespace AppHarbor.Commands
 			}
 		}
 
-		private static double WeightedAverage(IList<double> input, int spread = 40)
-		{
-			if (input.Count == 1)
-			{
-				return input.Average();
-			}
-
-			var weightdifference = spread / (input.Count() - 1);
-			var averageWeight = 50;
-			var startWeight = averageWeight - spread / 2;
-
-			return input.Select((x, i) => x * (startWeight + (i * weightdifference)))
-				.Sum() / (averageWeight * input.Count());
-		}
-
 		private bool TriggerAppHarborBuild(string applicationSlug, FederatedUploadCredentials credentials)
 		{
 			_writer.WriteLine("The package will be deployed to application \"{0}\".", _applicationConfiguration.GetApplicationId());
@@ -168,6 +153,21 @@ namespace AppHarbor.Commands
 				}
 			}
 			return true;
+		}
+
+		private static double WeightedAverage(IList<double> input, int spread = 40)
+		{
+			if (input.Count == 1)
+			{
+				return input.Average();
+			}
+
+			var weightdifference = spread / (input.Count() - 1);
+			var averageWeight = 50;
+			var startWeight = averageWeight - spread / 2;
+
+			return input.Select((x, i) => x * (startWeight + (i * weightdifference)))
+				.Sum() / (averageWeight * input.Count());
 		}
 	}
 }
