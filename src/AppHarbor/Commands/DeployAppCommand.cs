@@ -75,7 +75,6 @@ namespace AppHarbor.Commands
 
 			Console.CursorTop++;
 			_writer.WriteLine();
-			_writer.WriteLine("Package successfully uploaded.");
 
 			TriggerAppHarborBuild(_applicationConfiguration.GetApplicationId(), uploadCredentials);
 		}
