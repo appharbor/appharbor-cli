@@ -38,6 +38,8 @@ namespace AppHarbor.Commands
 
 		public void Execute(string[] arguments)
 		{
+			_writer.WriteLine("Getting upload credentials... ");
+
 			var uploadCredentials = GetCredentials();
 			using (var packageStream = new TemporaryFileStream())
 			{
@@ -81,8 +83,6 @@ namespace AppHarbor.Commands
 		{
 			var urlRequest = new RestRequest("applications/{slug}/uploadCredentials", Method.POST);
 			urlRequest.AddUrlSegment("slug", _applicationConfiguration.GetApplicationId());
-
-			_writer.WriteLine("Getting upload credentials... ");
 
 			var federatedCredentials = _restClient.Execute<FederatedUploadCredentials>(urlRequest);
 			return federatedCredentials.Data;
