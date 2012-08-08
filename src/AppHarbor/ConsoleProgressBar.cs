@@ -11,27 +11,30 @@ namespace AppHarbor
 		{
 			Console.CursorLeft = 0;
 
-			try
+			using (new ForegroundColor(ConsoleColor.Cyan))
 			{
-				Console.CursorVisible = false;
+				try
+				{
+					Console.CursorVisible = false;
 
-				int width = Console.WindowWidth - 1;
-				int newWidth = (int)((width * percentage) / 100d);
-				string progressBar = string.Empty
-					.PadRight(newWidth, ProgressBarCharacter)
-					.PadRight(width - newWidth, ' ');
+					int width = Console.WindowWidth - 1;
+					int newWidth = (int)((width * percentage) / 100d);
+					string progressBar = string.Empty
+						.PadRight(newWidth, ProgressBarCharacter)
+						.PadRight(width - newWidth, ' ');
 
-				Console.Write(progressBar);
-				message = message ?? string.Empty;
+					Console.Write(progressBar);
+					message = message ?? string.Empty;
 
-				Console.WriteLine();
+					Console.WriteLine();
 
-				OverwriteConsoleMessage(message);
-				Console.CursorTop--;
-			}
-			finally
-			{
-				Console.CursorVisible = true;
+					OverwriteConsoleMessage(message);
+					Console.CursorTop--;
+				}
+				finally
+				{
+					Console.CursorVisible = true;
+				}
 			}
 		}
 

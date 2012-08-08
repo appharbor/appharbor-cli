@@ -23,11 +23,8 @@ namespace AppHarbor
 			{
 				archive.WriteEntry(entries[i], true);
 
-				using (new ForegroundColor(ConsoleColor.Green))
-				{
-					ConsoleProgressBar.Render(i * 100 / (double)entriesCount,
-						string.Format("Packing files ({0} of {1})", i + 1, entriesCount));
-				}
+				ConsoleProgressBar.Render(i * 100 / (double)entriesCount,
+					string.Format("Packing files ({0} of {1})", i + 1, entriesCount));
 			}
 
 			archive.Close();

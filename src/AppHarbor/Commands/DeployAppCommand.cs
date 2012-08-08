@@ -109,12 +109,9 @@ namespace AppHarbor.Commands
 				.FromSeconds(bytesRemaining / WeightedAverage(bytesPerSecondAverages))
 				.GetHumanized());
 
-			using (new ForegroundColor(ConsoleColor.Green))
-			{
-				ConsoleProgressBar.Render(uploadProgressArgs.PercentDone,
-					string.Format("Uploading package ({0}% of {1:0.0} MB). {2}",
-						uploadProgressArgs.PercentDone, uploadProgressArgs.TotalBytes / 1048576, timeEstimate));
-			}
+			ConsoleProgressBar.Render(uploadProgressArgs.PercentDone,
+				string.Format("Uploading package ({0}% of {1:0.0} MB). {2}",
+					uploadProgressArgs.PercentDone, uploadProgressArgs.TotalBytes / 1048576, timeEstimate));
 		}
 
 		private bool TriggerAppHarborBuild(string applicationSlug, FederatedUploadCredentials credentials)
