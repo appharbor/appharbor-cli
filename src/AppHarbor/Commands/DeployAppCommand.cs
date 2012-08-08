@@ -1,13 +1,11 @@
 ﻿using System;
-using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
 using System.IO.Compression;
 using System.Linq;
 using System.Net;
-using System.Threading;
 using Amazon.S3;
-using Amazon.S3.Model;
+using Amazon.S3.Transfer;
 using RestSharp;
 
 namespace AppHarbor.Commands
@@ -18,7 +16,6 @@ namespace AppHarbor.Commands
 		private readonly string _accessToken;
 		private readonly IApplicationConfiguration _applicationConfiguration;
 		private readonly TextReader _reader;
-		private readonly ConcurrentDictionary<object, long> _uploadPartRequestProgress = new ConcurrentDictionary<object, long>();
 		private readonly TextWriter _writer;
 
 		public DeployAppCommand(IApplicationConfiguration applicationConfiguration, IAccessTokenConfiguration accessTokenConfiguration, TextReader reader, TextWriter writer)
@@ -29,10 +26,18 @@ namespace AppHarbor.Commands
 			_writer = writer;
 		}
 
+		private class TemporaryFileStream : FileStream
+		{
+			public TemporaryFileStream()
+				: base(Path.GetTempFileName(), FileMode.Create, FileAccess.ReadWrite, FileShare.Read, 4096, FileOptions.DeleteOnClose)
+			{
+			}
+		}
+
 		public void Execute(string[] arguments)
 		{
 			var uploadCredentials = GetCredentials();
-			using (var packageStream = new MemoryStream())
+			using (var packageStream = new TemporaryFileStream())
 			{
 				using (var gzipStream = new GZipStream(packageStream, CompressionMode.Compress, true))
 				{
@@ -41,97 +46,35 @@ namespace AppHarbor.Commands
 					var sourceDirectory = new DirectoryInfo(Directory.GetCurrentDirectory());
 					sourceDirectory.ToTar(gzipStream, excludedDirectoryNames: new[] { ".git", ".hg" });
 
-					UploadMultipart(packageStream, uploadCredentials);
-				}
-			}
-
-			_writer.WriteLine("Package successfully uploaded.");
-			TriggerAppHarborBuild(_applicationConfiguration.GetApplicationId(), uploadCredentials);
-		}
-
-		private void UploadMultipart(Stream inputStream, FederatedUploadCredentials uploadCredentials)
-		{
-			using (var s3Client = new AmazonS3Client(uploadCredentials.GetSessionCredentials()))
-			{
-				var initiateMultipartUploadRequest = new InitiateMultipartUploadRequest
-				{
-					BucketName = uploadCredentials.Bucket,
-					Key = uploadCredentials.ObjectKey,
-				};
-
-				var initMultipartUploadResponse = s3Client.InitiateMultipartUpload(initiateMultipartUploadRequest);
-
-				var uploadResponses = new ConcurrentBag<UploadPartResponse>();
-				var waitHandlers = new List<WaitHandle>();
-
-				inputStream.Position = 0;
-				var partSize = inputStream.Length / 5;
-
-				for (int i = 1; inputStream.Position < inputStream.Length; i++)
-				{
-					var uploadStream = new MemoryStream();
-
-					while (inputStream.Position < partSize * i)
+					using (var s3Client = new AmazonS3Client(uploadCredentials.GetSessionCredentials()))
 					{
-						var buffer = new byte[4096];
-						var bytesRead = inputStream.Read(buffer, 0, buffer.Length);
-						if (bytesRead > 0)
+						var uploadParts = 5;
+						var partSize = packageStream.Length / uploadParts;
+
+						var transferUtilityConfig = new TransferUtilityConfig();
+						transferUtilityConfig.NumberOfUploadThreads = uploadParts * 2;
+
+						var transferUtility = new TransferUtility(s3Client, transferUtilityConfig);
+						packageStream.Position = 0;
+						var request = new TransferUtilityUploadRequest
 						{
-							uploadStream.Write(buffer, 0, bytesRead);
-						}
-						else
-						{
-							break;
-						}
+							InputStream = packageStream,
+							BucketName = uploadCredentials.Bucket,
+							Key = uploadCredentials.ObjectKey,
+							PartSize = partSize,
+						};
+						request.UploadProgressEvent += RenderProgress;
+
+						transferUtility.Upload(request);
 					}
-
-					uploadStream.Position = 0;
-					UploadPartRequest uploadRequest = new UploadPartRequest
-					{
-						BucketName = uploadCredentials.Bucket,
-						InputStream = uploadStream,
-						Key = uploadCredentials.ObjectKey,
-						PartNumber = i,
-						PartSize = partSize,
-						UploadId = initMultipartUploadResponse.UploadId,
-					};
-
-					uploadRequest.WithSubscriber(UploadProgressHandler);
-					var asyncResult = s3Client.BeginUploadPart(uploadRequest, x =>
-					{
-						var response = s3Client.EndUploadPart(x);
-						uploadResponses.Add(response);
-
-						uploadStream.Dispose();
-					}, uploadRequest);
-
-					waitHandlers.Add(asyncResult.AsyncWaitHandle);
 				}
-
-				while (!WaitHandle.WaitAll(waitHandlers.ToArray(), 500))
-				{
-					var progressPercentage = 100 * _uploadPartRequestProgress.Sum(x => x.Value) / (double)inputStream.Length;
-					ConsoleProgressBar.Render(progressPercentage, ConsoleColor.Green,
-						string.Format("Uploading page ({0:0.0}% of {1:0.0} MB).",
-						progressPercentage, inputStream.Length / 1048576));
-				}
-
-				var completeMultipartUploadRequest = new CompleteMultipartUploadRequest
-				{
-					BucketName = uploadCredentials.Bucket,
-					Key = uploadCredentials.ObjectKey,
-					PartETags = uploadResponses.Select(x => new PartETag(x.PartNumber, x.ETag)).ToList(),
-					UploadId = initMultipartUploadResponse.UploadId,
-				};
-
-				s3Client.CompleteMultipartUpload(completeMultipartUploadRequest);
 			}
-		}
 
-		public void UploadProgressHandler(object request, UploadPartProgressArgs foobar)
-		{
-			_uploadPartRequestProgress.AddOrUpdate(request, foobar.TransferredBytes,
-				(x, i) => foobar.TransferredBytes);
+			Console.CursorTop++;
+			_writer.WriteLine();
+			_writer.WriteLine("Package successfully uploaded.");
+
+			TriggerAppHarborBuild(_applicationConfiguration.GetApplicationId(), uploadCredentials);
 		}
 
 		private FederatedUploadCredentials GetCredentials()
@@ -146,9 +89,43 @@ namespace AppHarbor.Commands
 			return federatedCredentials.Data;
 		}
 
+		private KeyValuePair<DateTime, double> lastUploadProgressEvent;
+		private IList<double> bytesPerSecondAverages = new List<double>();
+
+		private void RenderProgress(object sender, UploadProgressArgs uploadProgressArgs)
+		{
+			var secondsSinceLastAverage = (DateTime.Now - lastUploadProgressEvent.Key).TotalSeconds;
+
+			if (secondsSinceLastAverage > 2)
+			{
+				if (lastUploadProgressEvent.Key != DateTime.MinValue)
+				{
+					var bytesSinceLastProgress = uploadProgressArgs.TransferredBytes - lastUploadProgressEvent.Value;
+
+					var bytesPerSecond = bytesSinceLastProgress / secondsSinceLastAverage;
+					bytesPerSecondAverages.Add(bytesPerSecond);
+				}
+				lastUploadProgressEvent = new KeyValuePair<DateTime, double>(DateTime.Now, uploadProgressArgs.TransferredBytes);
+			}
+
+			if (bytesPerSecondAverages.Count() > 20)
+			{
+				bytesPerSecondAverages.RemoveAt(0);
+			}
+
+			var bytesRemaining = uploadProgressArgs.TotalBytes - uploadProgressArgs.TransferredBytes;
+
+			var timeEstimate = bytesPerSecondAverages.Count() < 1 ? "Estimating time left" :
+				string.Format("Time left: {0:0.0} min",  bytesRemaining / WeightedAverage(bytesPerSecondAverages) / TimeSpan.FromMinutes(1).TotalSeconds);
+
+			ConsoleProgressBar.Render(uploadProgressArgs.PercentDone, ConsoleColor.Green,
+				string.Format("Uploading package ({0}% of {1:0.0} MB). {2}",
+				uploadProgressArgs.PercentDone, uploadProgressArgs.TotalBytes / 1048576, timeEstimate));
+		}
+
 		private static double WeightedAverage(IList<double> input, int spread = 40)
 		{
-			if (input.Count < 2)
+			if (input.Count == 1)
 			{
 				return input.Average();
 			}
