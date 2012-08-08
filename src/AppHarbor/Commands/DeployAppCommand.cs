@@ -43,8 +43,6 @@ namespace AppHarbor.Commands
 			{
 				using (var gzipStream = new GZipStream(packageStream, CompressionMode.Compress, true))
 				{
-					_writer.WriteLine("Preparing deployment package for upload.");
-
 					var sourceDirectory = new DirectoryInfo(Directory.GetCurrentDirectory());
 					sourceDirectory.ToTar(gzipStream, excludedDirectoryNames: new[] { ".git", ".hg" });
 
@@ -117,11 +115,41 @@ namespace AppHarbor.Commands
 			var bytesRemaining = uploadProgressArgs.TotalBytes - uploadProgressArgs.TransferredBytes;
 
 			var timeEstimate = bytesPerSecondAverages.Count() < 1 ? "Estimating time left" :
-				string.Format("Time left: {0:0.0} min",  bytesRemaining / WeightedAverage(bytesPerSecondAverages) / TimeSpan.FromMinutes(1).TotalSeconds);
+				string.Format("{0:0.0} left",  GetHumanizedTime(bytesRemaining / WeightedAverage(bytesPerSecondAverages)));
 
 			ConsoleProgressBar.Render(uploadProgressArgs.PercentDone, ConsoleColor.Green,
 				string.Format("Uploading package ({0}% of {1:0.0} MB). {2}",
 				uploadProgressArgs.PercentDone, uploadProgressArgs.TotalBytes / 1048576, timeEstimate));
+		}
+
+		private static string GetHumanizedTime(double seconds)
+		{
+			string unit;
+			int dividend;
+			if (seconds < 60)
+			{
+				unit = "second";
+				dividend = 1;
+			}
+			else if (seconds < 60 * 60)
+			{
+				unit = "minute";
+				dividend = 60;
+			}
+			else
+			{
+				unit = "hour";
+				dividend = 60 * 60;
+			}
+
+			var unitCount = (int)seconds / dividend;
+			var approximateValue = ((int)Math.Round(unitCount / 10.0)) * 10;
+
+			var displayValue = unitCount < 10 ? unitCount : approximateValue;
+			unit = displayValue == 1 ? unit : unit + "s";
+
+
+			return string.Format("{0} {1}", displayValue, unit);
 		}
 
 		private static double WeightedAverage(IList<double> input, int spread = 40)
