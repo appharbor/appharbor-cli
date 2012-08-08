@@ -103,13 +103,12 @@ namespace AppHarbor.Commands
 
 					var bytesPerSecond = bytesSinceLastProgress / secondsSinceLastAverage;
 					bytesPerSecondAverages.Add(bytesPerSecond);
+					if (bytesPerSecondAverages.Count() > 20)
+					{
+						bytesPerSecondAverages.RemoveAt(0);
+					}
 				}
 				lastUploadProgressEvent = new KeyValuePair<DateTime, double>(DateTime.Now, uploadProgressArgs.TransferredBytes);
-			}
-
-			if (bytesPerSecondAverages.Count() > 20)
-			{
-				bytesPerSecondAverages.RemoveAt(0);
 			}
 
 			var bytesRemaining = uploadProgressArgs.TotalBytes - uploadProgressArgs.TransferredBytes;
