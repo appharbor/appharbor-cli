@@ -7,15 +7,13 @@ namespace AppHarbor
 	{
 		private const char ProgressBarCharacter = '\u2592';
 
-		public static void Render(double percentage, ConsoleColor color, string message)
+		public static void Render(double percentage, string message)
 		{
-			ConsoleColor originalColor = Console.ForegroundColor;
 			Console.CursorLeft = 0;
 
 			try
 			{
 				Console.CursorVisible = false;
-				Console.ForegroundColor = color;
 
 				int width = Console.WindowWidth - 1;
 				int newWidth = (int)((width * percentage) / 100d);
@@ -33,7 +31,6 @@ namespace AppHarbor
 			}
 			finally
 			{
-				Console.ForegroundColor = originalColor;
 				Console.CursorVisible = true;
 			}
 		}

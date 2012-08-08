@@ -104,15 +104,17 @@ namespace AppHarbor.Commands
 			}
 
 			var bytesRemaining = uploadProgressArgs.TotalBytes - uploadProgressArgs.TransferredBytes;
-
 			var timeEstimate = bytesPerSecondAverages.Count() < 1 ? "Estimating time left" :
 				string.Format("{0} left", TimeSpan
 				.FromSeconds(bytesRemaining / WeightedAverage(bytesPerSecondAverages))
 				.GetHumanized());
 
-			ConsoleProgressBar.Render(uploadProgressArgs.PercentDone, ConsoleColor.Green,
-				string.Format("Uploading package ({0}% of {1:0.0} MB). {2}",
-				uploadProgressArgs.PercentDone, uploadProgressArgs.TotalBytes / 1048576, timeEstimate));
+			using (new ForegroundColor(ConsoleColor.Green))
+			{
+				ConsoleProgressBar.Render(uploadProgressArgs.PercentDone,
+					string.Format("Uploading package ({0}% of {1:0.0} MB). {2}",
+						uploadProgressArgs.PercentDone, uploadProgressArgs.TotalBytes / 1048576, timeEstimate));
+			}
 		}
 
 		private static double WeightedAverage(IList<double> input, int spread = 40)
@@ -134,13 +136,11 @@ namespace AppHarbor.Commands
 		{
 			_writer.WriteLine("The package will be deployed to application \"{0}\".", _applicationConfiguration.GetApplicationId());
 
-			Console.WriteLine();
-			var originalColor = Console.ForegroundColor;
-			Console.ForegroundColor = ConsoleColor.Yellow;
-			_writer.WriteLine();
-			_writer.Write("Enter a deployment message: ");
-			Console.ForegroundColor = originalColor;
-
+			using (new ForegroundColor(ConsoleColor.Yellow))
+			{
+				_writer.WriteLine();
+				_writer.Write("Enter a deployment message: ");
+			}
 			var commitMessage = _reader.ReadLine();
 
 			var request = new RestRequest("applications/{slug}/buildnotifications", Method.POST)
@@ -162,7 +162,10 @@ namespace AppHarbor.Commands
 
 			if (response.StatusCode == HttpStatusCode.OK)
 			{
-				_writer.WriteLine("Deploying... Open application overview with `appharbor open`.");
+				using (new ForegroundColor(ConsoleColor.Green))
+				{
+					_writer.WriteLine("Deploying... Open application overview with `appharbor open`.");
+				}
 			}
 			return true;
 		}
