@@ -39,6 +39,7 @@ namespace AppHarbor.Commands
 		public void Execute(string[] arguments)
 		{
 			_writer.WriteLine("Getting upload credentials... ");
+			_writer.WriteLine();
 
 			var uploadCredentials = GetCredentials();
 			using (var packageStream = new TemporaryFileStream())
