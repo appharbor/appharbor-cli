@@ -26,7 +26,7 @@ namespace AppHarbor
 				Console.Write(progressBar);
 				message = message ?? string.Empty;
 
-				Console.CursorTop++;
+				Console.WriteLine();
 
 				OverwriteConsoleMessage(message);
 				Console.CursorTop--;
