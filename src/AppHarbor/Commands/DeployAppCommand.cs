@@ -69,12 +69,12 @@ namespace AppHarbor.Commands
 						request.UploadProgressEvent += RenderProgress;
 
 						transferUtility.Upload(request);
+
+						Console.CursorTop++;
+						_writer.WriteLine();
 					}
 				}
 			}
-
-			Console.CursorTop++;
-			_writer.WriteLine();
 
 			TriggerAppHarborBuild(_applicationConfiguration.GetApplicationId(), uploadCredentials);
 		}
