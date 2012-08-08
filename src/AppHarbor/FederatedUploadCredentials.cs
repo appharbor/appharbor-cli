@@ -2,11 +2,13 @@
 
 namespace AppHarbor
 {
-	public class FederatedAmazonCredentials
+	public class FederatedUploadCredentials
 	{
 		public string AccessKeyId { get; set; }
 		public string SecretAccessKey { get; set; }
 		public string SessionToken { get; set; }
+		public string Bucket { get; set; }
+		public string ObjectKey { get; set; }
 
 		public SessionAWSCredentials GetSessionCredentials()
 		{

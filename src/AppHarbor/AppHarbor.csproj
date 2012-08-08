@@ -98,7 +98,7 @@
     <Compile Include="CompressionExtensions.cs" />
     <Compile Include="ConsoleProgressBar.cs" />
     <Compile Include="DispatchException.cs" />
-    <Compile Include="FederatedAmazonCredentials.cs" />
+    <Compile Include="FederatedUploadCredentials.cs" />
     <Compile Include="GitCommand.cs" />
     <Compile Include="GitCommandException.cs" />
     <Compile Include="GitRepositoryConfigurer.cs" />
