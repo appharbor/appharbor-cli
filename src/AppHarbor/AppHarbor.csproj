@@ -118,6 +118,7 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RepositoryConfigurationException.cs" />
+    <Compile Include="TemporaryFileStream.cs" />
     <Compile Include="TimeSpanExtensions.cs" />
     <Compile Include="TypeNameMatcher.cs" />
   </ItemGroup>

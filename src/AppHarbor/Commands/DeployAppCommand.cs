@@ -28,14 +28,6 @@ namespace AppHarbor.Commands
 			_writer = writer;
 		}
 
-		private class TemporaryFileStream : FileStream
-		{
-			public TemporaryFileStream()
-				: base(Path.GetTempFileName(), FileMode.Create, FileAccess.ReadWrite, FileShare.Read, 4096, FileOptions.DeleteOnClose)
-			{
-			}
-		}
-
 		public void Execute(string[] arguments)
 		{
 			_writer.WriteLine("Getting upload credentials... ");
