@@ -115,37 +115,42 @@ namespace AppHarbor.Commands
 			var bytesRemaining = uploadProgressArgs.TotalBytes - uploadProgressArgs.TransferredBytes;
 
 			var timeEstimate = bytesPerSecondAverages.Count() < 1 ? "Estimating time left" :
-				string.Format("{0:0.0} left",  GetHumanizedTime(bytesRemaining / WeightedAverage(bytesPerSecondAverages)));
+				string.Format("{0:0.0} left", GetHumanizedTime(
+					TimeSpan.FromSeconds(bytesRemaining / WeightedAverage(bytesPerSecondAverages))));
 
 			ConsoleProgressBar.Render(uploadProgressArgs.PercentDone, ConsoleColor.Green,
 				string.Format("Uploading package ({0}% of {1:0.0} MB). {2}",
 				uploadProgressArgs.PercentDone, uploadProgressArgs.TotalBytes / 1048576, timeEstimate));
 		}
 
-		private static string GetHumanizedTime(double seconds)
+		private static string GetHumanizedTime(TimeSpan timeSpan)
 		{
 			string unit;
-			int dividend;
-			if (seconds < 60)
+			double value;
+			if (timeSpan.TotalSeconds < 60)
 			{
 				unit = "second";
-				dividend = 1;
+				value = timeSpan.TotalSeconds;
 			}
-			else if (seconds < 60 * 60)
+			else if (timeSpan.TotalMinutes < 60)
 			{
 				unit = "minute";
-				dividend = 60;
+				value = timeSpan.TotalMinutes;
+			}
+			else if (timeSpan.TotalHours < 24)
+			{
+				unit = "hour";
+				value = timeSpan.TotalHours;
 			}
 			else
 			{
-				unit = "hour";
-				dividend = 60 * 60;
+				unit = "day";
+				value = timeSpan.Days;
 			}
 
-			var unitCount = (int)seconds / dividend;
-			var approximateValue = ((int)Math.Round(unitCount / 10.0)) * 10;
+			var approximateValue = ((int)Math.Round(value / 10.0)) * 10;
 
-			var displayValue = unitCount < 10 ? unitCount : approximateValue;
+			var displayValue = value < 10 ? (int)value : approximateValue;
 			unit = displayValue == 1 ? unit : unit + "s";
 
 
