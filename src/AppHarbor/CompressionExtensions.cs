@@ -27,9 +27,6 @@ namespace AppHarbor
 					string.Format("Packing files ({0} of {1})", i + 1, entriesCount));
 			}
 
-			Console.CursorTop++;
-			Console.WriteLine();
-
 			archive.Close();
 		}
 
