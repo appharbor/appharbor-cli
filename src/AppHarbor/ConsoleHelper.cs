@@ -94,7 +94,7 @@ namespace AppHarbor
 
 			foreach (var value in allValuesToTrace.OrderBy(k => k.Key))
 			{
-				_writer.WriteLine("    " + value.Key + " : " + value.Value);
+				_writer.WriteLine("    {0}:{1}", value.Key, value.Value);
 			}
 
 			_writer.WriteLine();
