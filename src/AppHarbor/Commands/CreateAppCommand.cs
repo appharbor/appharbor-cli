@@ -1,5 +1,6 @@
 ﻿using System.IO;
 using System.Linq;
+using NDesk.Options;
 
 namespace AppHarbor.Commands
 {
@@ -15,11 +16,19 @@ namespace AppHarbor.Commands
 			_appHarborClient = appHarborClient;
 			_applicationConfiguration = applicationConfiguration;
 			_textWriter = textWriter;
+
+			HasOption("r|region:", "Optional String argument which is null if no value follow is specified", x => Region = x);
+		}
+
+		public string Region
+		{
+			get;
+			set;
 		}
 
 		public override void Run(string[] arguments)
 		{
-			var result = _appHarborClient.CreateApplication(arguments.First(), arguments.Skip(1).FirstOrDefault());
+			var result = _appHarborClient.CreateApplication(arguments.First(), Region);
 
 			_textWriter.WriteLine("Created application \"{0}\" | URL: https://{0}.apphb.com", result.Id);
 			_textWriter.WriteLine("");
