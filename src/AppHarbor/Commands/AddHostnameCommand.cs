@@ -2,7 +2,7 @@
 
 namespace AppHarbor.Commands
 {
-	[CommandHelp("Add a hostname", "[HOSTNAME]")]
+	[CommandHelp("Add a hostname", additionalArgumentsHelp: "<HOSTNAME>", numberOfAdditionalArguments: 1)]
 	public class AddHostnameCommand : ConsoleCommand
 	{
 		private readonly IApplicationConfiguration _applicationConfiguration;
@@ -16,11 +16,6 @@ namespace AppHarbor.Commands
 
 		public override void Run(string[] arguments)
 		{
-			if (arguments.Length == 0)
-			{
-				throw new CommandException("No hostname was specified");
-			}
-
 			var applicationId = _applicationConfiguration.GetApplicationId();
 			_appharborClient.CreateHostname(applicationId, arguments[0]);
 		}

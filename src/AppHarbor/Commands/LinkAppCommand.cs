@@ -2,7 +2,7 @@
 
 namespace AppHarbor.Commands
 {
-	[CommandHelp("Link directory to an application", "[SLUG]", alias: "link")]
+	[CommandHelp("Link directory to an application", additionalArgumentsHelp: "<SLUG>", numberOfAdditionalArguments: 1, alias: "link")]
 	public class LinkAppCommand : ConsoleCommand
 	{
 		private readonly IApplicationConfiguration _applicationConfiguration;
@@ -16,11 +16,6 @@ namespace AppHarbor.Commands
 
 		public override void Run(string[] arguments)
 		{
-			if (arguments.Length == 0)
-			{
-				throw new CommandException("Please specify an application id.");
-			}
-
 			var user = _appharborClient.GetUser();
 
 			Application application;

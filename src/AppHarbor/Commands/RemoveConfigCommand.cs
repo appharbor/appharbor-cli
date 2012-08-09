@@ -1,6 +1,6 @@
 ﻿namespace AppHarbor.Commands
 {
-	[CommandHelp("Remove configuration variable", "[KEY1 KEY2..]")]
+	[CommandHelp("Remove configuration variable", additionalArgumentsHelp: "[KEY1 KEY2..]", numberOfAdditionalArguments: 1)]
 	public class RemoveConfigCommand : ConsoleCommand
 	{
 		private readonly IApplicationConfiguration _applicationConfiguration;
@@ -14,11 +14,6 @@
 
 		public override void Run(string[] arguments)
 		{
-			if (arguments.Length == 0)
-			{
-				throw new CommandException("No configuration variable key was specified");
-			}
-
 			var applicationId = _applicationConfiguration.GetApplicationId();
 
 			foreach (var key in arguments)

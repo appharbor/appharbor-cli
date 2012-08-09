@@ -1,6 +1,6 @@
 ﻿namespace AppHarbor.Commands
 {
-	[CommandHelp("Remove hostname from application", "[HOSTNAME]")]
+	[CommandHelp("Remove hostname from application", additionalArgumentsHelp: "<HOSTNAME>", numberOfAdditionalArguments: 1)]
 	public class RemoveHostnameCommand : ConsoleCommand
 	{
 		private readonly IApplicationConfiguration _applicationConfiguration;
@@ -14,11 +14,6 @@
 
 		public override void Run(string[] arguments)
 		{
-			if (arguments.Length == 0)
-			{
-				throw new CommandException("No hostname was specified");
-			}
-
 			var applicationId = _applicationConfiguration.GetApplicationId();
 
 			_appharborClient.RemoveHostname(applicationId, arguments[0]);

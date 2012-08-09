@@ -1,6 +1,6 @@
 ﻿namespace AppHarbor.Commands
 {
-	[CommandHelp("Add configuration variable to application", additionalArgumentsHelp: "[KEY=VALUE]")]
+	[CommandHelp("Add configuration variable to application", additionalArgumentsHelp: "[KEY=VALUE]", numberOfAdditionalArguments: 1)]
 	public class AddConfigCommand : ConsoleCommand
 	{
 		private readonly IApplicationConfiguration _applicationConfiguration;
@@ -14,10 +14,6 @@
 
 		public override void Run(string[] arguments)
 		{
-			if (arguments.Length == 0)
-			{
-				throw new CommandException("No configuration variables are specified");
-			}
 			var applicationId = _applicationConfiguration.GetApplicationId();
 
 			foreach (var argument in arguments)
