@@ -6,26 +6,10 @@ using System.Linq;
 using System.Reflection;
 using System.Xml.Linq;
 
-namespace ManyConsole.Internal
+namespace AppHarbor
 {
 	public class ConsoleHelp
 	{
-		public static void ShowSummaryOfCommands(IEnumerable<ConsoleCommand> commands, TextWriter console)
-		{
-			console.WriteLine("Available commands are:");
-			console.WriteLine();
-
-			var commandList = commands.ToList();
-			var n = commandList.Max(c => c.Command.Length) + 1;
-			var commandFormatString = "    {0,-" + n + "}- {1}";
-
-			foreach (var command in commandList)
-			{
-				console.WriteLine(commandFormatString, command.Command, command.OneLineDescription);
-			}
-			console.WriteLine();
-		}
-
 		public static void ShowCommandHelp(ConsoleCommand selectedCommand, TextWriter console)
 		{
 			var haveOptions = selectedCommand.Options.Count > 0;

@@ -17,14 +17,14 @@ namespace AppHarbor
 			container.Kernel.Resolver.AddSubResolver(new CollectionResolver(container.Kernel));
 
 			container.Register(AllTypes.FromThisAssembly()
-				.BasedOn<ICommand>());
+				.BasedOn<ConsoleCommand>());
 
 			container.Register(Component
 				.For<IEnumerable<Type>>()
 				.UsingFactoryMethod(x =>
 				{
 					return Assembly.GetExecutingAssembly().GetExportedTypes()
-						.Where(y => typeof(ICommand).IsAssignableFrom(y) && y.IsClass);
+						.Where(y => typeof(ConsoleCommand).IsAssignableFrom(y) && y.IsClass && !y.IsAbstract);
 				}));
 
 			container.Register(Component
@@ -62,7 +62,7 @@ namespace AppHarbor
 
 			container.Register(Component
 				.For<ITypeNameMatcher>()
-				.ImplementedBy<TypeNameMatcher<ICommand>>());
+				.ImplementedBy<TypeNameMatcher<ConsoleCommand>>());
 
 			container.Register(Component
 				.For<IAliasMatcher>()

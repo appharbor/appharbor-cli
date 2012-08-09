@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Linq;
 using Castle.MicroKernel;
+using System.Collections.Generic;
+using NDesk.Options;
 
 namespace AppHarbor
 {
@@ -38,10 +40,24 @@ namespace AppHarbor
 				throw new DispatchException(string.Format("The command \"{0}\" doesn't match a command name or alias", string.Join(" ", args)));
 			}
 
+			var console = Console.Out;
+			ConsoleCommand command = null;
 			try
 			{
-				var command = (ICommand)_kernel.Resolve(matchingType);
-				command.Run(args.Skip(argsToSkip).ToArray());
+				command = (ConsoleCommand)_kernel.Resolve(matchingType);
+
+				CheckRequiredArguments(command);
+
+				var remainingArguments = args.Skip(argsToSkip).ToArray();
+
+				if (command.RemainingArgumentsCount > 0)
+				{
+					CheckRemainingArguments(remainingArguments, (int)command.RemainingArgumentsCount);
+				}
+
+				ConsoleHelp.ShowParsedCommand(command, console);
+
+				command.Run(remainingArguments);
 			}
 			catch (ApiException exception)
 			{
@@ -51,6 +67,44 @@ namespace AppHarbor
 			{
 				throw new DispatchException(exception.Message);
 			}
+			catch (Exception exception)
+			{
+				if (!ConsoleHelpAsException.WriterErrorMessage(exception, console))
+				{
+					throw new DispatchException();
+				}
+				console.WriteLine();
+				if (exception is ConsoleHelpAsException || exception is OptionException)
+				{
+					ConsoleHelp.ShowCommandHelp(command, console);
+				}
+			}
 		}
+
+		private static void CheckRequiredArguments(ConsoleCommand command)
+		{
+			var missingOptions = command.RequiredOptions
+				.Where(o => !o.WasIncluded).Select(o => o.Name).OrderBy(n => n).ToArray();
+
+			if (missingOptions.Any())
+			{
+				throw new ConsoleHelpAsException("Missing option: " + string.Join(", ", missingOptions));
+			}
+		}
+
+		private static void CheckRemainingArguments(IList<string> remainingArguments, int parametersRequiredAfterOptions)
+		{
+			if (remainingArguments.Count() < parametersRequiredAfterOptions)
+			{
+				throw new ConsoleHelpAsException(
+					string.Format("Invalid number of arguments-- expected {0} more.", parametersRequiredAfterOptions - remainingArguments.Count()));
+			}
+
+			if (remainingArguments.Count() > parametersRequiredAfterOptions)
+			{
+				throw new ConsoleHelpAsException("Extra parameters specified: " + string.Join(", ", remainingArguments.Skip(parametersRequiredAfterOptions).ToArray()));
+			}
+		}
+
 	}
 }
