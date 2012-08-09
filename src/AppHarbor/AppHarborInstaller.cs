@@ -35,6 +35,9 @@ namespace AppHarbor
 				}));
 
 			container.Register(Component
+				.For<ConsoleHelper>());
+
+			container.Register(Component
 				.For<TextReader>()
 				.UsingFactoryMethod(x =>
 				{

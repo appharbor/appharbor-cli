@@ -89,7 +89,7 @@
     <Compile Include="Commands\UnlinkAppCommand.cs" />
     <Compile Include="Commands\UserCommand.cs" />
     <Compile Include="ConsoleCommand.cs" />
-    <Compile Include="ConsoleHelp.cs" />
+    <Compile Include="ConsoleHelper.cs" />
     <Compile Include="ConsoleHelpAsException.cs" />
     <Compile Include="DispatchException.cs" />
     <Compile Include="GitCommand.cs" />

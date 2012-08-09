@@ -8,32 +8,39 @@ using System.Xml.Linq;
 
 namespace AppHarbor
 {
-	public class ConsoleHelp
+	public class ConsoleHelper
 	{
-		public static void ShowCommandHelp(ConsoleCommand selectedCommand, TextWriter console)
+		private readonly TextWriter _writer;
+
+		public ConsoleHelper(TextWriter writer)
+		{
+			_writer = writer;
+		}
+
+		public void ShowCommandHelp(ConsoleCommand selectedCommand)
 		{
 			var haveOptions = selectedCommand.Options.Count > 0;
 
-			console.WriteLine("'" + selectedCommand.Command + "' - " + selectedCommand.OneLineDescription);
-			console.WriteLine();
-			console.Write("Expected usage: {0} {1} ", AppDomain.CurrentDomain.FriendlyName, selectedCommand.Command);
+			_writer.WriteLine("'" + selectedCommand.Command + "' - " + selectedCommand.OneLineDescription);
+			_writer.WriteLine();
+			_writer.Write("Expected usage: {0} {1} ", AppDomain.CurrentDomain.FriendlyName, selectedCommand.Command);
 
 			if (haveOptions)
 			{
-				console.Write("<options> ");
+				_writer.Write("<options> ");
 			}
 
-			console.WriteLine(selectedCommand.RemainingArgumentsHelpText);
+			_writer.WriteLine(selectedCommand.RemainingArgumentsHelpText);
 
 			if (haveOptions)
 			{
-				console.WriteLine("<options> available:");
-				selectedCommand.Options.WriteOptionDescriptions(console);
+				_writer.WriteLine("<options> available:");
+				selectedCommand.Options.WriteOptionDescriptions(_writer);
 			}
-			console.WriteLine();
+			_writer.WriteLine();
 		}
 
-		public static void ShowParsedCommand(ConsoleCommand consoleCommand, TextWriter consoleOut)
+		public void ShowParsedCommand(ConsoleCommand consoleCommand)
 		{
 			if (!consoleCommand.TraceCommandAfterParse)
 			{
@@ -70,7 +77,7 @@ namespace AppHarbor
 				allValuesToTrace[field.Name] = MakeObjectReadable(field.GetValue(consoleCommand));
 			}
 
-			consoleOut.WriteLine();
+			_writer.WriteLine();
 
 			var introLine = string.Format("Executing {0}", consoleCommand.Command);
 
@@ -83,14 +90,14 @@ namespace AppHarbor
 				introLine = introLine + " (" + consoleCommand.OneLineDescription + "):";
 			}
 
-			consoleOut.WriteLine(introLine);
+			_writer.WriteLine(introLine);
 
 			foreach (var value in allValuesToTrace.OrderBy(k => k.Key))
 			{
-				consoleOut.WriteLine("    " + value.Key + " : " + value.Value);
+				_writer.WriteLine("    " + value.Key + " : " + value.Value);
 			}
 
-			consoleOut.WriteLine();
+			_writer.WriteLine();
 		}
 
 		private static string MakeObjectReadable(object value)

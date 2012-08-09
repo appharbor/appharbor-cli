@@ -11,12 +11,14 @@ namespace AppHarbor
 		private readonly IAliasMatcher _aliasMatcher;
 		private readonly ITypeNameMatcher _typeNameMatcher;
 		private readonly IKernel _kernel;
+		private readonly ConsoleHelper _consoleHelper;
 
-		public CommandDispatcher(IAliasMatcher aliasMatcher, ITypeNameMatcher typeNameMatcher, IKernel kernel)
+		public CommandDispatcher(IAliasMatcher aliasMatcher, ITypeNameMatcher typeNameMatcher, IKernel kernel, ConsoleHelper consoleHelper)
 		{
 			_aliasMatcher = aliasMatcher;
 			_typeNameMatcher = typeNameMatcher;
 			_kernel = kernel;
+			_consoleHelper = consoleHelper;
 		}
 
 		public void Dispatch(string[] args)
@@ -40,7 +42,7 @@ namespace AppHarbor
 				throw new DispatchException(string.Format("The command \"{0}\" doesn't match a command name or alias", string.Join(" ", args)));
 			}
 
-			var console = Console.Out;
+			var consoleWriter = Console.Out;
 			ConsoleCommand command = null;
 			try
 			{
@@ -54,7 +56,7 @@ namespace AppHarbor
 					CheckRemainingArguments(remainingArguments, (int)command.RemainingArgumentsCount);
 				}
 
-				ConsoleHelp.ShowParsedCommand(command, console);
+				_consoleHelper.ShowParsedCommand(command);
 
 				command.Run(remainingArguments.ToArray());
 			}
@@ -68,14 +70,14 @@ namespace AppHarbor
 			}
 			catch (Exception exception)
 			{
-				if (!ConsoleHelpAsException.WriterErrorMessage(exception, console))
+				if (!ConsoleHelpAsException.WriterErrorMessage(exception, consoleWriter))
 				{
 					throw new DispatchException();
 				}
-				console.WriteLine();
+				consoleWriter.WriteLine();
 				if (exception is ConsoleHelpAsException || exception is OptionException)
 				{
-					ConsoleHelp.ShowCommandHelp(command, console);
+					_consoleHelper.ShowCommandHelp(command);
 				}
 			}
 		}
