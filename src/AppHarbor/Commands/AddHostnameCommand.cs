@@ -3,7 +3,7 @@
 namespace AppHarbor.Commands
 {
 	[CommandHelp("Add a hostname", "[HOSTNAME]")]
-	public class AddHostnameCommand : ICommand
+	public class AddHostnameCommand : ConsoleCommand
 	{
 		private readonly IApplicationConfiguration _applicationConfiguration;
 		private readonly IAppHarborClient _appharborClient;
@@ -14,7 +14,7 @@ namespace AppHarbor.Commands
 			_appharborClient = appharborClient;
 		}
 
-		public void Run(string[] arguments)
+		public override void Run(string[] arguments)
 		{
 			if (arguments.Length == 0)
 			{

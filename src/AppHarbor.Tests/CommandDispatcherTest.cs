@@ -13,9 +13,9 @@ namespace AppHarbor.Tests
 		private static Type FooCommandType = typeof(FooCommand);
 
 		[CommandHelp("foo description", options: "", alias: "qux")]
-		public class FooCommand : ICommand
+		public class FooCommand : ConsoleCommand
 		{
-			public virtual void Run(string[] arguments)
+			public override void Run(string[] arguments)
 			{
 			}
 		}

@@ -5,7 +5,7 @@ using System.Linq;
 namespace AppHarbor.Commands
 {
 	[CommandHelp("List latest builds")]
-	public class BuildCommand : ICommand
+	public class BuildCommand : ConsoleCommand
 	{
 		public const string OutputFormat = "{0,-43}{1,-13}{2,5}";
 
@@ -20,7 +20,7 @@ namespace AppHarbor.Commands
 			_writer = writer;
 		}
 
-		public void Run(string[] arguments)
+		public override void Run(string[] arguments)
 		{
 			var applicationId = _applicationConfiguration.GetApplicationId();
 			var builds = _appharborClient.GetBuilds(applicationId);

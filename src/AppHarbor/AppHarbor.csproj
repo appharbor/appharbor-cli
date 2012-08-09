@@ -99,7 +99,6 @@
     <Compile Include="IAliasMatcher.cs" />
     <Compile Include="IAppHarborClient.cs" />
     <Compile Include="IApplicationConfiguration.cs" />
-    <Compile Include="ICommand.cs" />
     <Compile Include="ICommandMatcher.cs" />
     <Compile Include="IFileSystem.cs" />
     <Compile Include="IGitCommand.cs" />

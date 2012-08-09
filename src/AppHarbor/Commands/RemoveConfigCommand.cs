@@ -1,7 +1,7 @@
 ﻿namespace AppHarbor.Commands
 {
 	[CommandHelp("Remove configuration variable", "[KEY1 KEY2..]")]
-	public class RemoveConfigCommand : ICommand
+	public class RemoveConfigCommand : ConsoleCommand
 	{
 		private readonly IApplicationConfiguration _applicationConfiguration;
 		private readonly IAppHarborClient _appharborClient;
@@ -12,7 +12,7 @@
 			_appharborClient = appharborClient;
 		}
 
-		public void Run(string[] arguments)
+		public override void Run(string[] arguments)
 		{
 			if (arguments.Length == 0)
 			{

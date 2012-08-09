@@ -4,7 +4,7 @@ using System.Linq;
 namespace AppHarbor.Commands
 {
 	[CommandHelp("List all associated hostnames")]
-	public class HostnameCommand : ICommand
+	public class HostnameCommand : ConsoleCommand
 	{
 		private readonly IApplicationConfiguration _applicationConfiguration;
 		private readonly IAppHarborClient _appharborClient;
@@ -17,7 +17,7 @@ namespace AppHarbor.Commands
 			_writer = writer;
 		}
 
-		public void Run(string[] arguments)
+		public override void Run(string[] arguments)
 		{
 			var applicationId = _applicationConfiguration.GetApplicationId();
 			var hostnames = _appharborClient.GetHostnames(applicationId);
