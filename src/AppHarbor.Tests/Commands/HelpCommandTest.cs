@@ -18,7 +18,7 @@ namespace AppHarbor.Tests.Commands
 		[CommandHelp("Lorem Ipsum motherfucker", "[bar]")]
 		class FooBarCommand { }
 
-		[CommandHelp("Ipsum lol", "[Quz]", "quux")]
+		[CommandHelp("Ipsum lol", "[Quz]", 1, "quux")]
 		class BazQuxCommand { }
 
 		[Fact]

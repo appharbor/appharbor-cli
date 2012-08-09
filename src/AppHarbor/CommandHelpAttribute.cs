@@ -4,11 +4,12 @@ namespace AppHarbor
 {
 	public class CommandHelpAttribute : Attribute
 	{
-		public CommandHelpAttribute(string description, string options = "", string alias = "")
+		public CommandHelpAttribute(string description, string additionalArgumentsHelp = "", int numberOfAdditionalArguments = 0, string alias = "")
 		{
 			Alias = alias;
 			Description = description;
-			Options = options;
+			AdditionalArgumentHelpText = additionalArgumentsHelp;
+			AdditionalArgumentsCount = numberOfAdditionalArguments;
 		}
 
 		public string Alias
@@ -23,7 +24,13 @@ namespace AppHarbor
 			private set;
 		}
 
-		public string Options
+		public string AdditionalArgumentHelpText
+		{
+			get;
+			private set;
+		}
+
+		public int AdditionalArgumentsCount
 		{
 			get;
 			private set;

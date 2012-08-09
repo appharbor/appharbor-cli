@@ -12,7 +12,7 @@ namespace AppHarbor.Tests
 	{
 		private static Type FooCommandType = typeof(FooCommand);
 
-		[CommandHelp("foo description", options: "", alias: "qux")]
+		[CommandHelp("foo description", additionalArgumentsHelp: "", alias: "qux")]
 		public class FooCommand : ConsoleCommand
 		{
 			public override void Run(string[] arguments)

@@ -8,7 +8,7 @@ namespace AppHarbor.Tests
 {
 	public class AliasMatcherTest
 	{
-		[CommandHelp("foo", options: "", alias: "bar")]
+		[CommandHelp("foo", alias: "bar")]
 		class Foo { }
 
 		[Fact]

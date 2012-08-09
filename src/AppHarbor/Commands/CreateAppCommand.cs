@@ -3,7 +3,7 @@ using System.Linq;
 
 namespace AppHarbor.Commands
 {
-	[CommandHelp("Create an application", "[NAME]", "create")]
+	[CommandHelp("Create an application", alias: "create", numberOfAdditionalArguments: 1, additionalArgumentsHelp:  "<NAME>")]
 	public class CreateAppCommand : ConsoleCommand
 	{
 		private readonly IAppHarborClient _appHarborClient;
@@ -19,11 +19,6 @@ namespace AppHarbor.Commands
 
 		public override void Run(string[] arguments)
 		{
-			if (arguments.Length == 0)
-			{
-				throw new CommandException("An application name must be provided to create an application");
-			}
-
 			var result = _appHarborClient.CreateApplication(arguments.First(), arguments.Skip(1).FirstOrDefault());
 
 			_textWriter.WriteLine("Created application \"{0}\" | URL: https://{0}.apphb.com", result.Id);

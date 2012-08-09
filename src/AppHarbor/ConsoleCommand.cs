@@ -22,6 +22,11 @@ namespace AppHarbor
 			var splitted = SplitUpperCase(commandType.Name).Where(x => x != "Command");
 			Command = string.Join(" ", splitted.Reverse().ToArray()).ToLower();
 			var helpAttribute = commandType.GetCustomAttributes(true).OfType<CommandHelpAttribute>().Single();
+
+			if (helpAttribute.AdditionalArgumentsCount > 0)
+			{
+				HasAdditionalArguments(helpAttribute.AdditionalArgumentsCount, helpAttribute.AdditionalArgumentHelpText);
+			}
 			OneLineDescription = helpAttribute.Description;
 		}
 
