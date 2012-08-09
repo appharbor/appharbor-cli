@@ -1,7 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Castle.MicroKernel;
-using System.Collections.Generic;
 using NDesk.Options;
 
 namespace AppHarbor
@@ -46,9 +46,8 @@ namespace AppHarbor
 			{
 				command = (ConsoleCommand)_kernel.Resolve(matchingType);
 
+				var remainingArguments = command.Options.Parse(args.Skip(argsToSkip));
 				CheckRequiredArguments(command);
-
-				var remainingArguments = args.Skip(argsToSkip).ToArray();
 
 				if (command.RemainingArgumentsCount > 0)
 				{
@@ -57,7 +56,7 @@ namespace AppHarbor
 
 				ConsoleHelp.ShowParsedCommand(command, console);
 
-				command.Run(remainingArguments);
+				command.Run(remainingArguments.ToArray());
 			}
 			catch (ApiException exception)
 			{
