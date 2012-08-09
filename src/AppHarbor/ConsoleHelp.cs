@@ -19,7 +19,9 @@ namespace AppHarbor
 			console.Write("Expected usage: {0} {1} ", AppDomain.CurrentDomain.FriendlyName, selectedCommand.Command);
 
 			if (haveOptions)
+			{
 				console.Write("<options> ");
+			}
 
 			console.WriteLine(selectedCommand.RemainingArgumentsHelpText);
 
@@ -38,15 +40,16 @@ namespace AppHarbor
 				return;
 			}
 
-			string[] skippedProperties = new[]{
-                "Command",
-                "OneLineDescription",
-                "Options",
-                "TraceCommandAfterParse",
-                "RemainingArgumentsCount",
-                "RemainingArgumentsHelpText",
-                "RequiredOptions"
-            };
+			string[] skippedProperties = new[]
+			{
+				"Command",
+				"OneLineDescription",
+				"Options",
+				"TraceCommandAfterParse",
+				"RemainingArgumentsCount",
+				"RemainingArgumentsHelpText",
+				"RequiredOptions"
+			};
 
 			var properties = consoleCommand.GetType().GetProperties(BindingFlags.Public | BindingFlags.Instance)
 				.Where(p => !skippedProperties.Contains(p.Name));
@@ -54,7 +57,7 @@ namespace AppHarbor
 			var fields = consoleCommand.GetType().GetFields(BindingFlags.Public | BindingFlags.Instance)
 				.Where(p => !skippedProperties.Contains(p.Name));
 
-			Dictionary<string, string> allValuesToTrace = new Dictionary<string, string>();
+			var allValuesToTrace = new Dictionary<string, string>();
 
 			foreach (var property in properties)
 			{
@@ -69,22 +72,28 @@ namespace AppHarbor
 
 			consoleOut.WriteLine();
 
-			string introLine = String.Format("Executing {0}", consoleCommand.Command);
+			var introLine = string.Format("Executing {0}", consoleCommand.Command);
 
 			if (string.IsNullOrEmpty(consoleCommand.OneLineDescription))
+			{
 				introLine = introLine + ":";
+			}
 			else
+			{
 				introLine = introLine + " (" + consoleCommand.OneLineDescription + "):";
+			}
 
 			consoleOut.WriteLine(introLine);
 
 			foreach (var value in allValuesToTrace.OrderBy(k => k.Key))
+			{
 				consoleOut.WriteLine("    " + value.Key + " : " + value.Value);
+			}
 
 			consoleOut.WriteLine();
 		}
 
-		static string MakeObjectReadable(object value)
+		private static string MakeObjectReadable(object value)
 		{
 			string readable;
 
@@ -102,9 +111,13 @@ namespace AppHarbor
 				readable = readable;
 			}
 			else if (value != null)
+			{
 				readable = value.ToString();
+			}
 			else
+			{
 				readable = "null";
+			}
 			return readable;
 		}
 	}
