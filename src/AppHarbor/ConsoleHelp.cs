@@ -107,8 +107,6 @@ namespace AppHarbor
 					readable += separator + MakeObjectReadable(member);
 					separator = ", ";
 				}
-
-				readable = readable;
 			}
 			else if (value != null)
 			{
