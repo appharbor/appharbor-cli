@@ -70,15 +70,12 @@ namespace AppHarbor
 			}
 			catch (Exception exception)
 			{
-				if (!ConsoleHelpAsException.WriterErrorMessage(exception, consoleWriter))
-				{
-					throw new DispatchException();
-				}
-				consoleWriter.WriteLine();
-				if (exception is ConsoleHelpAsException || exception is OptionException)
+				if (exception is ArgumentParsingException || exception is OptionException)
 				{
 					_consoleHelper.ShowCommandHelp(command);
+					throw new DispatchException(exception.Message);
 				}
+				throw;
 			}
 		}
 
@@ -89,7 +86,7 @@ namespace AppHarbor
 
 			if (missingOptions.Any())
 			{
-				throw new ConsoleHelpAsException("Missing option: " + string.Join(", ", missingOptions));
+				throw new ArgumentParsingException("Missing option: " + string.Join(", ", missingOptions));
 			}
 		}
 
@@ -97,13 +94,13 @@ namespace AppHarbor
 		{
 			if (remainingArguments.Count() < parametersRequiredAfterOptions)
 			{
-				throw new ConsoleHelpAsException(
-					string.Format("Invalid number of arguments-- expected {0} more.", parametersRequiredAfterOptions - remainingArguments.Count()));
+				throw new ArgumentParsingException(
+					string.Format("Invalid number of arguments -- expected {0} or more.", parametersRequiredAfterOptions - remainingArguments.Count()));
 			}
 
 			if (remainingArguments.Count() > parametersRequiredAfterOptions)
 			{
-				throw new ConsoleHelpAsException("Extra parameters specified: " + string.Join(", ", remainingArguments.Skip(parametersRequiredAfterOptions).ToArray()));
+				throw new ArgumentParsingException("Extra parameters specified: " + string.Join(", ", remainingArguments.Skip(parametersRequiredAfterOptions).ToArray()));
 			}
 		}
 

@@ -90,7 +90,7 @@
     <Compile Include="Commands\UserCommand.cs" />
     <Compile Include="ConsoleCommand.cs" />
     <Compile Include="ConsoleHelper.cs" />
-    <Compile Include="ConsoleHelpAsException.cs" />
+    <Compile Include="ArgumentParsingException.cs" />
     <Compile Include="DispatchException.cs" />
     <Compile Include="GitCommand.cs" />
     <Compile Include="GitCommandException.cs" />
