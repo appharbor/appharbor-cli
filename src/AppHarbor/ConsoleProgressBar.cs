@@ -17,7 +17,7 @@ namespace AppHarbor
 			_perSecondAverages = new List<double>();
 		}
 
-		public void RenderProgress(string message, string itemType, long processedItems, long totalItems)
+		public void Update(string message, string itemType, long processedItems, long totalItems)
 		{
 			var secondsSinceLastAverage = (DateTime.Now - _lastProgressEvent.Key).TotalSeconds;
 

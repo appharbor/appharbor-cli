@@ -25,7 +25,7 @@ namespace AppHarbor
 			{
 				archive.WriteEntry(entries[i], true);
 
-				consoleProgressBar.RenderProgress("Packing files", "files", i, entriesCount);
+				consoleProgressBar.Update("Packing files", "files", i, entriesCount);
 			}
 
 			archive.Close();
