@@ -17,7 +17,38 @@ namespace AppHarbor
 			_perSecondAverages = new List<double>();
 		}
 
-		public static void Render(double percentage, string message)
+		public void RenderProgress(string message, string itemType, long processedItems, long totalItems)
+		{
+			var secondsSinceLastAverage = (DateTime.Now - _lastProgressEvent.Key).TotalSeconds;
+
+			if (secondsSinceLastAverage > 2)
+			{
+				if (_lastProgressEvent.Key != DateTime.MinValue)
+				{
+					var itemsSinceLastProgress = processedItems - _lastProgressEvent.Value;
+
+					var itemsPerSecond = itemsSinceLastProgress / secondsSinceLastAverage;
+					_perSecondAverages.Add(itemsPerSecond);
+					if (_perSecondAverages.Count() > 20)
+					{
+						_perSecondAverages.RemoveAt(0);
+					}
+				}
+				_lastProgressEvent = new KeyValuePair<DateTime, double>(DateTime.Now, processedItems);
+			}
+
+			var itemsRemaining = totalItems - processedItems;
+			var timeEstimate = _perSecondAverages.Count() < 1 ? "Estimating time left" :
+				string.Format("{0} left", TimeSpan
+				.FromSeconds(itemsRemaining / WeightedAverage(_perSecondAverages))
+				.GetHumanized());
+
+			var percentDone = (processedItems * 100) / totalItems;
+			ConsoleProgressBar.Render(percentDone, string.Format("{0} ({1}% of {2:0.0} {3}). {4}",
+				message, percentDone, totalItems, itemType, timeEstimate));
+		}
+
+		private static void Render(double percentage, string message)
 		{
 			Console.CursorLeft = 0;
 
@@ -46,37 +77,6 @@ namespace AppHarbor
 					Console.CursorVisible = true;
 				}
 			}
-		}
-
-		public void RenderProgress(object sender, long processedItems, long totalItems)
-		{
-			var secondsSinceLastAverage = (DateTime.Now - _lastProgressEvent.Key).TotalSeconds;
-
-			if (secondsSinceLastAverage > 2)
-			{
-				if (_lastProgressEvent.Key != DateTime.MinValue)
-				{
-					var itemsSinceLastProgress = processedItems - _lastProgressEvent.Value;
-
-					var itemsPerSecond = itemsSinceLastProgress / secondsSinceLastAverage;
-					_perSecondAverages.Add(itemsPerSecond);
-					if (_perSecondAverages.Count() > 20)
-					{
-						_perSecondAverages.RemoveAt(0);
-					}
-				}
-				_lastProgressEvent = new KeyValuePair<DateTime, double>(DateTime.Now, processedItems);
-			}
-
-			var itemsRemaining = totalItems - processedItems;
-			var timeEstimate = _perSecondAverages.Count() < 1 ? "Estimating time left" :
-				string.Format("{0} left", TimeSpan
-				.FromSeconds(itemsRemaining / WeightedAverage(_perSecondAverages))
-				.GetHumanized());
-
-			var percentDone = (itemsRemaining * 100) / totalItems;
-			ConsoleProgressBar.Render(percentDone, string.Format("Uploading package ({0}% of {1:0.0} MB). {2}",
-					percentDone, totalItems / 1048576, timeEstimate));
 		}
 
 

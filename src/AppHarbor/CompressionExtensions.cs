@@ -19,12 +19,13 @@ namespace AppHarbor
 				.ToList();
 
 			var entriesCount = entries.Count();
+
+			var consoleProgressBar = new ConsoleProgressBar();
 			for (var i = 0; i < entriesCount; i++)
 			{
 				archive.WriteEntry(entries[i], true);
 
-				ConsoleProgressBar.Render(i * 100 / (double)entriesCount,
-					string.Format("Packing files ({0} of {1})", i + 1, entriesCount));
+				consoleProgressBar.RenderProgress("Packing files", "files", i, entriesCount);
 			}
 
 			archive.Close();
