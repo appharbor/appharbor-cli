@@ -80,33 +80,33 @@ namespace AppHarbor.Commands
 			return federatedCredentials.Data;
 		}
 
-		private KeyValuePair<DateTime, double> lastUploadProgressEvent;
-		private IList<double> bytesPerSecondAverages = new List<double>();
+		private KeyValuePair<DateTime, double> _lastUploadProgressEvent;
+		private IList<double> _bytesPerSecondAverages = new List<double>();
 
 		private void RenderProgress(object sender, UploadProgressArgs uploadProgressArgs)
 		{
-			var secondsSinceLastAverage = (DateTime.Now - lastUploadProgressEvent.Key).TotalSeconds;
+			var secondsSinceLastAverage = (DateTime.Now - _lastUploadProgressEvent.Key).TotalSeconds;
 
 			if (secondsSinceLastAverage > 2)
 			{
-				if (lastUploadProgressEvent.Key != DateTime.MinValue)
+				if (_lastUploadProgressEvent.Key != DateTime.MinValue)
 				{
-					var bytesSinceLastProgress = uploadProgressArgs.TransferredBytes - lastUploadProgressEvent.Value;
+					var bytesSinceLastProgress = uploadProgressArgs.TransferredBytes - _lastUploadProgressEvent.Value;
 
 					var bytesPerSecond = bytesSinceLastProgress / secondsSinceLastAverage;
-					bytesPerSecondAverages.Add(bytesPerSecond);
-					if (bytesPerSecondAverages.Count() > 20)
+					_bytesPerSecondAverages.Add(bytesPerSecond);
+					if (_bytesPerSecondAverages.Count() > 20)
 					{
-						bytesPerSecondAverages.RemoveAt(0);
+						_bytesPerSecondAverages.RemoveAt(0);
 					}
 				}
-				lastUploadProgressEvent = new KeyValuePair<DateTime, double>(DateTime.Now, uploadProgressArgs.TransferredBytes);
+				_lastUploadProgressEvent = new KeyValuePair<DateTime, double>(DateTime.Now, uploadProgressArgs.TransferredBytes);
 			}
 
 			var bytesRemaining = uploadProgressArgs.TotalBytes - uploadProgressArgs.TransferredBytes;
-			var timeEstimate = bytesPerSecondAverages.Count() < 1 ? "Estimating time left" :
+			var timeEstimate = _bytesPerSecondAverages.Count() < 1 ? "Estimating time left" :
 				string.Format("{0} left", TimeSpan
-				.FromSeconds(bytesRemaining / WeightedAverage(bytesPerSecondAverages))
+				.FromSeconds(bytesRemaining / WeightedAverage(_bytesPerSecondAverages))
 				.GetHumanized());
 
 			ConsoleProgressBar.Render(uploadProgressArgs.PercentDone,
