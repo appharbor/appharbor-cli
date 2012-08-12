@@ -59,8 +59,8 @@ namespace AppHarbor.Commands
 						var progressBar = new ConsoleProgressBar();
 						const int bytesPerMegabyte = 1048576;
 
-						request.UploadProgressEvent += (x, y) => progressBar.Update(
-							"Uploading package", "MB", y.TransferredBytes / bytesPerMegabyte, y.TotalBytes / bytesPerMegabyte);
+						request.UploadProgressEvent += (object x, UploadProgressArgs y) => progressBar
+							.Update("Uploading package", "MB", y.TransferredBytes / bytesPerMegabyte, y.TotalBytes / bytesPerMegabyte);
 
 						transferUtility.Upload(request);
 
