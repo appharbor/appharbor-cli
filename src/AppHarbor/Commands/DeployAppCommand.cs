@@ -114,7 +114,7 @@ namespace AppHarbor.Commands
 					uploadProgressArgs.PercentDone, uploadProgressArgs.TotalBytes / 1048576, timeEstimate));
 		}
 
-		private bool TriggerAppHarborBuild(string applicationSlug, FederatedUploadCredentials credentials)
+		private void TriggerAppHarborBuild(string applicationSlug, FederatedUploadCredentials credentials)
 		{
 			_writer.WriteLine("The package will be deployed to application \"{0}\".", _applicationConfiguration.GetApplicationId());
 
@@ -149,7 +149,6 @@ namespace AppHarbor.Commands
 					_writer.WriteLine("Deploying... Open application overview with `appharbor open`.");
 				}
 			}
-			return true;
 		}
 
 		private static double WeightedAverage(IList<double> input, int spread = 40)
