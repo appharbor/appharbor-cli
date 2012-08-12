@@ -79,7 +79,6 @@ namespace AppHarbor
 			}
 		}
 
-
 		private static void OverwriteConsoleMessage(string message)
 		{
 			Console.CursorLeft = 0;
