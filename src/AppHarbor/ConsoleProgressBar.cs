@@ -8,8 +8,14 @@ namespace AppHarbor
 	public class ConsoleProgressBar
 	{
 		private const char ProgressBarCharacter = '\u2592';
+
 		private KeyValuePair<DateTime, double> _lastProgressEvent;
-		private IList<double> _perSecondAverages = new List<double>();
+		private readonly IList<double> _perSecondAverages;
+
+		public ConsoleProgressBar()
+		{
+			_perSecondAverages = new List<double>();
+		}
 
 		public static void Render(double percentage, string message)
 		{
