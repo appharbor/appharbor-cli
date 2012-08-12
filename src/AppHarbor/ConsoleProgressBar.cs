@@ -48,7 +48,7 @@ namespace AppHarbor
 			}
 		}
 
-		public void RenderProgress(object sender, UploadProgressArgs uploadProgressArgs)
+		public void RenderProgress(object sender, long processedItems, long totalItems)
 		{
 			var secondsSinceLastAverage = (DateTime.Now - _lastProgressEvent.Key).TotalSeconds;
 
@@ -56,7 +56,7 @@ namespace AppHarbor
 			{
 				if (_lastProgressEvent.Key != DateTime.MinValue)
 				{
-					var itemsSinceLastProgress = uploadProgressArgs.TransferredBytes - _lastProgressEvent.Value;
+					var itemsSinceLastProgress = processedItems - _lastProgressEvent.Value;
 
 					var itemsPerSecond = itemsSinceLastProgress / secondsSinceLastAverage;
 					_perSecondAverages.Add(itemsPerSecond);
@@ -65,18 +65,18 @@ namespace AppHarbor
 						_perSecondAverages.RemoveAt(0);
 					}
 				}
-				_lastProgressEvent = new KeyValuePair<DateTime, double>(DateTime.Now, uploadProgressArgs.TransferredBytes);
+				_lastProgressEvent = new KeyValuePair<DateTime, double>(DateTime.Now, processedItems);
 			}
 
-			var itemsRemaining = uploadProgressArgs.TotalBytes - uploadProgressArgs.TransferredBytes;
+			var itemsRemaining = totalItems - processedItems;
 			var timeEstimate = _perSecondAverages.Count() < 1 ? "Estimating time left" :
 				string.Format("{0} left", TimeSpan
 				.FromSeconds(itemsRemaining / WeightedAverage(_perSecondAverages))
 				.GetHumanized());
 
-			ConsoleProgressBar.Render(uploadProgressArgs.PercentDone,
-				string.Format("Uploading package ({0}% of {1:0.0} MB). {2}",
-					uploadProgressArgs.PercentDone, uploadProgressArgs.TotalBytes / 1048576, timeEstimate));
+			var percentDone = (itemsRemaining * 100) / totalItems;
+			ConsoleProgressBar.Render(percentDone, string.Format("Uploading package ({0}% of {1:0.0} MB). {2}",
+					percentDone, totalItems / 1048576, timeEstimate));
 		}
 
 

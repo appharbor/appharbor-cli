@@ -57,7 +57,7 @@ namespace AppHarbor.Commands
 							PartSize = partSize,
 						};
 						var progressBar = new ConsoleProgressBar();
-						request.UploadProgressEvent += progressBar.RenderProgress;
+						request.UploadProgressEvent += (x, y) => progressBar.RenderProgress(x, y.TransferredBytes, y.TotalBytes);
 
 						transferUtility.Upload(request);
 
