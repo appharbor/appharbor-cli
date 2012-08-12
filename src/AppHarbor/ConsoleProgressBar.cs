@@ -8,8 +8,8 @@ namespace AppHarbor
 	public class ConsoleProgressBar
 	{
 		private const char ProgressBarCharacter = '\u2592';
-		private KeyValuePair<DateTime, double> _lastUploadProgressEvent;
-		private IList<double> _bytesPerSecondAverages = new List<double>();
+		private KeyValuePair<DateTime, double> _lastProgressEvent;
+		private IList<double> _perSecondAverages = new List<double>();
 
 		public static void Render(double percentage, string message)
 		{
@@ -44,28 +44,28 @@ namespace AppHarbor
 
 		public void RenderProgress(object sender, UploadProgressArgs uploadProgressArgs)
 		{
-			var secondsSinceLastAverage = (DateTime.Now - _lastUploadProgressEvent.Key).TotalSeconds;
+			var secondsSinceLastAverage = (DateTime.Now - _lastProgressEvent.Key).TotalSeconds;
 
 			if (secondsSinceLastAverage > 2)
 			{
-				if (_lastUploadProgressEvent.Key != DateTime.MinValue)
+				if (_lastProgressEvent.Key != DateTime.MinValue)
 				{
-					var bytesSinceLastProgress = uploadProgressArgs.TransferredBytes - _lastUploadProgressEvent.Value;
+					var itemsSinceLastProgress = uploadProgressArgs.TransferredBytes - _lastProgressEvent.Value;
 
-					var bytesPerSecond = bytesSinceLastProgress / secondsSinceLastAverage;
-					_bytesPerSecondAverages.Add(bytesPerSecond);
-					if (_bytesPerSecondAverages.Count() > 20)
+					var itemsPerSecond = itemsSinceLastProgress / secondsSinceLastAverage;
+					_perSecondAverages.Add(itemsPerSecond);
+					if (_perSecondAverages.Count() > 20)
 					{
-						_bytesPerSecondAverages.RemoveAt(0);
+						_perSecondAverages.RemoveAt(0);
 					}
 				}
-				_lastUploadProgressEvent = new KeyValuePair<DateTime, double>(DateTime.Now, uploadProgressArgs.TransferredBytes);
+				_lastProgressEvent = new KeyValuePair<DateTime, double>(DateTime.Now, uploadProgressArgs.TransferredBytes);
 			}
 
-			var bytesRemaining = uploadProgressArgs.TotalBytes - uploadProgressArgs.TransferredBytes;
-			var timeEstimate = _bytesPerSecondAverages.Count() < 1 ? "Estimating time left" :
+			var itemsRemaining = uploadProgressArgs.TotalBytes - uploadProgressArgs.TransferredBytes;
+			var timeEstimate = _perSecondAverages.Count() < 1 ? "Estimating time left" :
 				string.Format("{0} left", TimeSpan
-				.FromSeconds(bytesRemaining / WeightedAverage(_bytesPerSecondAverages))
+				.FromSeconds(itemsRemaining / WeightedAverage(_perSecondAverages))
 				.GetHumanized());
 
 			ConsoleProgressBar.Render(uploadProgressArgs.PercentDone,
