@@ -43,7 +43,7 @@ namespace AppHarbor.Commands
 
 					using (var s3Client = new AmazonS3Client(uploadCredentials.GetSessionCredentials()))
 					{
-						var uploadParts = 5;
+						const int uploadParts = 5;
 						var partSize = packageStream.Length / uploadParts;
 
 						var transferUtilityConfig = new TransferUtilityConfig();
