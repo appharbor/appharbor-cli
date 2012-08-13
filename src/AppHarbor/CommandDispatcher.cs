@@ -21,14 +21,14 @@ namespace AppHarbor
 		public void Dispatch(string[] args)
 		{
 			var commandArguments = args.TakeWhile(x => !x.StartsWith("-"));
-			var commandString = commandArguments.Any() ? string.Concat(commandArguments.Skip(1).FirstOrDefault(), args[0]) : "help";
+			var commandTypeNameCandidate = commandArguments.Any() ? string.Concat(commandArguments.Skip(1).FirstOrDefault(), args[0]) : "help";
 
 			Type matchingType = null;
 			int argsToSkip = 0;
 
-			if (_typeNameMatcher.IsSatisfiedBy(commandString))
+			if (_typeNameMatcher.IsSatisfiedBy(commandTypeNameCandidate))
 			{
-				matchingType = _typeNameMatcher.GetMatchedType(commandString);
+				matchingType = _typeNameMatcher.GetMatchedType(commandTypeNameCandidate);
 				argsToSkip = 2;
 			}
 			else if (_aliasMatcher.IsSatisfiedBy(args[0]))
