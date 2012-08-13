@@ -23,6 +23,7 @@ Once installed, you can log in to create and administer AppHarbor applications:
 	  app                         #  List your applications
 	  app create [name]           #  Create an application ("create")
 	  app delete                  #  Delete application
+	  app deploy                  #  Deploy current directory
 	  app info                    #  Get application details
 	  app link [slug]             #  Link directory to an application ("link")
 	  app unlink                  #  Unlink application from directory ("unlink")
