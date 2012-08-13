@@ -29,7 +29,7 @@ namespace AppHarbor.Commands
 			_writer = writer;
 
 			_excludedDirectories = new List<string> { ".git", ".hg" };
-			OptionSet.Add("e|excluded-directory-name=", "Add excluded directory name", x => _excludedDirectories.Add(x));
+			OptionSet.Add("e|excluded-directory=", "Add excluded directory name", x => _excludedDirectories.Add(x));
 		}
 
 		protected override void InnerExecute(string[] arguments)
