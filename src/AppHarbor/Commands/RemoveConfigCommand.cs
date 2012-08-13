@@ -1,14 +1,13 @@
 ﻿namespace AppHarbor.Commands
 {
 	[CommandHelp("Remove configuration variable", "[KEY1 KEY2..]")]
-	public class RemoveConfigCommand : Command
+	public class RemoveConfigCommand : ApplicationCommand
 	{
-		private readonly IApplicationConfiguration _applicationConfiguration;
 		private readonly IAppHarborClient _appharborClient;
 
 		public RemoveConfigCommand(IApplicationConfiguration applicationConfiguration, IAppHarborClient appharborClient)
+			: base(applicationConfiguration)
 		{
-			_applicationConfiguration = applicationConfiguration;
 			_appharborClient = appharborClient;
 		}
 
@@ -19,11 +18,9 @@
 				throw new CommandException("No configuration variable key was specified");
 			}
 
-			var applicationId = _applicationConfiguration.GetApplicationId();
-
 			foreach (var key in arguments)
 			{
-				_appharborClient.RemoveConfigurationVariable(applicationId, key);
+				_appharborClient.RemoveConfigurationVariable(ApplicationId, key);
 			}
 		}
 	}

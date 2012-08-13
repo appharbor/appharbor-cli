@@ -5,25 +5,23 @@ using System.Linq;
 namespace AppHarbor.Commands
 {
 	[CommandHelp("List latest builds")]
-	public class BuildCommand : Command
+	public class BuildCommand : ApplicationCommand
 	{
 		public const string OutputFormat = "{0,-43}{1,-13}{2,5}";
 
-		private readonly IApplicationConfiguration _applicationConfiguration;
 		private readonly IAppHarborClient _appharborClient;
 		private readonly TextWriter _writer;
 
 		public BuildCommand(IApplicationConfiguration applicationConfiguration, IAppHarborClient appharborClient, TextWriter writer)
+			: base(applicationConfiguration)
 		{
-			_applicationConfiguration = applicationConfiguration;
 			_appharborClient = appharborClient;
 			_writer = writer;
 		}
 
 		protected override void InnerExecute(string[] arguments)
 		{
-			var applicationId = _applicationConfiguration.GetApplicationId();
-			var builds = _appharborClient.GetBuilds(applicationId);
+			var builds = _appharborClient.GetBuilds(ApplicationId);
 
 			_writer.WriteLine(string.Format(OutputFormat, "Commit", "Status", "Deployed"));
 
