@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Linq;
 using Castle.MicroKernel;
 
@@ -38,10 +39,12 @@ namespace AppHarbor
 				throw new DispatchException(string.Format("The command \"{0}\" doesn't match a command name or alias", string.Join(" ", args)));
 			}
 
+			var command = (Command)_kernel.Resolve(matchingType);
+			var commandArguments = command.OptionSet.Parse(args.Skip(argsToSkip));
+
 			try
 			{
-				var command = (Command)_kernel.Resolve(matchingType);
-				command.Execute(args.Skip(argsToSkip).ToArray());
+				command.Execute(commandArguments.ToArray());
 			}
 			catch (ApiException exception)
 			{
@@ -49,6 +52,9 @@ namespace AppHarbor
 			}
 			catch (CommandException exception)
 			{
+				command.WriteUsage(invokedWith: string.Join(" ", args.TakeWhile(x => !x.StartsWith("-"))),
+					writer: _kernel.Resolve<TextWriter>());
+
 				throw new DispatchException(exception.Message);
 			}
 		}
