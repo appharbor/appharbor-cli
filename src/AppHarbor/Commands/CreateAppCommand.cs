@@ -21,7 +21,7 @@ namespace AppHarbor.Commands
 			OptionSet.Add("r|region=", "Optionally specify a region", x => _region = x);
 		}
 
-		public override void Execute(string[] arguments)
+		protected override void InnerExecute(string[] arguments)
 		{
 			if (arguments.Length == 0)
 			{

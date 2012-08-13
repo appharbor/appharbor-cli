@@ -15,7 +15,7 @@ namespace AppHarbor.Tests
 		[CommandHelp("foo description", options: "", alias: "qux")]
 		public class FooCommand : Command
 		{
-			public override void Execute(string[] arguments)
+			protected override void InnerExecute(string[] arguments)
 			{
 			}
 		}

@@ -15,7 +15,7 @@ namespace AppHarbor.Commands
 			_writer = writer;
 		}
 
-		public override void Execute(string[] arguments)
+		protected override void InnerExecute(string[] arguments)
 		{
 			var applications = _client.GetApplications();
 			foreach (var application in applications.OrderBy(x => x.Slug))
