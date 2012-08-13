@@ -13,7 +13,7 @@ namespace AppHarbor
 			_optionSet = new OptionSet();
 		}
 
-		public void Execute(string[] arguments)
+		public virtual void Execute(string[] arguments)
 		{
 			var commandArguments = OptionSet.Parse(arguments).ToArray();
 			InnerExecute(commandArguments);
