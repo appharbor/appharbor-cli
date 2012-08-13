@@ -5,8 +5,8 @@ using AppHarbor.Commands;
 using AppHarbor.Model;
 using Moq;
 using Ploeh.AutoFixture.Xunit;
-using Xunit.Extensions;
 using Xunit;
+using Xunit.Extensions;
 
 namespace AppHarbor.Tests.Commands
 {
