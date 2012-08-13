@@ -67,5 +67,15 @@ namespace AppHarbor.Tests.Commands
 
 			writer.Verify(x => x.WriteLine("Created application \"{0}\" | URL: https://{0}.apphb.com", applicationSlug), Times.Once());
 		}
+
+		[Theory, AutoCommandData]
+		public void ShouldSetRegionIsSpecified([Frozen]Mock<IAppHarborClient> client, [Frozen]Mock<TextWriter> writer, Mock<CreateAppCommand> command, string regionName, string applicationSlug)
+		{
+			client.Setup(x => x.CreateApplication(applicationSlug, regionName)).Returns(new CreateResult { Id = applicationSlug });
+
+			command.Object.Execute(new string[] { applicationSlug, "-r", regionName });
+
+			client.VerifyAll();
+		}
 	}
 }
