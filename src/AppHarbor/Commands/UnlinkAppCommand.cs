@@ -4,7 +4,7 @@ using System.IO;
 namespace AppHarbor.Commands
 {
 	[CommandHelp("Unlink application from directory", alias: "unlink")]
-	public class UnlinkAppCommand : ICommand
+	public class UnlinkAppCommand : Command
 	{
 		private readonly IApplicationConfiguration _applicationConfiguration;
 		private readonly TextWriter _writer;
@@ -15,7 +15,7 @@ namespace AppHarbor.Commands
 			_writer = writer;
 		}
 
-		public void Execute(string[] arguments)
+		public override void Execute(string[] arguments)
 		{
 			_applicationConfiguration.RemoveConfiguration();
 			_writer.WriteLine("Successfully unlinked directory.");

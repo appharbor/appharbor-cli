@@ -80,6 +80,7 @@
     <Compile Include="Commands\AddHostnameCommand.cs" />
     <Compile Include="Commands\AppCommand.cs" />
     <Compile Include="Commands\BuildCommand.cs" />
+    <Compile Include="Command.cs" />
     <Compile Include="Commands\ConfigCommand.cs" />
     <Compile Include="Commands\DeleteAppCommand.cs" />
     <Compile Include="Commands\CreateAppCommand.cs" />
@@ -107,7 +108,6 @@
     <Compile Include="IAliasMatcher.cs" />
     <Compile Include="IAppHarborClient.cs" />
     <Compile Include="IApplicationConfiguration.cs" />
-    <Compile Include="ICommand.cs" />
     <Compile Include="ICommandMatcher.cs" />
     <Compile Include="IFileSystem.cs" />
     <Compile Include="IGitCommand.cs" />

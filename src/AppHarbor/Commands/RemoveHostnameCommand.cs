@@ -1,7 +1,7 @@
 ﻿namespace AppHarbor.Commands
 {
 	[CommandHelp("Remove hostname from application", "[HOSTNAME]")]
-	public class RemoveHostnameCommand : ICommand
+	public class RemoveHostnameCommand : Command
 	{
 		private readonly IApplicationConfiguration _applicationConfiguration;
 		private readonly IAppHarborClient _appharborClient;
@@ -12,7 +12,7 @@
 			_appharborClient = appharborClient;
 		}
 
-		public void Execute(string[] arguments)
+		public override void Execute(string[] arguments)
 		{
 			if (arguments.Length == 0)
 			{

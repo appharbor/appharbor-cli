@@ -5,7 +5,7 @@ using RestSharp.Contrib;
 namespace AppHarbor.Commands
 {
 	[CommandHelp("Login to AppHarbor", alias: "login")]
-	public class LoginUserCommand : ICommand
+	public class LoginUserCommand : Command
 	{
 		private readonly IAccessTokenConfiguration _accessTokenConfiguration;
 		private readonly IMaskedInput _maskedInput;
@@ -20,7 +20,7 @@ namespace AppHarbor.Commands
 			_writer = writer;
 		}
 
-		public void Execute(string[] arguments)
+		public override void Execute(string[] arguments)
 		{
 			if (_accessTokenConfiguration.GetAccessToken() != null)
 			{

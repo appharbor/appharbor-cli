@@ -4,7 +4,7 @@ using System.Linq;
 namespace AppHarbor.Commands
 {
 	[CommandHelp("Create an application", "[NAME]", "create")]
-	public class CreateAppCommand : ICommand
+	public class CreateAppCommand : Command
 	{
 		private readonly IAppHarborClient _appHarborClient;
 		private readonly IApplicationConfiguration _applicationConfiguration;
@@ -17,7 +17,7 @@ namespace AppHarbor.Commands
 			_textWriter = textWriter;
 		}
 
-		public void Execute(string[] arguments)
+		public override void Execute(string[] arguments)
 		{
 			if (arguments.Length == 0)
 			{
