@@ -15,7 +15,8 @@ namespace AppHarbor
 
 		public void Execute(string[] arguments)
 		{
-			InnerExecute(arguments);
+			var commandArguments = OptionSet.Parse(arguments).ToArray();
+			InnerExecute(commandArguments);
 		}
 
 		protected abstract void InnerExecute(string[] arguments);
