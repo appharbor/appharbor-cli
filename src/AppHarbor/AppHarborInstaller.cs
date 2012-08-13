@@ -24,7 +24,7 @@ namespace AppHarbor
 				.UsingFactoryMethod(x =>
 				{
 					return Assembly.GetExecutingAssembly().GetExportedTypes()
-						.Where(y => typeof(Command).IsAssignableFrom(y) && y.IsClass);
+						.Where(y => typeof(Command).IsAssignableFrom(y) && y.IsClass && !y.IsAbstract);
 				}));
 
 			container.Register(Component
