@@ -20,13 +20,15 @@ namespace AppHarbor
 
 		public void Dispatch(string[] args)
 		{
-			var commandArgument = args.Any() ? string.Concat(args.Skip(1).FirstOrDefault(), args[0]) : "help";
+			var commandArguments = args.TakeWhile(x => !x.StartsWith("-"));
+			var commandString = commandArguments.Any() ? string.Concat(commandArguments.Skip(1).FirstOrDefault(), args[0]) : "help";
+
 			Type matchingType = null;
 			int argsToSkip = 0;
 
-			if (_typeNameMatcher.IsSatisfiedBy(commandArgument))
+			if (_typeNameMatcher.IsSatisfiedBy(commandString))
 			{
-				matchingType = _typeNameMatcher.GetMatchedType(commandArgument);
+				matchingType = _typeNameMatcher.GetMatchedType(commandString);
 				argsToSkip = 2;
 			}
 			else if (_aliasMatcher.IsSatisfiedBy(args[0]))
@@ -51,7 +53,7 @@ namespace AppHarbor
 			}
 			catch (CommandException exception)
 			{
-				command.WriteUsage(invokedWith: string.Join(" ", args.TakeWhile(x => !x.StartsWith("-"))),
+				command.WriteUsage(invokedWith: string.Join(" ", commandArguments),
 					writer: _kernel.Resolve<TextWriter>());
 
 				if (!(exception is HelpException))
