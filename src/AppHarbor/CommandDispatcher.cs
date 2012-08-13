@@ -40,11 +40,10 @@ namespace AppHarbor
 			}
 
 			var command = (Command)_kernel.Resolve(matchingType);
-			var commandArguments = command.OptionSet.Parse(args.Skip(argsToSkip));
 
 			try
 			{
-				command.Execute(commandArguments.ToArray());
+				command.Execute(args.Skip(argsToSkip).ToArray());
 			}
 			catch (ApiException exception)
 			{
