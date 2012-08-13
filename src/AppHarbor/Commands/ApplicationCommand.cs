@@ -8,5 +8,13 @@
 		{
 			_applicationConfiguration = applicationConfiguration;
 		}
+
+		protected string ApplicationId
+		{
+			get
+			{
+				return _applicationConfiguration.GetApplicationId();
+			}
+		}
 	}
 }
