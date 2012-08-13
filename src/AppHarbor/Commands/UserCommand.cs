@@ -3,7 +3,7 @@
 namespace AppHarbor.Commands
 {
 	[CommandHelp("Show currently logged in user")]
-	public class UserCommand : ICommand
+	public class UserCommand : Command
 	{
 		private readonly IAppHarborClient _appharborClient;
 		private readonly TextWriter _writer;
@@ -14,7 +14,7 @@ namespace AppHarbor.Commands
 			_writer = writer;
 		}
 
-		public void Execute(string[] arguments)
+		protected override void InnerExecute(string[] arguments)
 		{
 			var user = _appharborClient.GetUser();
 
