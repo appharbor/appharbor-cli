@@ -41,6 +41,10 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\AppHarbor.NET.2.1.0\lib\net35\AppHarbor.Sdk.dll</HintPath>
     </Reference>
+    <Reference Include="AWSSDK, Version=1.4.15.1, Culture=neutral, PublicKeyToken=cd2d24cd2bace800, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\AWSSDK.1.4.15.1\lib\AWSSDK.dll</HintPath>
+    </Reference>
     <Reference Include="Castle.Core">
       <HintPath>..\packages\Castle.Core.3.0.0.4001\lib\net40-client\Castle.Core.dll</HintPath>
     </Reference>
@@ -92,7 +96,10 @@
     <Compile Include="Commands\UnlinkAppCommand.cs" />
     <Compile Include="Commands\UserCommand.cs" />
     <Compile Include="CompressionExtensions.cs" />
+    <Compile Include="ConsoleProgressBar.cs" />
     <Compile Include="DispatchException.cs" />
+    <Compile Include="FederatedUploadCredentials.cs" />
+    <Compile Include="ForegroundColor.cs" />
     <Compile Include="GitCommand.cs" />
     <Compile Include="GitCommandException.cs" />
     <Compile Include="GitRepositoryConfigurer.cs" />
@@ -108,10 +115,13 @@
     <Compile Include="IMaskedInput.cs" />
     <Compile Include="ITypeNameMatcher.cs" />
     <Compile Include="MaskedConsoleInput.cs" />
+    <Compile Include="MegaByteProgressBar.cs" />
     <Compile Include="PhysicalFileSystem.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RepositoryConfigurationException.cs" />
+    <Compile Include="TemporaryFileStream.cs" />
+    <Compile Include="TimeSpanExtensions.cs" />
     <Compile Include="TypeNameMatcher.cs" />
   </ItemGroup>
   <ItemGroup>

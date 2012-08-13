@@ -2,6 +2,8 @@
 using System.IO;
 using System.IO.Compression;
 using System.Net;
+using Amazon.S3;
+using Amazon.S3.Transfer;
 using RestSharp;
 
 namespace AppHarbor.Commands
@@ -11,6 +13,7 @@ namespace AppHarbor.Commands
 	{
 		private readonly string _accessToken;
 		private readonly IApplicationConfiguration _applicationConfiguration;
+		private readonly IRestClient _restClient;
 		private readonly TextReader _reader;
 		private readonly TextWriter _writer;
 
@@ -18,144 +21,101 @@ namespace AppHarbor.Commands
 		{
 			_accessToken = accessTokenConfiguration.GetAccessToken();
 			_applicationConfiguration = applicationConfiguration;
+			_restClient = new RestClient("https://packageclient.apphb.com/");
 			_reader = reader;
 			_writer = writer;
 		}
 
 		public void Execute(string[] arguments)
 		{
-			var client = new RestClient("https://packageclient.apphb.com/");
-			var urlRequest = new RestRequest("applications/{slug}/authenticatedurls", Method.POST);
-			urlRequest.AddUrlSegment("slug", _applicationConfiguration.GetApplicationId());
+			_writer.WriteLine("Getting upload credentials... ");
+			_writer.WriteLine();
 
-			_writer.Write("Getting authorized upload URL... ");
-
-			var presignedUrl = client.Execute(urlRequest).Content;
-
-			var sourceDirectory = new DirectoryInfo(Directory.GetCurrentDirectory());
-
-			HttpWebRequest httpRequest = WebRequest.Create(presignedUrl) as HttpWebRequest;
-			httpRequest.Method = "PUT";
-			httpRequest.AllowWriteStreamBuffering = false;
-
-			var timeout = 10000000;
-			httpRequest.Timeout = timeout;
-			httpRequest.ReadWriteTimeout = timeout;
-
-			using (var memoryStream = new MemoryStream())
+			var uploadCredentials = GetCredentials();
+			using (var packageStream = new TemporaryFileStream())
 			{
-				using (var gzipStream = new GZipStream(memoryStream, CompressionMode.Compress, true))
+				using (var gzipStream = new GZipStream(packageStream, CompressionMode.Compress, true))
 				{
-					_writer.WriteLine("Preparing deployment package for upload");
-					sourceDirectory.ToTar(gzipStream);
+					var sourceDirectory = new DirectoryInfo(Directory.GetCurrentDirectory());
+					sourceDirectory.ToTar(gzipStream, excludedDirectoryNames: new[] { ".git", ".hg" });
 
-					httpRequest.ContentLength = memoryStream.Length;
-					using (var uploadStream = httpRequest.GetRequestStream())
+					using (var s3Client = new AmazonS3Client(uploadCredentials.GetSessionCredentials()))
 					{
-						var buffer = new byte[4096];
-						memoryStream.Position = 0;
+						const int uploadParts = 5;
+						var partSize = packageStream.Length / uploadParts;
 
-						_writer.WriteLine("Uploading package (total size is {0} MB)",  Math.Round((decimal)memoryStream.Length / 1048576, 2));
+						var transferUtilityConfig = new TransferUtilityConfig();
+						transferUtilityConfig.NumberOfUploadThreads = uploadParts * 2;
 
-						while (true)
+						var transferUtility = new TransferUtility(s3Client, transferUtilityConfig);
+						packageStream.Position = 0;
+						var request = new TransferUtilityUploadRequest
 						{
-							var progressPercentage = (int)((memoryStream.Position * 100) / memoryStream.Length);
-							RenderConsoleProgress(progressPercentage, '\u2592', ConsoleColor.Green, string.Format("Uploading ({0}%)", progressPercentage));
+							InputStream = packageStream,
+							BucketName = uploadCredentials.Bucket,
+							Key = uploadCredentials.ObjectKey,
+							PartSize = partSize,
+						};
 
-							var bytesRead = memoryStream.Read(buffer, 0, buffer.Length);
-							if (bytesRead > 0)
-							{
-								uploadStream.Write(buffer, 0, bytesRead);
-							}
-							else
-							{
-								break;
-							}
-						}
-						Console.Write(" ");
+						var progressBar = new MegaByteProgressBar();
+						request.UploadProgressEvent += (object x, UploadProgressArgs y) => progressBar
+							.Update("Uploading package", y.TransferredBytes, y.TotalBytes);
+
+						transferUtility.Upload(request);
+
+						Console.CursorTop++;
+						_writer.WriteLine();
 					}
 				}
 			}
-			var response = (HttpWebResponse)httpRequest.GetResponse();
 
-			if (response.StatusCode != HttpStatusCode.OK)
-			{
-				_writer.WriteLine("Package upload failed. Please try again.");
-				return;
-			}
-
-			_writer.WriteLine("Package successfully uploaded.");
-			TriggerAppHarborBuild(_applicationConfiguration.GetApplicationId(), presignedUrl);
+			TriggerAppHarborBuild(_applicationConfiguration.GetApplicationId(), uploadCredentials);
 		}
 
-		private bool TriggerAppHarborBuild(string application_slug, string download_url)
+		private FederatedUploadCredentials GetCredentials()
 		{
-			var client = new RestClient("https://packageclient.apphb.com/");
+			var urlRequest = new RestRequest("applications/{slug}/uploadCredentials", Method.POST);
+			urlRequest.AddUrlSegment("slug", _applicationConfiguration.GetApplicationId());
 
-			_writer.Write("Write a deployment message: ");
+			var federatedCredentials = _restClient.Execute<FederatedUploadCredentials>(urlRequest);
+			return federatedCredentials.Data;
+		}
+
+		private void TriggerAppHarborBuild(string applicationSlug, FederatedUploadCredentials credentials)
+		{
+			_writer.WriteLine("The package will be deployed to application \"{0}\".", _applicationConfiguration.GetApplicationId());
+
+			using (new ForegroundColor(ConsoleColor.Yellow))
+			{
+				_writer.WriteLine();
+				_writer.Write("Enter a deployment message: ");
+			}
 			var commitMessage = _reader.ReadLine();
 
 			var request = new RestRequest("applications/{slug}/buildnotifications", Method.POST)
 			{
 				RequestFormat = DataFormat.Json
 			}
-				.AddUrlSegment("slug", application_slug)
-				.AddHeader("Authorization", "BEARER " + _accessToken)
+				.AddUrlSegment("slug", applicationSlug)
+				.AddHeader("Authorization", string.Format("BEARER {0}", _accessToken))
 				.AddBody(new
 				{
-					UploadUrl = download_url,
+					Bucket = credentials.Bucket,
+					ObjectKey = credentials.ObjectKey,
 					CommitMessage = commitMessage,
 				});
 
 			_writer.WriteLine("Notifying AppHarbor.");
 
-			var response = client.Execute(request);
+			var response = _restClient.Execute(request);
 
 			if (response.StatusCode == HttpStatusCode.OK)
 			{
-				_writer.WriteLine("AppHarbor notified, deploying... Open overview in browser with `appharbor open`.");
+				using (new ForegroundColor(ConsoleColor.Green))
+				{
+					_writer.WriteLine("Deploying... Open application overview with `appharbor open`.");
+				}
 			}
-			return true;
-		}
-
-		private static void RenderConsoleProgress(int percentage, char progressBarCharacter, ConsoleColor color, string message)
-		{
-			Console.CursorVisible = false;
-			ConsoleColor originalColor = Console.ForegroundColor;
-			Console.ForegroundColor = color;
-			Console.CursorLeft = 0;
-			int width = Console.WindowWidth - 1;
-			int newWidth = (int)((width * percentage) / 100d);
-			string progressBar = new string(progressBarCharacter, newWidth) +
-				  new string(' ', width - newWidth);
-
-			Console.Write(progressBar);
-			if (string.IsNullOrEmpty(message)) message = "";
-
-			try
-			{
-				Console.CursorTop++;
-			}
-			catch (ArgumentOutOfRangeException)
-			{
-			}
-
-			OverwriteConsoleMessage(message);
-			Console.CursorTop--;
-			Console.ForegroundColor = originalColor;
-			Console.CursorVisible = true;
-		}
-
-		private static void OverwriteConsoleMessage(string message)
-		{
-			Console.CursorLeft = 0;
-			int maxCharacterWidth = Console.WindowWidth - 1;
-			if (message.Length > maxCharacterWidth)
-			{
-				message = message.Substring(0, maxCharacterWidth - 3) + "...";
-			}
-			message = message + new string(' ', maxCharacterWidth - message.Length);
-			Console.Write(message);
 		}
 	}
 }
