@@ -40,6 +40,9 @@ Once installed, you can log in to create and administer AppHarbor applications:
 	  user logout                 #  Logout of AppHarbor ("logout")
 	  user                        #  Show currently logged in user
 
+	Common options:
+	  -h, --help                  #  Show command help
+
 ## API
 
 The CLI uses the AppHarbor API, documentation can be found here: [http://support.appharbor.com/kb/api/api-overview](http://support.appharbor.com/kb/api/api-overview)
