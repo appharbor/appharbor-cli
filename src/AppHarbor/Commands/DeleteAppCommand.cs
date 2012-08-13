@@ -12,7 +12,7 @@
 			_applicationConfiguration = applicationConfiguration;
 		}
 
-		public override void Execute(string[] arguments)
+		protected override void InnerExecute(string[] arguments)
 		{
 			var id = _applicationConfiguration.GetApplicationId();
 			_appharborClient.DeleteApplication(id);

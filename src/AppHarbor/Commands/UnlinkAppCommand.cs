@@ -15,7 +15,7 @@ namespace AppHarbor.Commands
 			_writer = writer;
 		}
 
-		public override void Execute(string[] arguments)
+		protected override void InnerExecute(string[] arguments)
 		{
 			_applicationConfiguration.RemoveConfiguration();
 			_writer.WriteLine("Successfully unlinked directory.");

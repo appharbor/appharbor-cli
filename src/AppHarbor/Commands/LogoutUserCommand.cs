@@ -14,7 +14,7 @@ namespace AppHarbor.Commands
 			_writer = writer;
 		}
 
-		public override void Execute(string[] arguments)
+		protected override void InnerExecute(string[] arguments)
 		{
 			_accessTokenConfiguration.DeleteAccessToken();
 			_writer.WriteLine("Successfully logged out.");

@@ -14,7 +14,7 @@ namespace AppHarbor.Commands
 			_appharborClient = appharborClient;
 		}
 
-		public override void Execute(string[] arguments)
+		protected override void InnerExecute(string[] arguments)
 		{
 			if (arguments.Length == 0)
 			{

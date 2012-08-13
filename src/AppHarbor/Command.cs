@@ -13,7 +13,12 @@ namespace AppHarbor
 			_optionSet = new OptionSet();
 		}
 
-		public abstract void Execute(string[] arguments);
+		public void Execute(string[] arguments)
+		{
+			InnerExecute(arguments);
+		}
+
+		protected abstract void InnerExecute(string[] arguments);
 
 		public OptionSet OptionSet
 		{

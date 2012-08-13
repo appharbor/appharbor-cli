@@ -16,7 +16,7 @@ namespace AppHarbor.Commands
 			_writer = writer;
 		}
 
-		public override void Execute(string[] arguments)
+		protected override void InnerExecute(string[] arguments)
 		{
 			var id = _applicationConfiguration.GetApplicationId();
 			var application = _client.GetApplication(id);
