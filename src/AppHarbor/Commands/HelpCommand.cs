@@ -53,6 +53,10 @@ namespace AppHarbor.Commands
 				}
 				_writer.WriteLine();
 			}
+
+			_writer.WriteLine();
+			_writer.WriteLine("Common options:");
+			OptionSet.WriteOptionDescriptions(_writer);
 		}
 
 		private static string GetScope(Type x)
