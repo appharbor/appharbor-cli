@@ -3,7 +3,7 @@
 namespace AppHarbor.Commands
 {
 	[CommandHelp("Get application details")]
-	public class InfoAppCommand : ICommand
+	public class InfoAppCommand : Command
 	{
 		private readonly IAppHarborClient _client;
 		private readonly IApplicationConfiguration _applicationConfiguration;
@@ -16,7 +16,7 @@ namespace AppHarbor.Commands
 			_writer = writer;
 		}
 
-		public void Execute(string[] arguments)
+		public override void Execute(string[] arguments)
 		{
 			var id = _applicationConfiguration.GetApplicationId();
 			var application = _client.GetApplication(id);

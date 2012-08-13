@@ -3,7 +3,7 @@
 namespace AppHarbor.Commands
 {
 	[CommandHelp("Logout of AppHarbor", alias: "logout")]
-	public class LogoutUserCommand : ICommand
+	public class LogoutUserCommand : Command
 	{
 		private readonly IAccessTokenConfiguration _accessTokenConfiguration;
 		private readonly TextWriter _writer;
@@ -14,7 +14,7 @@ namespace AppHarbor.Commands
 			_writer = writer;
 		}
 
-		public void Execute(string[] arguments)
+		public override void Execute(string[] arguments)
 		{
 			_accessTokenConfiguration.DeleteAccessToken();
 			_writer.WriteLine("Successfully logged out.");
