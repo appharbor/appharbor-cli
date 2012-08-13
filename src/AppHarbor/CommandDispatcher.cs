@@ -54,7 +54,10 @@ namespace AppHarbor
 				command.WriteUsage(invokedWith: string.Join(" ", args.TakeWhile(x => !x.StartsWith("-"))),
 					writer: _kernel.Resolve<TextWriter>());
 
-				throw new DispatchException(exception.Message);
+				if (!(exception is HelpException))
+				{
+					throw new DispatchException(exception.Message);
+				}
 			}
 		}
 	}
