@@ -20,7 +20,7 @@ namespace AppHarbor
 
 		public void Dispatch(string[] args)
 		{
-			var commandArguments = args.TakeWhile(x => !x.StartsWith("-"));
+			var commandArguments = args.TakeWhile(x => !x.StartsWith("-")).Take(2);
 			var commandTypeNameCandidate = commandArguments.Any() ? string.Concat(commandArguments.Skip(1).FirstOrDefault(), args[0]) : "help";
 
 			Type matchingType = null;
@@ -29,7 +29,7 @@ namespace AppHarbor
 			if (_typeNameMatcher.IsSatisfiedBy(commandTypeNameCandidate))
 			{
 				matchingType = _typeNameMatcher.GetMatchedType(commandTypeNameCandidate);
-				argsToSkip = 2;
+				argsToSkip = commandArguments.Count();
 			}
 			else if (_aliasMatcher.IsSatisfiedBy(args[0]))
 			{
