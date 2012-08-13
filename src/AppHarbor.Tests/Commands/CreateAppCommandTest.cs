@@ -22,19 +22,18 @@ namespace AppHarbor.Tests.Commands
 		public void ShouldCreateApplicationWithOnlyName([Frozen]Mock<IAppHarborClient> client, CreateAppCommand command)
 		{
 			var arguments = new string[] { "foo" };
-			VerifyArguments(client, command, arguments);
+			command.Execute(arguments);
+			client.Verify(x => x.CreateApplication(arguments.First(), arguments.Skip(1).FirstOrDefault()), Times.Once());
 		}
 
 		[Theory, AutoCommandData]
-		public void ShouldCreateApplicationWithRegion([Frozen]Mock<IAppHarborClient> client, CreateAppCommand command, string[] arguments)
+		public void ShouldSetRegionIsSpecified([Frozen]Mock<IAppHarborClient> client, [Frozen]Mock<TextWriter> writer, Mock<CreateAppCommand> command, string regionName, string applicationSlug)
 		{
-			VerifyArguments(client, command, arguments);
-		}
+			client.Setup(x => x.CreateApplication(applicationSlug, regionName)).Returns(new CreateResult { Id = applicationSlug });
 
-		private static void VerifyArguments(Mock<IAppHarborClient> client, CreateAppCommand command, string[] arguments)
-		{
-			command.Execute(arguments);
-			client.Verify(x => x.CreateApplication(arguments.First(), arguments.Skip(1).FirstOrDefault()), Times.Once());
+			command.Object.Execute(new string[] { applicationSlug, "-r", regionName });
+
+			client.VerifyAll();
 		}
 
 		[Theory, AutoCommandData]
@@ -66,16 +65,6 @@ namespace AppHarbor.Tests.Commands
 			command.Object.Execute(new string[] { applicationName });
 
 			writer.Verify(x => x.WriteLine("Created application \"{0}\" | URL: https://{0}.apphb.com", applicationSlug), Times.Once());
-		}
-
-		[Theory, AutoCommandData]
-		public void ShouldSetRegionIsSpecified([Frozen]Mock<IAppHarborClient> client, [Frozen]Mock<TextWriter> writer, Mock<CreateAppCommand> command, string regionName, string applicationSlug)
-		{
-			client.Setup(x => x.CreateApplication(applicationSlug, regionName)).Returns(new CreateResult { Id = applicationSlug });
-
-			command.Object.Execute(new string[] { applicationSlug, "-r", regionName });
-
-			client.VerifyAll();
 		}
 	}
 }
