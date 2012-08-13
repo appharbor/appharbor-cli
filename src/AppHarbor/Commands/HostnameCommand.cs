@@ -4,23 +4,21 @@ using System.Linq;
 namespace AppHarbor.Commands
 {
 	[CommandHelp("List all associated hostnames")]
-	public class HostnameCommand : Command
+	public class HostnameCommand : ApplicationCommand
 	{
-		private readonly IApplicationConfiguration _applicationConfiguration;
 		private readonly IAppHarborClient _appharborClient;
 		private readonly TextWriter _writer;
 
 		public HostnameCommand(IApplicationConfiguration applicationConfiguration, IAppHarborClient appharborClient, TextWriter writer)
+			: base(applicationConfiguration)
 		{
-			_applicationConfiguration = applicationConfiguration;
 			_appharborClient = appharborClient;
 			_writer = writer;
 		}
 
 		protected override void InnerExecute(string[] arguments)
 		{
-			var applicationId = _applicationConfiguration.GetApplicationId();
-			var hostnames = _appharborClient.GetHostnames(applicationId);
+			var hostnames = _appharborClient.GetHostnames(ApplicationId);
 
 			if (!hostnames.Any())
 			{
