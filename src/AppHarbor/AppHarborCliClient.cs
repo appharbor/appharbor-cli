@@ -22,8 +22,10 @@ namespace AppHarbor
 			}
 		}
 
-		public CreateResult CreateApplication(string name, string regionIdentifier = null)
+		public CreateResult CreateApplication(string name, string regionIdentifier)
 		{
+			regionIdentifier = regionIdentifier == null ? "amazon-web-services::us-east-1" : regionIdentifier;
+
 			var result = _api.CreateApplication(name, regionIdentifier);
 			HandleCreateResult("application", name, result.Status);
 

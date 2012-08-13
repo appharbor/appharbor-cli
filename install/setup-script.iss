@@ -9,7 +9,7 @@ AppPublisher=AppHarbor, Inc.
 AppPublisherURL=https://appharbor.com
 AppSupportURL=http://support.appharbor.com
 AppUpdatesURL=https://github.com/appharbor/appharbor-cli/downloads
-AppVersion=1.0
+AppVersion=1.1
 ChangesEnvironment=yes
 Compression=lzma2
 DefaultDirName={pf}\AppHarbor
@@ -20,7 +20,7 @@ SolidCompression=yes
 Source: "..\src\AppHarbor\bin\Release\*"; DestDir: "{app}"; Flags: ignoreversion; Excludes: "*.xml,*.pdb"
 
 [Registry]
-root: HKLM; Subkey: "SYSTEM\CurrentControlSet\Control\Session Manager\Environment"; ValueType: expandsz; ValueName: "Path"; ValueData: "{olddata};{app}"; Check: NeedsAddPath('{app}')
+root: HKLM; Subkey: "SYSTEM\CurrentControlSet\Control\Session Manager\Environment"; ValueType: expandsz; ValueName: "Path"; ValueData: "{olddata};{app}"; Check: NeedsAddPath(ExpandConstant('{app}'))
 
 [Code]
 function NeedsAddPath(Param: string): boolean;
