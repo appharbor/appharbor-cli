@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Linq;
 using Castle.MicroKernel;
 
@@ -19,14 +20,16 @@ namespace AppHarbor
 
 		public void Dispatch(string[] args)
 		{
-			var commandArgument = args.Any() ? string.Concat(args.Skip(1).FirstOrDefault(), args[0]) : "help";
+			var commandArguments = args.TakeWhile(x => !x.StartsWith("-")).Take(2);
+			var commandTypeNameCandidate = commandArguments.Any() ? string.Concat(commandArguments.Skip(1).FirstOrDefault(), args[0]) : "help";
+
 			Type matchingType = null;
 			int argsToSkip = 0;
 
-			if (_typeNameMatcher.IsSatisfiedBy(commandArgument))
+			if (_typeNameMatcher.IsSatisfiedBy(commandTypeNameCandidate))
 			{
-				matchingType = _typeNameMatcher.GetMatchedType(commandArgument);
-				argsToSkip = 2;
+				matchingType = _typeNameMatcher.GetMatchedType(commandTypeNameCandidate);
+				argsToSkip = commandArguments.Count();
 			}
 			else if (_aliasMatcher.IsSatisfiedBy(args[0]))
 			{
@@ -38,9 +41,10 @@ namespace AppHarbor
 				throw new DispatchException(string.Format("The command \"{0}\" doesn't match a command name or alias", string.Join(" ", args)));
 			}
 
+			var command = (Command)_kernel.Resolve(matchingType);
+
 			try
 			{
-				var command = (ICommand)_kernel.Resolve(matchingType);
 				command.Execute(args.Skip(argsToSkip).ToArray());
 			}
 			catch (ApiException exception)
@@ -49,7 +53,13 @@ namespace AppHarbor
 			}
 			catch (CommandException exception)
 			{
-				throw new DispatchException(exception.Message);
+				command.WriteUsage(invokedWith: string.Join(" ", commandArguments),
+					writer: _kernel.Resolve<TextWriter>());
+
+				if (!(exception is HelpException))
+				{
+					throw new DispatchException(exception.Message);
+				}
 			}
 		}
 	}

@@ -22,7 +22,10 @@ namespace AppHarbor
 			catch (DispatchException exception)
 			{
 				Console.WriteLine();
-				Console.WriteLine("Error: {0}", exception.Message);
+				using (new ForegroundColor(ConsoleColor.Red))
+				{
+					Console.WriteLine("Error: {0}", exception.Message);
+				}
 			}
 		}
 	}

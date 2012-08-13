@@ -8,7 +8,7 @@ using System.Text;
 namespace AppHarbor.Commands
 {
 	[CommandHelp("Display help summary")]
-	public class HelpCommand : ICommand
+	public class HelpCommand : Command
 	{
 		private readonly IEnumerable<Type> _commandTypes;
 		private readonly TextWriter _writer;
@@ -19,7 +19,7 @@ namespace AppHarbor.Commands
 			_writer = writer;
 		}
 
-		public void Execute(string[] arguments)
+		protected override void InnerExecute(string[] arguments)
 		{
 			_writer.WriteLine("Usage: appharbor COMMAND [command-options]");
 			_writer.WriteLine("");
@@ -53,6 +53,10 @@ namespace AppHarbor.Commands
 				}
 				_writer.WriteLine();
 			}
+
+			_writer.WriteLine();
+			_writer.WriteLine("Common options:");
+			OptionSet.WriteOptionDescriptions(_writer);
 		}
 
 		private static string GetScope(Type x)

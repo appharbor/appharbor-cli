@@ -34,7 +34,7 @@ namespace AppHarbor
 		{
 			return directory.GetFiles("*", SearchOption.TopDirectoryOnly)
 				.Concat(directory.GetDirectories()
-				.Where(x => !excludedDirectories.Contains(x.Name))
+				.Where(x => !excludedDirectories.Select(y => y.ToLower()).Contains(x.Name.ToLower()))
 				.SelectMany(x => GetFiles(x, excludedDirectories)));
 		}
 	}

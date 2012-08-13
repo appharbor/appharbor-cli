@@ -54,6 +54,9 @@
     <Reference Include="ICSharpCode.SharpZipLib">
       <HintPath>..\packages\SharpZipLib.0.86.0\lib\20\ICSharpCode.SharpZipLib.dll</HintPath>
     </Reference>
+    <Reference Include="NDesk.Options">
+      <HintPath>..\packages\NDesk.Options.0.2.1\lib\NDesk.Options.dll</HintPath>
+    </Reference>
     <Reference Include="RestSharp, Version=103.1.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\RestSharp.103.1\lib\net4-client\RestSharp.dll</HintPath>
     </Reference>
@@ -79,7 +82,9 @@
     <Compile Include="Commands\AddConfigCommand.cs" />
     <Compile Include="Commands\AddHostnameCommand.cs" />
     <Compile Include="Commands\AppCommand.cs" />
+    <Compile Include="Commands\ApplicationCommand.cs" />
     <Compile Include="Commands\BuildCommand.cs" />
+    <Compile Include="Command.cs" />
     <Compile Include="Commands\ConfigCommand.cs" />
     <Compile Include="Commands\DeleteAppCommand.cs" />
     <Compile Include="Commands\CreateAppCommand.cs" />
@@ -103,11 +108,11 @@
     <Compile Include="GitCommand.cs" />
     <Compile Include="GitCommandException.cs" />
     <Compile Include="GitRepositoryConfigurer.cs" />
+    <Compile Include="HelpException.cs" />
     <Compile Include="IAccessTokenConfiguration.cs" />
     <Compile Include="IAliasMatcher.cs" />
     <Compile Include="IAppHarborClient.cs" />
     <Compile Include="IApplicationConfiguration.cs" />
-    <Compile Include="ICommand.cs" />
     <Compile Include="ICommandMatcher.cs" />
     <Compile Include="IFileSystem.cs" />
     <Compile Include="IGitCommand.cs" />

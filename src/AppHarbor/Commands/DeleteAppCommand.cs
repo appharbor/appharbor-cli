@@ -1,21 +1,21 @@
 ﻿namespace AppHarbor.Commands
 {
 	[CommandHelp("Delete application")]
-	public class DeleteAppCommand : ICommand
+	public class DeleteAppCommand : ApplicationCommand
 	{
 		private readonly IAppHarborClient _appharborClient;
 		private readonly IApplicationConfiguration _applicationConfiguration;
 
 		public DeleteAppCommand(IAppHarborClient appharborClient, IApplicationConfiguration applicationConfiguration)
+			: base(applicationConfiguration)
 		{
 			_appharborClient = appharborClient;
 			_applicationConfiguration = applicationConfiguration;
 		}
 
-		public void Execute(string[] arguments)
+		protected override void InnerExecute(string[] arguments)
 		{
-			var id = _applicationConfiguration.GetApplicationId();
-			_appharborClient.DeleteApplication(id);
+			_appharborClient.DeleteApplication(ApplicationId);
 
 			_applicationConfiguration.RemoveConfiguration();
 		}

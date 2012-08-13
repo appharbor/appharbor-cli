@@ -4,7 +4,7 @@ using System.Linq;
 namespace AppHarbor.Commands
 {
 	[CommandHelp("List your applications")]
-	public class AppCommand : ICommand
+	public class AppCommand : Command
 	{
 		private readonly IAppHarborClient _client;
 		private readonly TextWriter _writer;
@@ -15,7 +15,7 @@ namespace AppHarbor.Commands
 			_writer = writer;
 		}
 
-		public void Execute(string[] arguments)
+		protected override void InnerExecute(string[] arguments)
 		{
 			var applications = _client.GetApplications();
 			foreach (var application in applications.OrderBy(x => x.Slug))

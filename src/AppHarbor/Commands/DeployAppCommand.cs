@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.IO.Compression;
+using System.Linq;
 using System.Net;
 using Amazon.S3;
 using Amazon.S3.Transfer;
@@ -9,24 +11,28 @@ using RestSharp;
 namespace AppHarbor.Commands
 {
 	[CommandHelp("Deploy current directory", alias: "deploy")]
-	public class DeployAppCommand : ICommand
+	public class DeployAppCommand : ApplicationCommand
 	{
 		private readonly string _accessToken;
-		private readonly IApplicationConfiguration _applicationConfiguration;
 		private readonly IRestClient _restClient;
 		private readonly TextReader _reader;
 		private readonly TextWriter _writer;
 
+		private readonly IList<string> _excludedDirectories;
+
 		public DeployAppCommand(IApplicationConfiguration applicationConfiguration, IAccessTokenConfiguration accessTokenConfiguration, TextReader reader, TextWriter writer)
+			: base(applicationConfiguration)
 		{
 			_accessToken = accessTokenConfiguration.GetAccessToken();
-			_applicationConfiguration = applicationConfiguration;
 			_restClient = new RestClient("https://packageclient.apphb.com/");
 			_reader = reader;
 			_writer = writer;
+
+			_excludedDirectories = new List<string> { ".git", ".hg" };
+			OptionSet.Add("e|excluded-directory=", "Add excluded directory name", x => _excludedDirectories.Add(x));
 		}
 
-		public void Execute(string[] arguments)
+		protected override void InnerExecute(string[] arguments)
 		{
 			_writer.WriteLine("Getting upload credentials... ");
 			_writer.WriteLine();
@@ -37,7 +43,7 @@ namespace AppHarbor.Commands
 				using (var gzipStream = new GZipStream(packageStream, CompressionMode.Compress, true))
 				{
 					var sourceDirectory = new DirectoryInfo(Directory.GetCurrentDirectory());
-					sourceDirectory.ToTar(gzipStream, excludedDirectoryNames: new[] { ".git", ".hg" });
+					sourceDirectory.ToTar(gzipStream, excludedDirectoryNames: _excludedDirectories.ToArray());
 
 					using (var s3Client = new AmazonS3Client(uploadCredentials.GetSessionCredentials()))
 					{
@@ -69,21 +75,21 @@ namespace AppHarbor.Commands
 				}
 			}
 
-			TriggerAppHarborBuild(_applicationConfiguration.GetApplicationId(), uploadCredentials);
+			TriggerAppHarborBuild(uploadCredentials);
 		}
 
 		private FederatedUploadCredentials GetCredentials()
 		{
 			var urlRequest = new RestRequest("applications/{slug}/uploadCredentials", Method.POST);
-			urlRequest.AddUrlSegment("slug", _applicationConfiguration.GetApplicationId());
+			urlRequest.AddUrlSegment("slug", ApplicationId);
 
 			var federatedCredentials = _restClient.Execute<FederatedUploadCredentials>(urlRequest);
 			return federatedCredentials.Data;
 		}
 
-		private void TriggerAppHarborBuild(string applicationSlug, FederatedUploadCredentials credentials)
+		private void TriggerAppHarborBuild(FederatedUploadCredentials credentials)
 		{
-			_writer.WriteLine("The package will be deployed to application \"{0}\".", _applicationConfiguration.GetApplicationId());
+			_writer.WriteLine("The package will be deployed to application \"{0}\".", ApplicationId);
 
 			using (new ForegroundColor(ConsoleColor.Yellow))
 			{
@@ -96,7 +102,7 @@ namespace AppHarbor.Commands
 			{
 				RequestFormat = DataFormat.Json
 			}
-				.AddUrlSegment("slug", applicationSlug)
+				.AddUrlSegment("slug", ApplicationId)
 				.AddHeader("Authorization", string.Format("BEARER {0}", _accessToken))
 				.AddBody(new
 				{
