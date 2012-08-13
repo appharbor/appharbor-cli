@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.IO.Compression;
+using System.Linq;
 using System.Net;
 using Amazon.S3;
 using Amazon.S3.Transfer;
@@ -16,6 +18,8 @@ namespace AppHarbor.Commands
 		private readonly TextReader _reader;
 		private readonly TextWriter _writer;
 
+		private readonly IList<string> _excludedDirectories;
+
 		public DeployAppCommand(IApplicationConfiguration applicationConfiguration, IAccessTokenConfiguration accessTokenConfiguration, TextReader reader, TextWriter writer)
 			: base(applicationConfiguration)
 		{
@@ -23,6 +27,9 @@ namespace AppHarbor.Commands
 			_restClient = new RestClient("https://packageclient.apphb.com/");
 			_reader = reader;
 			_writer = writer;
+
+			_excludedDirectories = new List<string> { ".git", ".hg" };
+			OptionSet.Add("e|excluded-directory-name=", "Add excluded directory name", x => _excludedDirectories.Add(x));
 		}
 
 		protected override void InnerExecute(string[] arguments)
@@ -36,7 +43,7 @@ namespace AppHarbor.Commands
 				using (var gzipStream = new GZipStream(packageStream, CompressionMode.Compress, true))
 				{
 					var sourceDirectory = new DirectoryInfo(Directory.GetCurrentDirectory());
-					sourceDirectory.ToTar(gzipStream, excludedDirectoryNames: new[] { ".git", ".hg" });
+					sourceDirectory.ToTar(gzipStream, excludedDirectoryNames: _excludedDirectories.ToArray());
 
 					using (var s3Client = new AmazonS3Client(uploadCredentials.GetSessionCredentials()))
 					{
