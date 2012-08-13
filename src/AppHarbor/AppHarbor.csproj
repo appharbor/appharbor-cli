@@ -82,6 +82,7 @@
     <Compile Include="Commands\AddConfigCommand.cs" />
     <Compile Include="Commands\AddHostnameCommand.cs" />
     <Compile Include="Commands\AppCommand.cs" />
+    <Compile Include="Commands\ApplicationCommand.cs" />
     <Compile Include="Commands\BuildCommand.cs" />
     <Compile Include="Command.cs" />
     <Compile Include="Commands\ConfigCommand.cs" />
