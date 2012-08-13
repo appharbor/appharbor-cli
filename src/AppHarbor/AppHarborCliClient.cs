@@ -41,9 +41,9 @@ namespace AppHarbor
 		public Application GetApplication(string id)
 		{
 			var application = _api.GetApplication(id);
-			if (string.IsNullOrEmpty(application.Slug))
+			if (application == null)
 			{
-				throw new ApiException();
+				throw new ApiException(string.Format("Applicaton \"{0}\" could not be found", id));
 			}
 
 			return application;
