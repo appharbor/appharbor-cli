@@ -8,7 +8,15 @@ For more about AppHarbor see [https://appharbor.com/](https://appharbor.com/).
 
 The CLI is known to work on Windows. [Download](https://github.com/appharbor/appharbor-cli/downloads) and run the installer to get started.
 
-Once installed, you can log in to create and administer AppHarbor applications:
+Once installed, you can log in to create and administer AppHarbor applications. Use the `-h` switch to
+get more information about each command and any options available.
+
+Example usage: `appharbor deploy -e bin -e obj`
+
+This will deploy the application using the optional "excluded directory name" argument
+to avoid uploading compiled binaries.
+
+Other commands:
 
 	$ appharbor login
 	Username: friism
@@ -26,6 +34,7 @@ Once installed, you can log in to create and administer AppHarbor applications:
 	  app deploy                  #  Deploy current directory
 	  app info                    #  Get application details
 	  app link [slug]             #  Link directory to an application ("link")
+	  appharbor open              #  Open application on appharbor.com
 	  app unlink                  #  Unlink application from directory ("unlink")
 	  build                       #  List latest builds
 	  config add [key=value]      #  Add configuration variable to application
@@ -38,6 +47,9 @@ Once installed, you can log in to create and administer AppHarbor applications:
 	  user login                  #  Login to AppHarbor ("login")
 	  user logout                 #  Logout of AppHarbor ("logout")
 	  user                        #  Show currently logged in user
+
+	Common options:
+	  -h, --help                  #  Show command help
 
 ## API
 
