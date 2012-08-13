@@ -115,6 +115,7 @@
     <Compile Include="IMaskedInput.cs" />
     <Compile Include="ITypeNameMatcher.cs" />
     <Compile Include="MaskedConsoleInput.cs" />
+    <Compile Include="MegaByteProgressBar.cs" />
     <Compile Include="PhysicalFileSystem.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -4,19 +4,24 @@ using System.Linq;
 
 namespace AppHarbor
 {
-	public class ConsoleProgressBar
+	public abstract class ConsoleProgressBar
 	{
 		private const char ProgressBarCharacter = '\u2592';
 
 		private KeyValuePair<DateTime, double> _lastProgressEvent;
-		private readonly IList<double> _perSecondAverages;
 
-		public ConsoleProgressBar()
+		private readonly IList<double> _perSecondAverages;
+		private readonly string _displayUnit;
+		private Func<long, double> _displayUnitConversion;
+
+		public ConsoleProgressBar(string displayUnit, Func<long, double> displayUnitConversion)
 		{
 			_perSecondAverages = new List<double>();
+			_displayUnit = displayUnit;
+			_displayUnitConversion = displayUnitConversion;
 		}
 
-		public void Update(string message, string itemType, long processedItems, long totalItems)
+		public void Update(string message, long processedItems, long totalItems)
 		{
 			var secondsSinceLastAverage = (DateTime.Now - _lastProgressEvent.Key).TotalSeconds;
 
@@ -44,7 +49,7 @@ namespace AppHarbor
 
 			var percentDone = (processedItems * 100) / totalItems;
 			ConsoleProgressBar.Render(percentDone, string.Format("{0} ({1}% of {2:0.0} {3}). {4}",
-				message, percentDone, totalItems, itemType, timeEstimate));
+				message, percentDone, _displayUnitConversion(totalItems), _displayUnit, timeEstimate));
 		}
 
 		private static void Render(double percentage, string message)

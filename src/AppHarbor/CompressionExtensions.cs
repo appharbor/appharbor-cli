@@ -19,12 +19,12 @@ namespace AppHarbor
 
 			var entriesCount = entries.Count();
 
-			var consoleProgressBar = new ConsoleProgressBar();
+			var consoleProgressBar = new MegaByteProgressBar();
 			for (var i = 0; i < entriesCount; i++)
 			{
 				archive.WriteEntry(entries[i], true);
 
-				consoleProgressBar.Update("Packing files", "files", i, entriesCount);
+				consoleProgressBar.Update("Packing files", entries.Take(i + 1).Sum(x => x.Size), entries.Sum(x => x.Size));
 			}
 
 			archive.Close();
