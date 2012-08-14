@@ -38,29 +38,24 @@ namespace AppHarbor.Commands
 			_writer.WriteLine();
 
 			var uploadCredentials = GetCredentials();
-			using (var packageStream = new TemporaryFileStream())
+
+			var packageStream = new FileStream(Path.GetTempFileName(), FileMode.Create, FileAccess.ReadWrite, FileShare.ReadWrite);
+			try
 			{
 				using (var gzipStream = new GZipStream(packageStream, CompressionMode.Compress, true))
 				{
 					var sourceDirectory = new DirectoryInfo(Directory.GetCurrentDirectory());
 					sourceDirectory.ToTar(gzipStream, excludedDirectoryNames: _excludedDirectories.ToArray());
 
+					packageStream.Dispose();
 					using (var s3Client = new AmazonS3Client(uploadCredentials.GetSessionCredentials()))
 					{
-						const int uploadParts = 5;
-						var partSize = packageStream.Length / uploadParts;
-
-						var transferUtilityConfig = new TransferUtilityConfig();
-						transferUtilityConfig.NumberOfUploadThreads = uploadParts * 2;
-
-						var transferUtility = new TransferUtility(s3Client, transferUtilityConfig);
-						packageStream.Position = 0;
+						var transferUtility = new TransferUtility(s3Client);
 						var request = new TransferUtilityUploadRequest
 						{
-							InputStream = packageStream,
+							FilePath = packageStream.Name,
 							BucketName = uploadCredentials.Bucket,
 							Key = uploadCredentials.ObjectKey,
-							PartSize = partSize,
 						};
 
 						var progressBar = new MegaByteProgressBar();
@@ -73,6 +68,10 @@ namespace AppHarbor.Commands
 						_writer.WriteLine();
 					}
 				}
+			}
+			finally
+			{
+				File.Delete(packageStream.Name);
 			}
 
 			TriggerAppHarborBuild(uploadCredentials);
