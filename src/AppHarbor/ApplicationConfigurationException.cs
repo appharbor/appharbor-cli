@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace AppHarbor
+﻿namespace AppHarbor
 {
 	public class ApplicationConfigurationException : CommandException
 	{

@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace AppHarbor
+﻿namespace AppHarbor
 {
 	public interface IAccessTokenConfiguration
 	{
