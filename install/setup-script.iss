@@ -18,6 +18,7 @@ SolidCompression=yes
 
 [Files]
 Source: "..\src\AppHarbor\bin\Release\*"; DestDir: "{app}"; Flags: ignoreversion; Excludes: "*.xml,*.pdb"
+Source: "ah.bat"; DestDir: "{app}"; Flags: ignoreversion;
 
 [Registry]
 root: HKLM; Subkey: "SYSTEM\CurrentControlSet\Control\Session Manager\Environment"; ValueType: expandsz; ValueName: "Path"; ValueData: "{olddata};{app}"; Check: NeedsAddPath(ExpandConstant('{app}'))
