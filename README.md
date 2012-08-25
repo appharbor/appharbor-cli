@@ -31,7 +31,7 @@ to avoid uploading compiled binaries.
 	  app deploy                  #  Deploy current directory
 	  app info                    #  Get application details
 	  app link [slug]             #  Link directory to an application ("link")
-	  appharbor open              #  Open application on appharbor.com
+	  app open                    #  Open application on appharbor.com
 	  app unlink                  #  Unlink application from directory ("unlink")
 	  build                       #  List latest builds
 	  config add [key=value]      #  Add configuration variable to application
