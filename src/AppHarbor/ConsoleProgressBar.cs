@@ -13,7 +13,7 @@ namespace AppHarbor
 		private readonly IList<double> _perSecondAverages;
 		private readonly string _displayUnit;
 		private Func<long, double> _displayUnitConversion;
-		private readonly object _lock = new Object();
+		private readonly object _lock = new object();
 
 		public ConsoleProgressBar(string displayUnit, Func<long, double> displayUnitConversion)
 		{
