@@ -38,41 +38,40 @@ namespace AppHarbor.Commands
 			_writer.WriteLine();
 
 			var uploadCredentials = GetCredentials();
-			using (var packageStream = new TemporaryFileStream())
+
+			var temporaryFileName = Path.GetTempFileName();
+			try
 			{
+				using (var packageStream = new FileStream(temporaryFileName, FileMode.Create, FileAccess.ReadWrite, FileShare.ReadWrite))
 				using (var gzipStream = new GZipStream(packageStream, CompressionMode.Compress, true))
 				{
 					var sourceDirectory = new DirectoryInfo(Directory.GetCurrentDirectory());
 					sourceDirectory.ToTar(gzipStream, excludedDirectoryNames: _excludedDirectories.ToArray());
-
-					using (var s3Client = new AmazonS3Client(uploadCredentials.GetSessionCredentials()))
-					{
-						const int uploadParts = 5;
-						var partSize = packageStream.Length / uploadParts;
-
-						var transferUtilityConfig = new TransferUtilityConfig();
-						transferUtilityConfig.NumberOfUploadThreads = uploadParts * 2;
-
-						var transferUtility = new TransferUtility(s3Client, transferUtilityConfig);
-						packageStream.Position = 0;
-						var request = new TransferUtilityUploadRequest
-						{
-							InputStream = packageStream,
-							BucketName = uploadCredentials.Bucket,
-							Key = uploadCredentials.ObjectKey,
-							PartSize = partSize,
-						};
-
-						var progressBar = new MegaByteProgressBar();
-						request.UploadProgressEvent += (object x, UploadProgressArgs y) => progressBar
-							.Update("Uploading package", y.TransferredBytes, y.TotalBytes);
-
-						transferUtility.Upload(request);
-
-						Console.CursorTop++;
-						_writer.WriteLine();
-					}
 				}
+
+				using (var s3Client = new AmazonS3Client(uploadCredentials.GetSessionCredentials()))
+				using (var transferUtility = new TransferUtility(s3Client))
+				{
+					var request = new TransferUtilityUploadRequest
+					{
+						FilePath = temporaryFileName,
+						BucketName = uploadCredentials.Bucket,
+						Key = uploadCredentials.ObjectKey,
+					};
+
+					var progressBar = new MegaByteProgressBar();
+					request.UploadProgressEvent += (object x, UploadProgressArgs y) => progressBar
+						.Update("Uploading package", y.TransferredBytes, y.TotalBytes);
+
+					transferUtility.Upload(request);
+
+					Console.CursorTop++;
+					_writer.WriteLine();
+				}
+			}
+			finally
+			{
+				File.Delete(temporaryFileName);
 			}
 
 			TriggerAppHarborBuild(uploadCredentials);
