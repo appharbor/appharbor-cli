@@ -39,39 +39,39 @@ namespace AppHarbor.Commands
 
 			var uploadCredentials = GetCredentials();
 
-			var packageStream = new FileStream(Path.GetTempFileName(), FileMode.Create, FileAccess.ReadWrite, FileShare.ReadWrite);
+			var temporaryFileName = Path.GetTempFileName();
 			try
 			{
+				using (var packageStream = new FileStream(temporaryFileName, FileMode.Create, FileAccess.ReadWrite, FileShare.ReadWrite))
 				using (var gzipStream = new GZipStream(packageStream, CompressionMode.Compress, true))
 				{
 					var sourceDirectory = new DirectoryInfo(Directory.GetCurrentDirectory());
 					sourceDirectory.ToTar(gzipStream, excludedDirectoryNames: _excludedDirectories.ToArray());
+				}
 
-					packageStream.Dispose();
-					using (var s3Client = new AmazonS3Client(uploadCredentials.GetSessionCredentials()))
+				using (var s3Client = new AmazonS3Client(uploadCredentials.GetSessionCredentials()))
+				using (var transferUtility = new TransferUtility(s3Client))
+				{
+					var request = new TransferUtilityUploadRequest
 					{
-						var transferUtility = new TransferUtility(s3Client);
-						var request = new TransferUtilityUploadRequest
-						{
-							FilePath = packageStream.Name,
-							BucketName = uploadCredentials.Bucket,
-							Key = uploadCredentials.ObjectKey,
-						};
+						FilePath = temporaryFileName,
+						BucketName = uploadCredentials.Bucket,
+						Key = uploadCredentials.ObjectKey,
+					};
 
-						var progressBar = new MegaByteProgressBar();
-						request.UploadProgressEvent += (object x, UploadProgressArgs y) => progressBar
-							.Update("Uploading package", y.TransferredBytes, y.TotalBytes);
+					var progressBar = new MegaByteProgressBar();
+					request.UploadProgressEvent += (object x, UploadProgressArgs y) => progressBar
+						.Update("Uploading package", y.TransferredBytes, y.TotalBytes);
 
-						transferUtility.Upload(request);
+					transferUtility.Upload(request);
 
-						Console.CursorTop++;
-						_writer.WriteLine();
-					}
+					Console.CursorTop++;
+					_writer.WriteLine();
 				}
 			}
 			finally
 			{
-				File.Delete(packageStream.Name);
+				File.Delete(temporaryFileName);
 			}
 
 			TriggerAppHarborBuild(uploadCredentials);
