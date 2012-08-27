@@ -48,6 +48,15 @@ to avoid uploading compiled binaries.
 	Common options:
 	  -h, --help                  #  Show command help
 
+## Alias
+
+If you use the CLI a lot you might want to create an alias for the appharbor executable. You can do this with a simple batch file called "ah.bat" in the
+CLI install directory. The file should have this content:
+
+    appharbor %*
+
+After this you can simply call the commands with for instance `ah config`.
+
 ## API
 
 The CLI uses the AppHarbor API, documentation can be found here: [http://support.appharbor.com/kb/api/api-overview](http://support.appharbor.com/kb/api/api-overview)
