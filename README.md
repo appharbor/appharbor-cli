@@ -28,7 +28,7 @@ to avoid uploading compiled binaries.
 	  app                         #  List your applications
 	  app create [name]           #  Create an application ("create")
 	  app delete                  #  Delete application
-	  app deploy                  #  Deploy current directory
+	  app deploy                  #  Deploy current directory ("deploy")
 	  app info                    #  Get application details
 	  app link [slug]             #  Link directory to an application ("link")
 	  app open                    #  Open application on appharbor.com
