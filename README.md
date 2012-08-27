@@ -12,8 +12,10 @@ Once installed, you can log in to create and administer AppHarbor applications. 
 get more information about each command and any options available.
 
 Example usage: `appharbor deploy -e bin -e obj`
+
 This will deploy the application using the optional "excluded directory name" argument
-to avoid uploading compiled binaries.
+to avoid uploading compiled binaries. Also note the use of a command "alias".
+Aliases are enclosed in paranthesis in the list of available commands.
 
 	$ appharbor login
 	Username: friism
