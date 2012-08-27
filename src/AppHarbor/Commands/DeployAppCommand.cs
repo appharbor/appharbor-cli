@@ -107,7 +107,7 @@ namespace AppHarbor.Commands
 				{
 					Bucket = credentials.Bucket,
 					ObjectKey = credentials.ObjectKey,
-					CommitMessage = commitMessage,
+					CommitMessage = string.IsNullOrEmpty(commitMessage) ? "Deployed from CLI" : commitMessage,
 				});
 
 			_writer.WriteLine("Notifying AppHarbor.");
