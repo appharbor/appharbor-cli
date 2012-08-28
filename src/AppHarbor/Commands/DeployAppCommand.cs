@@ -57,6 +57,7 @@ namespace AppHarbor.Commands
 						FilePath = temporaryFileName,
 						BucketName = uploadCredentials.Bucket,
 						Key = uploadCredentials.ObjectKey,
+						Timeout = (int)TimeSpan.FromHours(2).TotalMilliseconds,
 					};
 
 					var progressBar = new MegaByteProgressBar();
