@@ -6,4 +6,4 @@ deploy/*
 *.suo
 *.cache
 packages/
-
+src/TestResults/*
