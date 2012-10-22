@@ -1,6 +1,7 @@
 ﻿using System.IO;
 using RestSharp;
 using RestSharp.Contrib;
+using System;
 
 namespace AppHarbor.Commands
 {
@@ -27,12 +28,35 @@ namespace AppHarbor.Commands
 				throw new CommandException("You're already logged in. You need to log out (\"logout\") before you can log in again.");
 			}
 
-			_writer.Write("Username: ");
-			var username = _reader.ReadLine();
+            string username = null;
+            string password = null;
 
-			_writer.Write("Password: ");
-			var password = _maskedInput.Get();
-			_writer.WriteLine();
+            if (arguments == null || arguments.Length != 2)
+            {
+                _writer.WriteLine("Please supply your Credentials.");
+                _writer.Write("Username: ");
+                username = _reader.ReadLine();
+
+                _writer.Write("Password: ");
+                password = _maskedInput.Get();
+                _writer.WriteLine();                
+            }
+            else
+            {
+                _writer.WriteLine("Using parameterized Credentials.");
+                username = arguments[0];
+                password = arguments[1];
+            }
+
+            if (String.IsNullOrEmpty(username))
+            {
+                _writer.WriteLine("No Username supplied, login failed.");
+                return;
+            }
+            if (String.IsNullOrEmpty(password))
+            {
+                _writer.WriteLine("No Password supplied, login failed.");
+            }            
 
 			var accessToken = GetAccessToken(username, password);
 			_accessTokenConfiguration.SetAccessToken(accessToken);
