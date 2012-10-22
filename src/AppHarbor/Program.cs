@@ -5,7 +5,7 @@ namespace AppHarbor
 {
 	class Program
 	{
-		static void Main(string[] args)
+		static int Main(string[] args)
 		{
 			var container = new WindsorContainer()
 				.Install(new AppHarborInstaller());
@@ -15,6 +15,8 @@ namespace AppHarbor
 			try
 			{
 				commandDispatcher.Dispatch(args);
+                // no there was no problems :)
+                return 0;
 			}
 			catch (DispatchException exception)
 			{
@@ -23,6 +25,8 @@ namespace AppHarbor
 				{
 					Console.WriteLine("Error: {0}", exception.Message);
 				}
+                // yes, there was a problem :(
+                return 1;
 			}
 		}
 	}
