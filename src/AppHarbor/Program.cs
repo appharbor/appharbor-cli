@@ -15,8 +15,7 @@ namespace AppHarbor
 			try
 			{
 				commandDispatcher.Dispatch(args);
-                // no there was no problems :)
-                return 0;
+				return 0; // no there was no problems :)
 			}
 			catch (DispatchException exception)
 			{
@@ -25,8 +24,7 @@ namespace AppHarbor
 				{
 					Console.WriteLine("Error: {0}", exception.Message);
 				}
-                // yes, there was a problem :(
-                return 1;
+				return 1; // yes, there was a problem :(
 			}
 		}
 	}

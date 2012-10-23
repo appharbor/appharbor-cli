@@ -9,18 +9,18 @@ namespace AppHarbor.Tests.Commands
 {
 	public class LoginUserCommandTest
 	{
-        [Theory, AutoCommandData]
-        public void ShouldSetAppHarborTokenIfUserIsntLoggedInUseArgs([Frozen]Mock<TextWriter> writer, [Frozen]Mock<IAccessTokenConfiguration> accessTokenConfigurationMock, Mock<LoginUserCommand> loginCommand, string username, string password, string token)
-        {
-            accessTokenConfigurationMock.Setup(x => x.GetAccessToken()).Returns((string)null);
-            loginCommand.Setup(x => x.GetAccessToken(username, password)).Returns(token);
-
-            loginCommand.Object.Execute(new string[] {username,password});
-
-            writer.Verify(x => x.WriteLine("Using parameterized Credentials."), Times.Once());
-            writer.Verify(x => x.WriteLine("Successfully logged in as {0}", username), Times.Once());
-            accessTokenConfigurationMock.Verify(x => x.SetAccessToken(token), Times.Once());
-        }
+		[Theory, AutoCommandData]
+		public void ShouldSetAppHarborTokenIfUserIsntLoggedInUseArgs([Frozen]Mock<TextWriter> writer, [Frozen]Mock<IAccessTokenConfiguration> accessTokenConfigurationMock, Mock<LoginUserCommand> loginCommand, string username, string password, string token)
+		{
+			accessTokenConfigurationMock.Setup(x => x.GetAccessToken()).Returns((string)null);
+			loginCommand.Setup(x => x.GetAccessToken(username, password)).Returns(token);
+	
+			loginCommand.Object.Execute(new string[] {username,password});
+			
+			writer.Verify(x => x.WriteLine("Using parameterized Credentials."), Times.Once());
+			writer.Verify(x => x.WriteLine("Successfully logged in as {0}", username), Times.Once());
+			accessTokenConfigurationMock.Verify(x => x.SetAccessToken(token), Times.Once());
+		}
         
         [Theory, AutoCommandData]
 		public void ShouldSetAppHarborTokenIfUserIsntLoggedIn([Frozen]Mock<TextWriter> writer, [Frozen]Mock<IMaskedInput> maskedConsoleInput, [Frozen]Mock<TextReader> reader, [Frozen]Mock<IAccessTokenConfiguration> accessTokenConfigurationMock, Mock<LoginUserCommand> loginCommand, string username, string password, string token)
