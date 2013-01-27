@@ -22,7 +22,7 @@ namespace AppHarbor
 			var processArguments = new StringBuilder();
 
 			processArguments.AppendFormat("/C ");
-			processArguments.AppendFormat("\"{0}\" ", _gitExecutable.FullName);
+			processArguments.AppendFormat("\"{0}\" ", GitExecutable);
 			processArguments.AppendFormat("{0} ", command);
 
 			var process = new Process
@@ -65,5 +65,13 @@ namespace AppHarbor
 				return new DirectoryInfo(Directory.GetCurrentDirectory());
 			}
 		}
+
+        private string GitExecutable
+        {
+            get
+            {
+                return _gitExecutable.Exists ? _gitExecutable.FullName : _gitExecutable.Name;
+            }
+        }
 	}
 }
