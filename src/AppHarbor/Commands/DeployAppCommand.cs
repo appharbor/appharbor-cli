@@ -13,6 +13,8 @@ namespace AppHarbor.Commands
 	[CommandHelp("Deploy current directory", alias: "deploy")]
 	public class DeployAppCommand : ApplicationCommand
 	{
+		private DirectoryInfo _sourceDirectory;
+
 		private readonly string _accessToken;
 		private readonly IRestClient _restClient;
 		private readonly TextReader _reader;
@@ -27,6 +29,9 @@ namespace AppHarbor.Commands
 			_restClient = new RestClient("https://packageclient.apphb.com/");
 			_reader = reader;
 			_writer = writer;
+
+			_sourceDirectory = new DirectoryInfo(Directory.GetCurrentDirectory());
+			OptionSet.Add("source-directory=", "Set source directory", x => _sourceDirectory = new DirectoryInfo(x));
 
 			_excludedDirectories = new List<string> { ".git", ".hg" };
 			OptionSet.Add("e|excluded-directory=", "Add excluded directory name", x => _excludedDirectories.Add(x));
@@ -45,8 +50,7 @@ namespace AppHarbor.Commands
 				using (var packageStream = new FileStream(temporaryFileName, FileMode.Create, FileAccess.ReadWrite, FileShare.ReadWrite))
 				using (var gzipStream = new GZipStream(packageStream, CompressionMode.Compress, true))
 				{
-					var sourceDirectory = new DirectoryInfo(Directory.GetCurrentDirectory());
-					sourceDirectory.ToTar(gzipStream, excludedDirectoryNames: _excludedDirectories.ToArray());
+					_sourceDirectory.ToTar(gzipStream, excludedDirectoryNames: _excludedDirectories.ToArray());
 				}
 
 				using (var s3Client = new AmazonS3Client(uploadCredentials.GetSessionCredentials()))
