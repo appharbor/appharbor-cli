@@ -13,6 +13,7 @@ namespace AppHarbor.Commands
 	[CommandHelp("Deploy current directory", alias: "deploy")]
 	public class DeployAppCommand : ApplicationCommand
 	{
+		private string _message;
 		private DirectoryInfo _sourceDirectory;
 
 		private readonly string _accessToken;
@@ -35,6 +36,8 @@ namespace AppHarbor.Commands
 
 			_excludedDirectories = new List<string> { ".git", ".hg" };
 			OptionSet.Add("e|excluded-directory=", "Add excluded directory name", x => _excludedDirectories.Add(x));
+
+			OptionSet.Add("m|message=", "Specify commit message", x => _message = x);
 		}
 
 		protected override void InnerExecute(string[] arguments)
@@ -95,12 +98,15 @@ namespace AppHarbor.Commands
 		{
 			_writer.WriteLine("The package will be deployed to application \"{0}\".", ApplicationId);
 
-			using (new ForegroundColor(ConsoleColor.Yellow))
+			if (string.IsNullOrEmpty(_message))
 			{
-				_writer.WriteLine();
-				_writer.Write("Enter a deployment message: ");
+				using (new ForegroundColor(ConsoleColor.Yellow))
+				{
+					_writer.WriteLine();
+					_writer.Write("Enter a deployment message: ");
+				}
+				_message = _reader.ReadLine();
 			}
-			var commitMessage = _reader.ReadLine();
 
 			var request = new RestRequest("applications/{slug}/buildnotifications", Method.POST)
 			{
@@ -112,7 +118,7 @@ namespace AppHarbor.Commands
 				{
 					Bucket = credentials.Bucket,
 					ObjectKey = credentials.ObjectKey,
-					CommitMessage = string.IsNullOrEmpty(commitMessage) ? "Deployed from CLI" : commitMessage,
+					CommitMessage = string.IsNullOrEmpty(_message) ? "Deployed from CLI" : _message,
 				});
 
 			_writer.WriteLine("Notifying AppHarbor.");
