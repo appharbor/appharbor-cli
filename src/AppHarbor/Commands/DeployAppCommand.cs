@@ -98,12 +98,15 @@ namespace AppHarbor.Commands
 		{
 			_writer.WriteLine("The package will be deployed to application \"{0}\".", ApplicationId);
 
-			using (new ForegroundColor(ConsoleColor.Yellow))
+			if (string.IsNullOrEmpty(_message))
 			{
-				_writer.WriteLine();
-				_writer.Write("Enter a deployment message: ");
+				using (new ForegroundColor(ConsoleColor.Yellow))
+				{
+					_writer.WriteLine();
+					_writer.Write("Enter a deployment message: ");
+				}
+				_message = _reader.ReadLine();
 			}
-			var commitMessage = _reader.ReadLine();
 
 			var request = new RestRequest("applications/{slug}/buildnotifications", Method.POST)
 			{
@@ -115,7 +118,7 @@ namespace AppHarbor.Commands
 				{
 					Bucket = credentials.Bucket,
 					ObjectKey = credentials.ObjectKey,
-					CommitMessage = string.IsNullOrEmpty(commitMessage) ? "Deployed from CLI" : commitMessage,
+					CommitMessage = string.IsNullOrEmpty(_message) ? "Deployed from CLI" : _message,
 				});
 
 			_writer.WriteLine("Notifying AppHarbor.");
