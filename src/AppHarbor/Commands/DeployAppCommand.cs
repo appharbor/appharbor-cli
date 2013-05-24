@@ -13,6 +13,7 @@ namespace AppHarbor.Commands
 	[CommandHelp("Deploy current directory", alias: "deploy")]
 	public class DeployAppCommand : ApplicationCommand
 	{
+		private string _message;
 		private DirectoryInfo _sourceDirectory;
 
 		private readonly string _accessToken;
@@ -35,6 +36,8 @@ namespace AppHarbor.Commands
 
 			_excludedDirectories = new List<string> { ".git", ".hg" };
 			OptionSet.Add("e|excluded-directory=", "Add excluded directory name", x => _excludedDirectories.Add(x));
+
+			OptionSet.Add("m|message=", "Specify commit message", x => _message = x);
 		}
 
 		protected override void InnerExecute(string[] arguments)
