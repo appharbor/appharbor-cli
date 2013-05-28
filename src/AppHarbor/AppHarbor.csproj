@@ -93,6 +93,7 @@
     <Compile Include="Commands\HostnameCommand.cs" />
     <Compile Include="Commands\InfoAppCommand.cs" />
     <Compile Include="Commands\LinkAppCommand.cs" />
+    <Compile Include="Commands\LogAppCommand.cs" />
     <Compile Include="Commands\LoginUserCommand.cs" />
     <Compile Include="Commands\LogoutUserCommand.cs" />
     <Compile Include="Commands\OpenAppCommand.cs" />
