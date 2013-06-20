@@ -88,7 +88,7 @@ namespace AppHarbor.Commands
 
 		private static void WriteColorizedLine(string line)
 		{
-			var parsed = Regex.Match(line, @"^(.*?\[(\w+)([.\w\.]+)?\]:)(.*)?$");
+			var parsed = Regex.Match(line, @"^(.*?\[([\w-]+)([\d\.]+)?\]:)(.*)?$");
 			var defaultColor = Console.ForegroundColor;
 
 			Console.ForegroundColor = ConsoleColor.Cyan;
