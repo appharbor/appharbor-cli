@@ -23,6 +23,7 @@ namespace AppHarbor.Commands
 		private readonly string _accessToken;
 		private readonly TextWriter _writer;
 		private readonly IRestClient _restClient;
+		private readonly IDictionary<string, ConsoleColor> _assignedColors;
 
 		private bool _tail;
 		private int _limit = 15;
@@ -35,6 +36,7 @@ namespace AppHarbor.Commands
 			_accessToken = accessTokenConfiguration.GetAccessToken();
 			_writer = writer;
 			_restClient = new RestClient("https://appharbor.com/");
+			_assignedColors = new Dictionary<string, ConsoleColor>();
 
 			OptionSet.Add("t|tail", "Tail log", x => _tail = true);
 			OptionSet.Add("n|num=", "Number of log messages", (int x) => _limit = x);
