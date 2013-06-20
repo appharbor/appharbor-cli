@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -10,6 +11,15 @@ namespace AppHarbor.Commands
 	[CommandHelp("Get application log", alias: "log")]
 	public class LogAppCommand : ApplicationCommand
 	{
+		private static IList<ConsoleColor> Colors = new List<ConsoleColor>
+		{
+			ConsoleColor.Red,
+			ConsoleColor.Green,
+			ConsoleColor.Yellow,
+			ConsoleColor.Magenta,
+			ConsoleColor.Cyan
+		};
+
 		private readonly string _accessToken;
 		private readonly TextWriter _writer;
 		private readonly IRestClient _restClient;
