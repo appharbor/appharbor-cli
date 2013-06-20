@@ -103,10 +103,17 @@ namespace AppHarbor.Commands
 			var parsed = Regex.Match(line, @"^(.*?\[([\w-]+)([\d\.]+)?\]:)(.*)?$");
 			var defaultColor = Console.ForegroundColor;
 
-			Console.ForegroundColor = ConsoleColor.Cyan;
+			var lineIdentifier = parsed.Groups[2].Value;
+			if (!_assignedColors.ContainsKey(lineIdentifier))
+			{
+				_assignedColors[lineIdentifier] = Colors[_assignedColors.Count() % Colors.Count()];
+			}
+
+			Console.ForegroundColor = _assignedColors[lineIdentifier];
 			Console.Write(parsed.Groups[1].Value);
 			Console.ForegroundColor = defaultColor;
 			Console.WriteLine(parsed.Groups[4].Value);
+
 		}
 	}
 }
