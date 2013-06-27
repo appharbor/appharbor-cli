@@ -15,6 +15,7 @@ namespace AppHarbor.Commands
 	{
 		private string _message;
 		private DirectoryInfo _sourceDirectory;
+		private bool _isDeployFromCurrentDirectory;
 		private string _username;
 		private string _password;
 
@@ -34,7 +35,12 @@ namespace AppHarbor.Commands
 			_accessTokenConfiguration = accessTokenConfiguration;
 
 			_sourceDirectory = new DirectoryInfo(Directory.GetCurrentDirectory());
-			OptionSet.Add("source-directory=", "Set source directory", x => _sourceDirectory = new DirectoryInfo(x));
+			_isDeployFromCurrentDirectory = true;
+			OptionSet.Add("source-directory=", "Set source directory", x =>
+			{
+				_sourceDirectory = new DirectoryInfo(x);
+				_isDeployFromCurrentDirectory = false;
+			});
 
 			_excludedDirectories = new List<string> { ".git", ".hg" };
 			OptionSet.Add("e|excluded-directory=", "Add excluded directory name", x => _excludedDirectories.Add(x));
@@ -55,6 +61,16 @@ namespace AppHarbor.Commands
 			_writer.WriteLine();
 
 			var uploadCredentials = GetCredentials();
+
+			if (_isDeployFromCurrentDirectory)
+			{
+				_writer.WriteLine("Deploying from current directory.");
+			}
+			else
+			{
+				_writer.WriteLine("Deploying from " + _sourceDirectory.FullName);
+			}
+			_writer.WriteLine();
 
 			var temporaryFileName = Path.GetTempFileName();
 			try
