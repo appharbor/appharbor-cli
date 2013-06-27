@@ -70,6 +70,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AccessTokenConfiguration.cs" />
+    <Compile Include="AccessTokenHelper.cs" />
     <Compile Include="AliasMatcher.cs" />
     <Compile Include="ApiException.cs" />
     <Compile Include="AppHarborCliClient.cs" />
