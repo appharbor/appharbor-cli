@@ -103,13 +103,13 @@ namespace AppHarbor.Commands
 						Timeout = (int)TimeSpan.FromHours(2).TotalMilliseconds,
 					};
 
-					var progressBar = new MegaByteProgressBar();
+					ProgressBarPresenter progressBar = ProgressBarFactory.CreateMegaByteProgressBar();
 					request.UploadProgressEvent += (object x, UploadProgressArgs y) => progressBar
 						.Update("Uploading package", y.TransferredBytes, y.TotalBytes);
 
 					transferUtility.Upload(request);
 
-					Console.CursorTop++;
+					_writer.WriteLine();
 					_writer.WriteLine();
 				}
 			}

@@ -19,7 +19,7 @@ namespace AppHarbor
 
 			var entriesCount = entries.Count();
 
-			var progressBar = new MegaByteProgressBar();
+			ProgressBarPresenter progressBar = ProgressBarFactory.CreateMegaByteProgressBar();
 			for (var i = 0; i < entriesCount; i++)
 			{
 				archive.WriteEntry(entries[i], true);

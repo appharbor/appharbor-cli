@@ -122,8 +122,11 @@
     <Compile Include="ITypeNameMatcher.cs" />
     <Compile Include="MaskedConsoleInput.cs" />
     <Compile Include="MegaByteProgressBar.cs" />
+    <Compile Include="NullProgressBar.cs" />
     <Compile Include="PhysicalFileSystem.cs" />
     <Compile Include="Program.cs" />
+    <Compile Include="ProgressBarFactory.cs" />
+    <Compile Include="ProgressBarPresenter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RepositoryConfigurationException.cs" />
     <Compile Include="TemporaryFileStream.cs" />
