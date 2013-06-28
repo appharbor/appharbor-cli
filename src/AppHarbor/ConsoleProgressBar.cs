@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace AppHarbor
 {
-	public abstract class ConsoleProgressBar
+	public abstract class ConsoleProgressBar : ProgressBarPresenter
 	{
 		private const char ProgressBarCharacter = '\u2592';
 
