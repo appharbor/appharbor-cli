@@ -28,7 +28,7 @@ namespace AppHarbor.Commands
 
 			var drains = _restClient.Execute<List<Drain>>(request);
 
-			var drain = drains.Data.First(x => x.Value == arguments[0]);
+			var drain = drains.Data.FirstOrDefault(x => x.Value == arguments[0]);
 
 			if (drain == null)
 			{
