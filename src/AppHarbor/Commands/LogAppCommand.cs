@@ -113,7 +113,6 @@ namespace AppHarbor.Commands
 			Console.Write(parsed.Groups[1].Value);
 			Console.ForegroundColor = defaultColor;
 			Console.WriteLine(parsed.Groups[4].Value);
-
 		}
 	}
 }
