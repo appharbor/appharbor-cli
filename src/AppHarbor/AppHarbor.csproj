@@ -90,6 +90,7 @@
     <Compile Include="Commands\DeleteAppCommand.cs" />
     <Compile Include="Commands\CreateAppCommand.cs" />
     <Compile Include="Commands\DeployAppCommand.cs" />
+    <Compile Include="Commands\RemoveDrainCommand.cs" />
     <Compile Include="Commands\DrainCommand.cs" />
     <Compile Include="Commands\HelpCommand.cs" />
     <Compile Include="Commands\HostnameCommand.cs" />
