@@ -32,7 +32,23 @@ namespace AppHarbor.Commands
 			_writer = writer;
 
 			_sourceDirectory = new DirectoryInfo(Directory.GetCurrentDirectory());
-			OptionSet.Add("source-directory=", "Set source directory", x => _sourceDirectory = new DirectoryInfo(x));
+			OptionSet.Add("source-directory=", "Set source directory", x =>
+			{
+				_sourceDirectory = new DirectoryInfo(x);
+
+				if (!_sourceDirectory.Exists)
+				{
+					throw new CommandException(string.Format("The directory '{0}' does not exist or is not accessible", _sourceDirectory.FullName));
+				}
+
+				// Chgange the current directory to the source directory
+				// because the Tar library use it as a reference point
+				// and it will leave the specified source-directory in each
+				// tar file path otherwise.
+				Environment.CurrentDirectory = _sourceDirectory.FullName;
+
+				_writer.WriteLine("Deploying from " + _sourceDirectory.FullName);
+			});
 
 			_excludedDirectories = new List<string> { ".git", ".hg" };
 			OptionSet.Add("e|excluded-directory=", "Add excluded directory name", x => _excludedDirectories.Add(x));
