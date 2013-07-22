@@ -84,6 +84,26 @@ namespace AppHarbor
 			container.Register(Component
 				.For<IMaskedInput>()
 				.ImplementedBy<MaskedConsoleInput>());
+
+			RegisterProgressBar(container);
+		}
+
+		private static void RegisterProgressBar(IWindsorContainer container)
+		{
+			if (ConsoleWindowHelper.HasConsoleWindow)
+			{
+				container.Register(Component
+					.For<IProgressBar>()
+					.ImplementedBy<MegaByteProgressBar>()
+					.LifeStyle.Transient);
+			}
+			else
+			{
+				container.Register(Component
+					.For<IProgressBar>()
+					.ImplementedBy<NullProgressBar>()
+					.LifeStyle.Transient);
+			}
 		}
 	}
 }
