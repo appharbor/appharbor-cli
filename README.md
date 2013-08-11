@@ -6,7 +6,7 @@ For more about AppHarbor see [https://appharbor.com/](https://appharbor.com/).
 
 ## Setup
 
-The CLI is known to work on Windows. [Download](https://github.com/appharbor/appharbor-cli/downloads) and run the installer to get started.
+The CLI is known to work on Windows. [Download](https://appharbor-cli.s3.amazonaws.com/appharbor-cli-v1.2.exe) and run the installer to get started.
 
 Once installed, you can log in to create and administer AppHarbor applications. Use the `-h` switch to
 get more information about each command and any options available.
@@ -33,12 +33,16 @@ Aliases are enclosed in paranthesis in the list of available commands.
 	  app deploy                  #  Deploy current directory ("deploy")
 	  app info                    #  Get application details
 	  app link [slug]             #  Link directory to an application ("link")
-	  app open                    #  Open application on appharbor.com
+	  app log                     #  Get application log ("log")
+	  app open                    #  Open application on appharbor.com ("open")
 	  app unlink                  #  Unlink application from directory ("unlink")
 	  build                       #  List latest builds
 	  config add [key=value]      #  Add configuration variable to application
 	  config                      #  List all configuration variables
 	  config remove [key1 key2..] #  Remove configuration variable
+	  drain add [drain_url]       #  Add a log drain
+	  drain                       #  Show log drains and tokens
+	  drain remove [drain url]    #  Remove a log drain
 	  help                        #  Display help summary
 	  hostname add [hostname]     #  Add a hostname
 	  hostname                    #  List all associated hostnames
