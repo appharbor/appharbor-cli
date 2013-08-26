@@ -7,7 +7,7 @@ namespace AppHarbor
 {
 	public static class CompressionExtensions
 	{
-		public static void ToTar(this DirectoryInfo sourceDirectory, Stream output, string[] excludedDirectoryNames)
+		public static void ToTar(this DirectoryInfo sourceDirectory, Stream output, string[] excludedDirectoryNames, IProgressBar progressBar)
 		{
 			var archive = TarArchive.CreateOutputTarArchive(output);
 
@@ -19,7 +19,6 @@ namespace AppHarbor
 
 			var entriesCount = entries.Count();
 
-			var progressBar = new MegaByteProgressBar();
 			for (var i = 0; i < entriesCount; i++)
 			{
 				archive.WriteEntry(entries[i], true);
