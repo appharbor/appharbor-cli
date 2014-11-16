@@ -6,15 +6,9 @@ namespace AppHarbor
 	{
 		public CommandHelpAttribute(string description, string options = "", string alias = "")
 		{
-			Alias = alias;
 			Description = description;
 			Options = options;
-		}
-
-		public string Alias
-		{
-			get;
-			private set;
+			Alias = alias;
 		}
 
 		public string Description
@@ -24,6 +18,12 @@ namespace AppHarbor
 		}
 
 		public string Options
+		{
+			get;
+			private set;
+		}
+
+		public string Alias
 		{
 			get;
 			private set;

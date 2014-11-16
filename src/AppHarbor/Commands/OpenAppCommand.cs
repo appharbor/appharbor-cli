@@ -12,7 +12,7 @@ namespace AppHarbor.Commands
 
 		protected override void InnerExecute(string[] arguments)
 		{
-			Process.Start(string.Format("https://appharbor.com/applications/{0}", ApplicationId));
+			Process.Start(string.Format("{0}applications/{1}", AppHarborBaseUrl, ApplicationId));
 		}
 	}
 }

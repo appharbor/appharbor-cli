@@ -13,6 +13,8 @@ namespace AppHarbor.Commands
 	[CommandHelp("Deploy current directory", alias: "deploy")]
 	public class DeployAppCommand : ApplicationCommand
 	{
+		private const string PackageClientBaseUrl = "https://packageclient.apphb.com/";
+
 		private string _message;
 		private DirectoryInfo _sourceDirectory;
 
@@ -27,7 +29,7 @@ namespace AppHarbor.Commands
 			: base(applicationConfiguration)
 		{
 			_accessToken = accessTokenConfiguration.GetAccessToken();
-			_restClient = new RestClient("https://packageclient.apphb.com/");
+			_restClient = new RestClient(PackageClientBaseUrl);
 			_reader = reader;
 			_writer = writer;
 

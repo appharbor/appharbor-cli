@@ -16,7 +16,7 @@ namespace AppHarbor.Commands
 			: base(applicationConfiguration)
 		{
 			_accessToken = accessTokenConfiguration.GetAccessToken();
-			_restClient = new RestClient("https://appharbor.com/");
+			_restClient = new RestClient(AppHarborBaseUrl);
 		}
 
 		protected override void InnerExecute(string[] arguments)

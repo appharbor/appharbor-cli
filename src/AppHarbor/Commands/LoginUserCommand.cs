@@ -7,6 +7,8 @@ namespace AppHarbor.Commands
 	[CommandHelp("Login to AppHarbor", alias: "login")]
 	public class LoginUserCommand : Command
 	{
+		private const string PackageTokenClientBaseUrl = "https://appharbor-token-client.apphb.com";
+
 		private readonly IAccessTokenConfiguration _accessTokenConfiguration;
 		private readonly IMaskedInput _maskedInput;
 		private readonly TextReader _reader;
@@ -42,7 +44,7 @@ namespace AppHarbor.Commands
 		public virtual string GetAccessToken(string username, string password)
 		{
 			//NOTE: Remove when merged into AppHarbor.NET library
-			var restClient = new RestClient("https://appharbor-token-client.apphb.com");
+			var restClient = new RestClient(PackageTokenClientBaseUrl);
 			var request = new RestRequest("/token", Method.POST);
 
 			request.AddParameter("username", username);

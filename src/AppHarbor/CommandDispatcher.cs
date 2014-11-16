@@ -23,7 +23,7 @@ namespace AppHarbor
 			var commandArguments = args.TakeWhile(x => !x.StartsWith("-")).Take(2);
 			var commandTypeNameCandidate = commandArguments.Any() ? string.Concat(commandArguments.Skip(1).FirstOrDefault(), args[0]) : "help";
 
-			Type matchingType = null;
+			Type matchingType;
 			int argsToSkip = 0;
 
 			if (_typeNameMatcher.IsSatisfiedBy(commandTypeNameCandidate))
