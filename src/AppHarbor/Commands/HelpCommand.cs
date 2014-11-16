@@ -77,6 +77,12 @@ namespace AppHarbor.Commands
 			return new string(chars);
 		}
 
+		/// <remarks>
+		/// Splitting Pascal/Camel Cased Strings
+		/// http://haacked.com/archive/2005/09/23/splitting-pascalcamel-cased-strings.aspx/
+		/// Licensed under the terms of the Creative Commons Attribution 2.5 Generic License
+		/// </remarks>
+
 		private static string[] SplitUpperCase(string source)
 		{
 			if (source == null)
