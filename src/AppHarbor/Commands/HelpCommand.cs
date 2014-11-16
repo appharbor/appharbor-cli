@@ -86,10 +86,14 @@ namespace AppHarbor.Commands
 		private static string[] SplitUpperCase(string source)
 		{
 			if (source == null)
+			{
 				return new string[] { };
+			}
 
 			if (source.Length == 0)
+			{
 				return new string[] { "" };
+			}
 
 			var words = new StringCollection();
 			int wordStartIndex = 0;
