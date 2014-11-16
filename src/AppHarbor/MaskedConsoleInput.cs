@@ -6,7 +6,7 @@ namespace AppHarbor
 	{
 		public virtual string Get()
 		{
-			string input = "";
+			var input = string.Empty;
 			ConsoleKeyInfo consoleKey;
 
 			do
