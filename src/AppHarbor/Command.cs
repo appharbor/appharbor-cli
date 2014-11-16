@@ -6,6 +6,8 @@ namespace AppHarbor
 {
 	public abstract class Command
 	{
+		protected const string AppHarborBaseUrl = "https://appharbor.com/";
+
 		private readonly OptionSet _optionSet;
 		private bool _helpCommand;
 

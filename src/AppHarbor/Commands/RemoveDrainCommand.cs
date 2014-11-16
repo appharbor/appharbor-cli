@@ -9,8 +9,6 @@ namespace AppHarbor.Commands
 	[CommandHelp("Remove a log drain", "[DRAIN URL]")]
 	public class RemoveDrainCommand : ApplicationCommand
 	{
-		private const string AppHarborBaseUrl = "https://appharbor.com/";
-
 		private readonly string _accessToken;
 		private readonly IRestClient _restClient;
 

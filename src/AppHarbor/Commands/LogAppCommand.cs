@@ -11,8 +11,6 @@ namespace AppHarbor.Commands
 	[CommandHelp("Get application log", alias: "log")]
 	public class LogAppCommand : ApplicationCommand
 	{
-		private const string AppHarborBaseUrl = "https://appharbor.com/";
-
 		private static IList<ConsoleColor> Colors = new List<ConsoleColor>
 		{
 			ConsoleColor.Red,
