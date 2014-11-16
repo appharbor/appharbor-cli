@@ -10,6 +10,8 @@ namespace AppHarbor.Commands
 	[CommandHelp("Show log drains and tokens")]
 	public class DrainCommand : ApplicationCommand
 	{
+		private const string AppHarborBaseUrl = "https://appharbor.com/";
+
 		private readonly string _accessToken;
 		private readonly IRestClient _restClient;
 		private readonly TextWriter _writer;
@@ -18,7 +20,7 @@ namespace AppHarbor.Commands
 			: base(applicationConfiguration)
 		{
 			_accessToken = accessTokenConfiguration.GetAccessToken();
-			_restClient = new RestClient("https://appharbor.com/");
+			_restClient = new RestClient(AppHarborBaseUrl);
 			_writer = writer;
 		}
 

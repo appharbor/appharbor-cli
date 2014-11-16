@@ -6,6 +6,8 @@ namespace AppHarbor.Commands
 	[CommandHelp("Add a log drain", "[DRAIN_URL]")]
 	public class AddDrainCommand : ApplicationCommand
 	{
+		private const string AppHarborBaseUrl = "https://appharbor.com/";
+
 		private readonly string _accessToken;
 		private readonly IRestClient _restClient;
 
@@ -13,7 +15,7 @@ namespace AppHarbor.Commands
 			: base(applicationConfiguration)
 		{
 			_accessToken = accessTokenConfiguration.GetAccessToken();
-			_restClient = new RestClient("https://appharbor.com/");
+			_restClient = new RestClient(AppHarborBaseUrl);
 		}
 
 		protected override void  InnerExecute(string[] arguments)

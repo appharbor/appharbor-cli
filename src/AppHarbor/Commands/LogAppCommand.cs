@@ -11,6 +11,8 @@ namespace AppHarbor.Commands
 	[CommandHelp("Get application log", alias: "log")]
 	public class LogAppCommand : ApplicationCommand
 	{
+		private const string AppHarborBaseUrl = "https://appharbor.com/";
+
 		private static IList<ConsoleColor> Colors = new List<ConsoleColor>
 		{
 			ConsoleColor.Red,
@@ -35,7 +37,7 @@ namespace AppHarbor.Commands
 		{
 			_accessToken = accessTokenConfiguration.GetAccessToken();
 			_writer = writer;
-			_restClient = new RestClient("https://appharbor.com/");
+			_restClient = new RestClient(AppHarborBaseUrl);
 			_assignedColors = new Dictionary<string, ConsoleColor>();
 
 			OptionSet.Add("t|tail", "Tail log", x => _tail = true);
