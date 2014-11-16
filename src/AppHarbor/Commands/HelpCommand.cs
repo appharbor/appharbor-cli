@@ -91,10 +91,10 @@ namespace AppHarbor.Commands
 			if (source.Length == 0)
 				return new string[] { "" };
 
-			StringCollection words = new StringCollection();
+			var words = new StringCollection();
 			int wordStartIndex = 0;
 
-			char[] letters = source.ToCharArray();
+			var letters = source.ToCharArray();
 
 			for (int i = 1; i < letters.Length; i++)
 			{
@@ -107,8 +107,9 @@ namespace AppHarbor.Commands
 
 			words.Add(new String(letters, wordStartIndex, letters.Length - wordStartIndex));
 
-			string[] wordArray = new string[words.Count];
+			var wordArray = new string[words.Count];
 			words.CopyTo(wordArray, 0);
+
 			return wordArray;
 		}
 	}
