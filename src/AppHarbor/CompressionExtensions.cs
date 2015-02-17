@@ -2,12 +2,32 @@
 using System.IO;
 using System.Linq;
 using ICSharpCode.SharpZipLib.Tar;
+using System;
 
 namespace AppHarbor
 {
 	public static class CompressionExtensions
 	{
 		public static void ToTar(this DirectoryInfo sourceDirectory, Stream output, string[] excludedDirectoryNames)
+		{
+			string previousCurrDir = Environment.CurrentDirectory;
+			try
+			{
+				// Chgange the current directory to the source directory
+				// because the Tar library use it as a reference point
+				// and it will leave the specified source-directory in each
+				// tar file path otherwise.
+				Environment.CurrentDirectory = sourceDirectory.FullName;
+
+				TarDirectory(sourceDirectory, output, excludedDirectoryNames);
+			}
+			finally
+			{
+				Environment.CurrentDirectory = previousCurrDir;
+			}
+		}
+
+		private static void TarDirectory(DirectoryInfo sourceDirectory, Stream output, string[] excludedDirectoryNames)
 		{
 			var archive = TarArchive.CreateOutputTarArchive(output);
 
