@@ -22,8 +22,8 @@ namespace AppHarbor
 			var processArguments = new StringBuilder();
 
 			processArguments.AppendFormat("/C ");
-			processArguments.AppendFormat("\"{0}\" ", _gitExecutable.FullName);
-			processArguments.AppendFormat("{0} ", command);
+			processArguments.AppendFormat("\"\"{0}\" ", _gitExecutable.FullName);
+			processArguments.AppendFormat("{0} \"", command);
 
 			var process = new Process
 			{
