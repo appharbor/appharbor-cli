@@ -10,12 +10,20 @@ namespace AppHarbor
 	{
 		private readonly FileInfo _gitExecutable;
 
-		public GitCommand()
-		{
-			var programFilesPath = Environment.GetFolderPath(Environment.SpecialFolder.ProgramFilesX86);
-			var gitExecutablePath = Path.Combine(programFilesPath, "Git", "bin", "git.exe");
-			_gitExecutable = new FileInfo(gitExecutablePath);
-		}
+        public GitCommand()
+        {
+            var programFilesPath = Environment.GetFolderPath(Environment.SpecialFolder.ProgramFilesX86);
+            var gitExecutablePath = Path.Combine(programFilesPath, "Git", "bin", "git.exe");
+            _gitExecutable = new FileInfo(gitExecutablePath);
+
+            if (_gitExecutable.Exists) return;
+
+            programFilesPath = Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles);
+            gitExecutablePath = Path.Combine(programFilesPath, "Git", "bin", "git.exe");
+            _gitExecutable = new FileInfo(gitExecutablePath);
+
+            if (!_gitExecutable.Exists) throw new FileNotFoundException();
+        }
 
 		public virtual IList<string> Execute(string command)
 		{
